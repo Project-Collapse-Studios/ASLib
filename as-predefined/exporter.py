@@ -4,6 +4,57 @@ from pathlib import Path
 import argparse
 
 
+# Used to replace operator* with proper AS' operator declarations
+# Not sure why Strata uses operator* when the proper syntax is opAssign, opIndex, opAdd, etc
+OPERATOR_REPLACE = {
+    "operator~": "opCom",
+            
+    # Postfixed unary operators
+    "operator++": "opPostInc",     
+    "operator--": "opPostDec",
+            
+    # Comparison Operators
+    "operator==": "opEquals",
+    "operator!=": "opEquals",
+    "operator<": "opCmp",
+    "operator<=": "opCmp",
+    "operator>": "opCmp",
+    "operator>=": "opCmp",
+            
+    # Assignment operators
+    "operator=": "opAssign",
+    "operator+=": "opAddAssign",
+    "operator-=": "opSubAssign",
+    "operator*=": "opMulAssign",
+    "operator/=": "opDivAssign",
+    "operator%=": "opModAssign",
+    "operator**=": "opPowAssign",
+    "operator&=": "opAndAssign",
+    "operator|=": "opOrAssign",
+    "operator^=": "opXorAssign",
+    "operator<<=": "opShlAssign",
+    "operator>>=": "opShrAssign",
+    "operator>>>=": "opUShrAssign",
+    "operator@=": "opHndlAssign",
+
+    # Binary operators
+    "operator+": "opAdd",
+    "operator-": "opSub",
+    "operator*": "opMul",
+    "operator/": "opDiv",
+    "operator%": "opMod",
+    "operator**": "opPow",
+    "operator&": "opAnd",
+    "operator|": "opOr",
+    "operator^": "opXor",
+    "operator<<": "opShl",
+    "operator>>": "opShr",
+    "operator>>>": "opUShr",
+
+    # Index operator
+    "operator[]": "opIndex",
+}
+
 class Decl_Enum:
     def __init__(self, decl: dict):
         self.namespace = decl["namespace"]
@@ -93,124 +144,10 @@ class Decl_Function:
         r = "//" + self.documentation + "\n" if self.documentation else ""
         r += self.return_val + " "
 
-        match self.func_name: # Not sure why Strata uses operator* when the proper syntax is opAssign, opIndex, opAdd, etc
-            # Prefixed unary operators
-            case "operator~":
-                r += "opCom"
-            
-            # Postfixed unary operators
-            case "operator++":
-                r += "opPostInc"
-            
-            case "operator--":
-                r += "opPostDec"
-            
-            # Comparison Operators
-            case "operator==":
-                r += "opEquals"
-
-            case "operator!=":
-                r += "opEquals"
-
-            case "operator<":
-                r += "opCmp"
-
-            case "operator<=":
-                r += "opCmp"
-
-            case "operator>":
-                r += "opCmp"
-            
-            case "operator>=":
-                r += "opCmp"
-            
-
-            # Assignment operators
-            case "operator=":
-                r += "opAssign"
-            
-            case "operator+=":
-                r += "opAddAssign"
-
-            case "operator-=":
-                r += "opSubAssign"
-
-            case "operator*=":
-                r += "opMulAssign"
-
-            case "operator/=":
-                r += "opDivAssign"
-
-            case "operator%=":
-                r += "opModAssign"
-
-            case "operator**=":
-                r += "opPowAssign"
-
-            case "operator&=":
-                r += "opAndAssign"
-
-            case "operator|=":
-                r += "opOrAssign"
-
-            case "operator^=":
-                r += "opXorAssign"
-
-            case "operator<<=":
-                r += "opShlAssign"
-
-            case "operator>>=":
-                r += "opShrAssign"
-            
-            case "operator>>>=":
-                r += "opUShrAssign"
-
-            case "operator@=":
-                r += "opHndlAssign"
-
-            # Binary operators
-            case "operator+":
-                r += "opAdd"
-
-            case "operator-":
-                r += "opSub"
-
-            case "operator*":
-                r += "opMul"
-
-            case "operator/":
-                r += "opDiv"
-
-            case "operator%":
-                r += "opMod"
-
-            case "operator**":
-                r += "opPow"
-
-            case "operator&":
-                r += "opAnd"
-
-            case "operator|":
-                r += "opOr"
-
-            case "operator^":
-                r += "opXor"
-
-            case "operator<<":
-                r += "opShl"
-
-            case "operator>>":
-                r += "opShr"
-
-            case "operator>>>":
-                r += "opUShr"
-
-            # Index operator
-            case "operator[]":
-                r += "opIndex"
-
-            case _:
-                r += self.func_name
+        if self.func_name in OPERATOR_REPLACE.keys():
+            r += OPERATOR_REPLACE[self.func_name]
+        else:
+            r += self.func_name
 
         r += "(" + self.args + ")"
         
