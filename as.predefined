@@ -1,0 +1,1731 @@
+enum EConVarFlag {
+    FCVAR_NONE = 0,
+    FCVAR_UNREGISTERED = 1,
+    FCVAR_DEVELOPMENTONLY = 2,
+    FCVAR_SERVERDLL = 4,
+    FCVAR_CLIENTDLL = 8,
+    FCVAR_HIDDEN = 16,
+    FCVAR_PROTECTED = 32,
+    FCVAR_SPONLY = 64,
+    FCVAR_ARCHIVE = 128
+}
+
+enum ESolidType {
+    SOLID_NONE = 0,
+    SOLID_BSP = 1,
+    SOLID_BBOX = 2,
+    SOLID_OBB = 3,
+    SOLID_OBB_YAW = 4,
+    SOLID_CUSTOM = 5,
+    SOLID_VPHYSICS = 6,
+    SOLID_LAST = 7
+}
+
+enum EMoveCollide {
+    MOVECOLLIDE_DEFAULT = 0,
+    MOVECOLLIDE_FLY_BOUNCE = 1,
+    MOVECOLLIDE_FLY_CUSTOM = 2,
+    MOVECOLLIDE_FLY_SLIDE = 3,
+    MOVECOLLIDE_COUNT = 4
+}
+
+enum EMoveType {
+    MOVETYPE_NONE = 0,
+    MOVETYPE_ISOMETRIC = 1,
+    MOVETYPE_WALK = 2,
+    MOVETYPE_STEP = 3,
+    MOVETYPE_FLY = 4,
+    MOVETYPE_FLYGRAVITY = 5,
+    MOVETYPE_VPHYSICS = 6,
+    MOVETYPE_PUSH = 7,
+    MOVETYPE_NOCLIP = 8,
+    MOVETYPE_LADDER = 9,
+    MOVETYPE_OBSERVER = 10,
+    MOVETYPE_CUSTOM = 11
+}
+
+enum EFireBulletsFlags {
+    FIRE_BULLETS_FIRST_SHOT_ACCURATE = 1,
+    FIRE_BULLETS_DONT_HIT_UNDERWATER = 2,
+    FIRE_BULLETS_ALLOW_WATER_SURFACE_IMPACTS = 4,
+    FIRE_BULLETS_TEMPORARY_DANGER_SOUND = 8,
+    FIRE_BULLETS_NO_PIERCING_SPARK = 22,
+    FIRE_BULLETS_HULL = 50,
+    FIRE_BULLETS_ANGULAR_SPREAD = 100
+}
+
+enum EFieldType {
+    FIELD_VOID = 0,
+    FIELD_FLOAT = 1,
+    FIELD_DOUBLE = 2,
+    FIELD_STRING = 3,
+    FIELD_VECTOR = 4,
+    FIELD_VECTOR2D = 5,
+    FIELD_VECTOR4D = 6,
+    FIELD_QUATERNION = 7,
+    FIELD_INTEGER = 8,
+    FIELD_INTEGER64 = 9,
+    FIELD_BOOLEAN = 10,
+    FIELD_SHORT = 11,
+    FIELD_CHARACTER = 12,
+    FIELD_COLOR32 = 13,
+    FIELD_EMBEDDED = 14,
+    FIELD_CUSTOM = 15,
+    FIELD_CLASSPTR = 16,
+    FIELD_EHANDLE = 17,
+    FIELD_EDICT = 18,
+    FIELD_POSITION_VECTOR = 19,
+    FIELD_TIME = 20,
+    FIELD_TICK = 21,
+    FIELD_MODELNAME = 22,
+    FIELD_SOUNDNAME = 23,
+    FIELD_INPUT = 24,
+    FIELD_FUNCTION = 25,
+    FIELD_VMATRIX = 26,
+    FIELD_VMATRIX_WORLDSPACE = 27,
+    FIELD_MATRIX3X4_WORLDSPACE = 28,
+    FIELD_INTERVAL = 29,
+    FIELD_MODELINDEX = 30,
+    FIELD_MATERIALINDEX = 31,
+    FIELD_TYPECOUNT = 32
+}
+
+class array<T> {
+    T& opIndex(uint index);
+    const T& opIndex(uint index) const;
+    uint opForBegin() const;
+    bool opForEnd(uint) const;
+    uint opForNext(uint) const;
+    const T& opForValue0(uint index) const;
+    uint opForValue1(uint index) const;
+    T[]& opAssign(const T[]&in);
+    void insertAt(uint index, const T&in value);
+    void insertAt(uint index, const T[]&inout arr);
+    void insertLast(const T&in value);
+    void removeAt(uint index);
+    void removeLast();
+    void removeRange(uint start, uint count);
+    uint length() const;
+    void reserve(uint length);
+    void resize(uint length);
+    void sortAsc();
+    void sortAsc(uint startAt, uint count);
+    void sortDesc();
+    void sortDesc(uint startAt, uint count);
+    void reverse();
+    int find(const T&in value) const;
+    int find(uint startAt, const T&in value) const;
+    int findByRef(const T&in value) const;
+    int findByRef(uint startAt, const T&in value) const;
+    bool opEquals(const T[]&in) const;
+    bool isEmpty() const;
+    void sort(T[]::less&in, uint startAt = 0, uint count = uint(-1));
+}
+
+class string {
+    string& opAssign(const string&in str);
+    string& opAssign(int64 num);
+    string& opAssign(uint64 num);
+    string& opAssign(double num);
+    string& opAssign(float num);
+    uint8& opIndex(uint idx);
+    const uint8& opIndex(uint idx) const;
+    string& opAddAssign(const string&in);
+    string& opAddAssign(int64);
+    string& opAddAssign(uint64);
+    string& opAddAssign(double);
+    string& opAddAssign(float);
+    string opAdd(const string&in) const;
+    string opAdd(int64) const;
+    string opAdd(uint64) const;
+    string opAdd_r(int64) const;
+    string opAdd_r(uint64) const;
+    string opAdd(double) const;
+    string opAdd_r(double) const;
+    string opAdd(float) const;
+    string opAdd_r(float) const;
+    bool opEquals(const string&in) const;
+    uint len() const;
+    uint length() const;
+    uint resize() const;
+    bool empty() const;
+    string tolower() const;
+    string toupper() const;
+    string trim() const;
+    int64 toInt() const;
+    float toFloat() const;
+    uint locate(const string&in, const uint = 0) const;
+    string substr(const int start, const int length) const;
+    string subString(const int start, const int length) const;
+    string substr(const int start) const;
+    string subString(const int start) const;
+    string replace(const string&in search, const string&in replace) const;
+    bool isAlpha() const;
+    bool isNumerical() const;
+    bool isNumeric() const;
+    bool isAlphaNumerical() const;
+    string[]@ split(const string&in) const;
+}
+
+class dictionaryValue {
+    dictionaryValue& opAssign(const dictionaryValue&in);
+    dictionaryValue& opHndlAssign(const ?&in);
+    dictionaryValue& opHndlAssign(const dictionaryValue&in);
+    dictionaryValue& opAssign(const ?&in);
+    dictionaryValue& opAssign(double);
+    dictionaryValue& opAssign(int64);
+    void opCast(?&out);
+    void opConv(?&out);
+    int64 opConv();
+    double opConv();
+}
+
+class dictionary {
+    dictionary& opAssign(const dictionary&in);
+    void set(const string&in, const ?&in);
+    bool get(const string&in, ?&out) const;
+    void set(const string&in, const int64&in);
+    bool get(const string&in, int64&out) const;
+    void set(const string&in, const double&in);
+    bool get(const string&in, double&out) const;
+    bool exists(const string&in) const;
+    bool isEmpty() const;
+    uint getSize() const;
+    bool delete(const string&in);
+    void deleteAll();
+    string[]@ getKeys() const;
+    dictionaryValue& opIndex(const string&in);
+    const dictionaryValue& opIndex(const string&in) const;
+    dictionaryIter@ opForBegin() const;
+    bool opForEnd(dictionaryIter@) const;
+    dictionaryIter@ opForNext(dictionaryIter@) const;
+    const dictionaryValue& opForValue0(dictionaryIter@) const;
+    const string& opForValue1(dictionaryIter@) const;
+}
+
+class dictionaryIter {
+}
+
+class grid<T> {
+    T& opIndex(uint, uint);
+    const T& opIndex(uint, uint) const;
+    void resize(uint width, uint height);
+    uint width() const;
+    uint height() const;
+}
+
+class any {
+    any& opAssign(any&in);
+    void store(?&in);
+    void store(const int64&in);
+    void store(const double&in);
+    bool retrieve(?&out) const;
+    bool retrieve(int64&out) const;
+    bool retrieve(double&out) const;
+}
+
+class ref {
+    void opCast(?&out);
+    ref& opHndlAssign(const ref&in);
+    ref& opHndlAssign(const ?&in);
+    bool opEquals(const ref&in) const;
+    bool opEquals(const ?&in) const;
+}
+
+class Vector2D {
+    void Init(float ix, float iy);
+    bool IsValid() const;
+    void Invalidate();
+    float opIndex(int i) const;
+    float& opIndex(int i);
+    void Random(float minVal, float maxVal);
+    bool opEquals(const Vector2D&in v) const;
+    Vector2D& opAddAssign(const Vector2D&in v);
+    Vector2D& opSubAssign(const Vector2D&in v);
+    Vector2D& opMulAssign(const Vector2D&in v);
+    Vector2D& opMulAssign(float s);
+    Vector2D& opDivAssign(const Vector2D&in v);
+    Vector2D& opDivAssign(float s);
+    void Negate();
+    float Length() const;
+    float LengthSqr() const;
+    bool IsZero(float tolerance = 0.009999999776482582) const;
+    float NormalizeInPlace();
+    bool IsLengthGreaterThan(float val) const;
+    bool IsLengthLessThan(float val) const;
+    float DistTo(const Vector2D&in vOther) const;
+    float DistToSqr(const Vector2D&in vOther) const;
+    void MulAdd(const Vector2D&in a, const Vector2D&in b, float scalar);
+    float Dot(const Vector2D&in vOther) const;
+    Vector2D& opAssign(const Vector2D&in);
+    Vector2D opSub() const;
+    Vector2D opAdd(const Vector2D&in v) const;
+    Vector2D opSub(const Vector2D&in v) const;
+    Vector2D opMul(const Vector2D&in v) const;
+    Vector2D opDiv(const Vector2D&in v) const;
+    Vector2D opMul(float fl) const;
+    Vector2D opDiv(float fl) const;
+    float Cross(const Vector2D&in vOther) const;
+    Vector2D Min(const Vector2D&in vOther) const;
+    Vector2D Max(const Vector2D&in vOther) const;
+}
+
+class Vector {
+    void Init(float ix, float iy, float iz);
+    bool IsValid() const;
+    bool IsReasonable(float range = 1000000.0) const;
+    void Invalidate();
+    float opIndex(int i) const;
+    float& opIndex(int i);
+    Vector2D& AsVector2D();
+    const Vector2D& AsVector2D() const;
+    void Random(float minVal, float maxVal);
+    void Zero();
+    bool opEquals(const Vector&in) const;
+    Vector& opAddAssign(const Vector&in v);
+    Vector& opSubAssign(const Vector&in v);
+    Vector& opMulAssign(const Vector&in v);
+    Vector& opMulAssign(float s);
+    Vector& opDivAssign(const Vector&in v);
+    Vector& opDivAssign(float s);
+    Vector& opAddAssign(float fl);
+    Vector& opSubAssign(float fl);
+    void Negate();
+    float Length() const;
+    float LengthSqr() const;
+    float LengthRecipFast() const;
+    bool IsZero(float tolerance = 0.009999999776482582) const;
+    bool IsZeroFast() const;
+    float NormalizeInPlace();
+    float NormalizeInPlaceSafe(const Vector&in vFallback);
+    Vector Normalized() const;
+    Vector NormalizedSafe(const Vector&in vFallback) const;
+    bool IsLengthGreaterThan(float val) const;
+    bool IsLengthLessThan(float val) const;
+    bool WithinAABox(const Vector&in boxmin, const Vector&in boxmax);
+    float DistTo(const Vector&in vOther) const;
+    float DistToSqr(const Vector&in vOther) const;
+    void MulAdd(const Vector&in a, const Vector&in b, float scalar);
+    float Dot(const Vector&in vOther) const;
+    Vector& opAssign(const Vector&in);
+    int LargestComponent() const;
+    float LargestComponentValue() const;
+    int SmallestComponent() const;
+    float SmallestComponentValue() const;
+    float Length2D() const;
+    float Length2DSqr() const;
+    Vector ProjectOnto(const Vector&in onto);
+    Vector opSub() const;
+    Vector opAdd(const Vector&in v) const;
+    Vector opSub(const Vector&in v) const;
+    Vector opMul(const Vector&in v) const;
+    Vector opDiv(const Vector&in v) const;
+    Vector opMul(float fl) const;
+    Vector opDiv(float fl) const;
+    Vector Cross(const Vector&in vOther) const;
+    Vector Min(const Vector&in vOther) const;
+    Vector Max(const Vector&in vOther) const;
+}
+
+class Quaternion {
+    void Init(float ix, float iy, float iz, float iw);
+    void Init(const Vector&in vImaginaryPart, float flRealPart);
+    bool IsValid() const;
+    void Invalidate();
+    bool opEquals(const Quaternion&in src) const;
+    Quaternion& opAssign(const Quaternion&in);
+    Quaternion Conjugate() const;
+    Vector GetForward() const;
+    Vector GetLeft() const;
+    Vector GetUp() const;
+    void Print() const;
+    Vector& ImaginaryPart();
+    const Vector& ImaginaryPart() const;
+    float& RealPart();
+    float RealPart() const;
+    QAngle ToQAngle() const;
+    float opIndex(int i) const;
+    float& opIndex(int i);
+    Quaternion opAdd() const;
+    Quaternion opSub() const;
+}
+
+class QAngle {
+    void Init(float ix, float iy, float iz);
+    void Random(float minVal, float maxVal);
+    bool IsValid() const;
+    void Invalidate();
+    float opIndex(int i) const;
+    float& opIndex(int i);
+    bool opEquals(const QAngle&in v) const;
+    QAngle& opAddAssign(const QAngle&in v);
+    QAngle& opSubAssign(const QAngle&in v);
+    QAngle& opMulAssign(float s);
+    QAngle& opDivAssign(float s);
+    float Length() const;
+    float LengthSqr() const;
+    QAngle& opAssign(const QAngle&in);
+    void NormalizeInPlace();
+    void NormalizePositiveInPlace();
+    QAngle Normalized() const;
+    QAngle NormalizedPositive() const;
+    Quaternion ToQuaternion() const;
+    QAngle opSub() const;
+    QAngle opAdd(const QAngle&in v) const;
+    QAngle opSub(const QAngle&in v) const;
+    QAngle opMul(float fl) const;
+    QAngle opDiv(float fl) const;
+}
+
+class matrix3x4_t {
+    void InitXYZ(const Vector&in xAxis, const Vector&in yAxis, const Vector&in zAxis, const Vector&in vecOrigin);
+    void Init(const Vector&in xAxis, const Vector&in yAxis, const Vector&in zAxis, const Vector&in vecOrigin);
+    void InitFromQAngles(const QAngle&in angles, const Vector&in vPosition);
+    void InitFromQAngles(const QAngle&in angles);
+    void InitFromQuaternion(const Quaternion&in orientation, const Vector&in vPosition);
+    void InitFromQuaternion(const Quaternion&in orientation);
+    void InitFromDiagonal(const Vector&in vDiagonal);
+    Quaternion ToQuaternion() const;
+    QAngle ToQAngle() const;
+    void SetToIdentity();
+    void ScaleUpper3x3Matrix(float flScale);
+    void SetOrigin(const Vector&in p);
+    Vector GetOrigin() const;
+    void Invalidate();
+    bool IsValid() const;
+    bool opEquals(const matrix3x4_t&in other) const;
+    bool IsEqualTo(const matrix3x4_t&in other, float flTolerance = 9.999999747378752e-06) const;
+    Vector TransformVector(const Vector&in v0) const;
+    Vector RotateVector(const Vector&in v0) const;
+    Vector TransformVectorByInverse(const Vector&in v0) const;
+    Vector RotateVectorByInverse(const Vector&in v0) const;
+    Vector RotateExtents(const Vector&in vBoxExtents) const;
+    void TransformAABB(const Vector&in vecMinsIn, const Vector&in vecMaxsIn, Vector&out vecMinsOut, Vector&out vecMaxsOut) const;
+    void TransformAABBByInverse(const Vector&in vecMinsIn, const Vector&in vecMaxsIn, Vector&out vecMinsOut, Vector&out vecMaxsOut) const;
+    void RotateAABB(const Vector&in vecMinsIn, const Vector&in vecMaxsIn, Vector&out vecMinsOut, Vector&out vecMaxsOut) const;
+    void RotateAABBByInverse(const Vector&in vecMinsIn, const Vector&in vecMaxsIn, Vector&out vecMinsOut, Vector&out vecMaxsOut) const;
+    float GetOrthogonalityError() const;
+    float GetDeterminant() const;
+    float GetSylvestersCriterion() const;
+    Vector GetForward() const;
+    Vector GetLeft() const;
+    Vector GetUp() const;
+    Vector GetRow(int nRow) const;
+    void SetRow(int nRow, const Vector&in vRow);
+    void InverseTR(matrix3x4_t&out Out) const;
+    matrix3x4_t InverseTR() const;
+}
+
+class VPlane {
+    void Init(const Vector&in vNormal, float dist);
+    void Init(const Vector&in vNormal, const Vector&in vPointOnPlane);
+    float DistTo(const Vector&in vVec) const;
+    VPlane& opAssign(const VPlane&in thePlane);
+    VPlane Flip() const;
+    Vector GetPointOnPlane() const;
+    Vector ProjectPointOntoPlane(const Vector&in vPoint) const;
+}
+
+class Vector4D {
+    void Init(float ix, float iy, float iz, float iw);
+    void Init(const Vector&in src, float iw);
+    bool IsValid() const;
+    float opIndex(int i) const;
+    float& opIndex(int i);
+    Vector& AsVector3D();
+    const Vector& AsVector3D() const;
+    Vector2D& AsVector2D();
+    const Vector2D& AsVector2D() const;
+    void Random(float minVal, float maxVal);
+    bool opEquals(const Vector4D&in) const;
+    Vector4D& opAddAssign(const Vector4D&in v);
+    Vector4D& opSubAssign(const Vector4D&in v);
+    Vector4D& opMulAssign(const Vector4D&in v);
+    Vector4D& opMulAssign(float s);
+    Vector4D& opDivAssign(const Vector4D&in v);
+    Vector4D& opDivAssign(float s);
+    Vector4D opSub() const;
+    Vector4D opMul(float fl) const;
+    Vector4D opDiv(float fl) const;
+    Vector4D opMul(const Vector4D&in v) const;
+    Vector4D opAdd(const Vector4D&in v) const;
+    Vector4D opSub(const Vector4D&in v) const;
+    void Negate();
+    float Length() const;
+    float LengthSqr() const;
+    bool IsZero(float tolerance = 0.009999999776482582) const;
+    float DistTo(const Vector4D&in vOther) const;
+    float DistToSqr(const Vector4D&in vOther) const;
+    void MulAdd(const Vector4D&in a, const Vector4D&in b, float scalar);
+    float Dot(const Vector4D&in vOther) const;
+    Vector4D& opAssign(const Vector4D&in);
+}
+
+class VMatrix {
+    void Init(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33);
+    float& opIndex(uint, uint);
+    const float& opIndex(uint, uint) const;
+    void Init(const matrix3x4_t&in matrix3x4);
+    void SetLeft(const Vector&in vLeft);
+    void SetUp(const Vector&in vUp);
+    void SetForward(const Vector&in vForward);
+    void GetBasisVectors(Vector&out vForward, Vector&out vLeft, Vector&out vUp) const;
+    void SetBasisVectors(const Vector&in vForward, const Vector&in vLeft, const Vector&in vUp);
+    Vector& GetTranslation(Vector&out vTrans) const;
+    void SetTranslation(const Vector&in vTrans);
+    void PreTranslate(const Vector&in vTrans);
+    void PostTranslate(const Vector&in vTrans);
+    matrix3x4_t& As3x4();
+    const matrix3x4_t& As3x4() const;
+    void CopyFrom3x4(const matrix3x4_t&in m3x4);
+    void Set3x4(matrix3x4_t&out matrix3x4) const;
+    bool opEquals(const VMatrix&in src) const;
+    Vector GetLeft() const;
+    Vector GetUp() const;
+    Vector GetForward() const;
+    Vector GetTranslation() const;
+    void V3Mul(const Vector&in vIn, Vector&out vOut) const;
+    void V4Mul(const Vector4D&in vIn, Vector4D&out vOut) const;
+    Vector ApplyRotation(const Vector&in vVec) const;
+    Vector opMul(const Vector&in vVec) const;
+    Vector VMul3x3(const Vector&in vVec) const;
+    Vector VMul3x3Transpose(const Vector&in vVec) const;
+    Vector VMul4x3(const Vector&in vVec) const;
+    Vector VMul4x3Transpose(const Vector&in vVec) const;
+    void TransformPlane(const VPlane&in inPlane, VPlane&out outPlane) const;
+    VPlane opMul(const VPlane&in thePlane) const;
+    VMatrix& opAssign(const VMatrix&in mOther);
+    void MatrixMul(const VMatrix&in vm, VMatrix&out Out) const;
+    const VMatrix& opAddAssign(const VMatrix&in other);
+    VMatrix opMul(const VMatrix&in mOther) const;
+    VMatrix opAdd(const VMatrix&in other) const;
+    VMatrix opSub(const VMatrix&in other) const;
+    VMatrix opSub() const;
+    VMatrix opCom() const;
+    void Identity();
+    bool IsIdentity() const;
+    void SetupMatrixOrgAngles(const Vector&in origin, const QAngle&in vAngles);
+    bool InverseGeneral(VMatrix&out vInverse) const;
+    void InverseTR(VMatrix&out mRet) const;
+    bool IsRotationMatrix() const;
+    float Element(int i, int j) const;
+    void SetElement(int i, int j, float flValue);
+    VMatrix InverseTR() const;
+    Vector GetScale() const;
+    VMatrix Scale(const Vector&in vScale);
+    VMatrix NormalizeBasisVectors() const;
+    VMatrix Transpose() const;
+    VMatrix Transpose3x3() const;
+}
+
+class Color {
+    void SetColor(uint8, uint8, uint8, uint8);
+    void GetColor(uint8&out, uint8&out, uint8&out, uint8&out) const;
+    uint8& opIndex(int);
+    uint8& opIndex(int) const;
+}
+
+class ConVar {
+    int GetInt() const;
+    float GetFloat() const;
+    bool GetBool() const;
+    Color GetColor() const;
+    string GetString() const;
+    string GetStringFast() const;
+    string GetDefault() const;
+    void SetValue(int);
+    void SetValue(float);
+    void SetValue(const string&in);
+    void SetValue(Color);
+    void Reset();
+}
+
+class ConVarRef {
+    bool IsValid() const;
+    float GetFloat() const;
+    int GetInt() const;
+    bool GetBool() const;
+    Color GetColor() const;
+    string GetString() const;
+    Vector GetVector() const;
+    Vector4D GetVector4D() const;
+    bool SetValue(int);
+    bool SetValue(float);
+    bool SetValue(bool);
+    bool SetValue(const string&in);
+    bool SetValue(Color);
+    bool SetValue(Vector);
+    bool SetValue(Vector4D);
+    EConVarFlag GetFlags() const;
+    string GetDefault() const;
+    float GetMin() const;
+    float GetMax() const;
+    void Revert();
+}
+
+class CollisionProperty {
+    const Vector& GetOBBMins() const;
+    const Vector& GetOBBMinsPreScaled() const;
+    const Vector& GetOBBMaxs() const;
+    const Vector& GetOBBMaxsPreScaled() const;
+    float GetBoundingRadius() const;
+    const Vector& GetOBBSize() const;
+    const QAngle& GetCollisionAngles() const;
+    int GetCollisionGroup() const;
+    const Vector& GetCollisionOrigin() const;
+    void SetCollisionBounds(const Vector&in, const Vector&in);
+    void SetSolid(ESolidType);
+    ESolidType GetSolid() const;
+    bool IsPointInBounds(const Vector&in) const;
+}
+
+class GameEvent {
+    string GetName() const;
+    bool IsReliable() const;
+    bool IsLocal() const;
+    bool IsEmpty(const string&in) const;
+    bool GetBool(const string&in name, bool def = false) const;
+    int GetInt(const string&in name, int def = 0) const;
+    int GetUint64(const string&in name, uint64 def = 0) const;
+    float GetFloat(const string&in name, float def = 0) const;
+    string GetString(const string&in name, string def = "") const;
+    void SetBool(const string&in, bool);
+    void SetInt(const string&in, int);
+    void SetUint64(const string&in, uint64);
+    void SetFloat(const string&in, float);
+    void SetString(const string&in, const string&in);
+}
+
+class IGameEventManager {
+    GameEvent@ CreateEvent(const string&in name, bool force = false);
+    bool FireEvent(GameEvent@ event, bool dontBoradast = false);
+    bool FireEventClientSide(GameEvent@);
+}
+
+class CommandArgs {
+    int ArgC() const;
+    string GetCommandString() const;
+    string Arg(int) const;
+}
+
+class cplane_t : VPlane {
+}
+
+class StorageScope {
+    void Clear(const string&in);
+    void ClearAll();
+    float GetFloat(const string&in);
+    int GetInt(const string&in);
+    Vector GetVector(const string&in);
+    string GetString(const string&in);
+    void SetFloat(const string&in, float);
+    void SetInt(const string&in, int);
+    void SetVector(const string&in, const Vector&in);
+    void SetString(const string&in, const string&in);
+}
+
+class trace_t {
+    trace_t& opAssign(const trace_t&in);
+    bool DidHitWorld() const;
+    bool DidHitNonWorldEntity() const;
+    int GetEntityIndex() const;
+    bool DidHit() const;
+}
+
+class FireBulletsInfo_t {
+}
+
+class IPhysicsObject {
+    bool IsStatic() const;
+    bool IsAsleep() const;
+    bool IsTrigger() const;
+    bool IsFluid() const;
+    bool IsHinged() const;
+    bool IsCollisionEnabled() const;
+    bool IsGravityEnabled() const;
+    bool IsDragEnabled() const;
+    bool IsMotionEnabled() const;
+    bool IsMoveable() const;
+    bool IsAttachedToConstraint(bool&out) const;
+    void EnableCollisions(bool&out);
+    void EnableGravity(bool&out);
+    void EnableDrag(bool&out);
+    void EnableMotion(bool&out);
+    void Wake();
+    void Sleep();
+    void SetMass(float&out);
+    float GetMass() const;
+    float GetInvMass() const;
+    Vector GetInertia() const;
+    Vector GetInvInertia() const;
+    void SetInertia(const Vector&in);
+    void SetBuoyancyRatio(float&out);
+    int GetMaterialIndex() const;
+    void SetMaterialIndex(int&out);
+    uint GetContents() const;
+    void SetContents(uint&out);
+    float GetSphereRadius() const;
+    void SetSphereRadius(float&out);
+    float GetEnergy() const;
+    Vector GetMassCenterLocalSpace() const;
+    void SetPosition(const Vector&in, const QAngle&in, bool&out);
+    void SetPositionMatrix(const matrix3x4_t&in, bool&out);
+    void ApplyForceCenter(const Vector&in);
+    void ApplyForceOffset(const Vector&in, const Vector&in);
+    void ApplyTorqueCenter(const Vector&in);
+    float CalculateLinearDrag(const Vector&in) const;
+    float CalculateAngularDrag(const Vector&in) const;
+    void SetDamping(float, float);
+    void GetDamping(float&out, float&out) const;
+    void SetDragCoefficient(float, float);
+    void GetPosition(Vector&out, QAngle&out) const;
+    void GetPositionMatrix(matrix3x4_t&out) const;
+    void SetVelocity(const Vector&in, const Vector&in);
+    void SetVelocityInstantaneous(const Vector&in, const Vector&in);
+    void GetVelocity(Vector&out, Vector&out) const;
+    void AddVelocity(const Vector&in, const Vector&in);
+    Vector GetVelocityAtPoint(const Vector&in) const;
+    void GetImplicitVelocity(Vector&out, Vector&out) const;
+    void CalculateForceOffset(const Vector&in, const Vector&in, Vector&out, Vector&out) const;
+    void CalculateVelocityOffset(const Vector&in, const Vector&in, Vector&out, Vector&out) const;
+}
+
+class CBaseEntity {
+    void Spawn();
+    void Precache();
+    void SetModel(const string&in);
+    void PrecacheModel(const string&in);
+    const Vector& GetAbsOrigin() const;
+    void SetAbsOrigin(const Vector&in);
+    const Vector& GetLocalOrigin() const;
+    void SetLocalOrigin(const Vector&in);
+    const QAngle& GetAbsAngles() const;
+    void SetAbsAngles(const QAngle&in);
+    const QAngle& GetLocalAngles() const;
+    void SetLocalAngles(const QAngle&in);
+    const Vector& GetAbsVelocity() const;
+    void SetAbsVelocity(const Vector&in);
+    const Vector& GetLocalVelocity() const;
+    void SetLocalVelocity(const Vector&in);
+    CBaseEntity@ GetOwnerEntity() const;
+    void SetOwnerEntity(CBaseEntity@);
+    void SetOwnerEntity(CBaseEntity@ parent, int attachment = -1);
+    void SetParentAttachmentMaintainOffset(const string&in);
+    void SetParentAttachment(const string&in);
+    int GetTeamNumber() const;
+    void ChangeTeam(int);
+    Vector EyePosition() const;
+    const QAngle& EyeAngles() const;
+    const QAngle& LocalEyeAngles() const;
+    Vector Forward() const;
+    Vector Up() const;
+    Vector Left() const;
+    const CollisionProperty@ CollisionProp() const;
+    CollisionProperty@ CollisionProp();
+    void SetMoveType(EMoveType val, EMoveCollide moveCollide = MOVECOLLIDE_DEFAULT);
+    EMoveType GetMoveType() const;
+    void SetMoveCollide(EMoveCollide);
+    EMoveCollide GetMoveCollide() const;
+    CBaseEntity@ GetMoveParent();
+    void SetSolid(ESolidType);
+    ESolidType GetSolid() const;
+    void SetCollisionBounds(const Vector&in, const Vector&in);
+    void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
+    void SetNextThink(float thinkTime, const string&in context = "");
+    void EmitSound(const string&in);
+    void StopSound(const string&in);
+    int GetHealth() const;
+    int GetMaxHealth() const;
+    void SetHealth(int);
+    void SetMaxHealth(int);
+    void FireBullets(const FireBulletsInfo_t&in);
+    void Remove();
+    string GetEntityName();
+    string GetClassname() const;
+    string GetDebugName();
+    int GetEntityIndex() const;
+    bool GetKeyValue(const string&in, uint8&out, int);
+    string GetModelName() const;
+    float GetElasticity() const;
+    void SetElasticity(float);
+    bool IsFloating();
+    bool IsBSPModel() const;
+    float GetFriction() const;
+    void SetFriction(float);
+    void SetGravity(float);
+    float GetGravity() const;
+    bool HasVPhysicsObject() const;
+    void PrecacheScriptSound(const string&in);
+    IPhysicsObject@ GetPhysicsObject() const;
+}
+
+class Variant {
+    EFieldType FieldType() const;
+    bool Bool() const;
+    string String() const;
+    int Int() const;
+    float Float() const;
+    void Vector3D(Vector&out) const;
+    void Angle3D(QAngle&out) const;
+    Color Color32() const;
+    void SetBool(bool);
+    void SetInt(int);
+    void SetFloat(float);
+    void SetEntity(CBaseEntity@);
+    void SetVector3D(const Vector&in);
+    void SetPositionVector3D(const Vector&in);
+    void SetAngle3D(const QAngle&in);
+    void SetColor32(Color clr);
+    void SetColor32(int, int, int, int);
+    void SetString(const string&in);
+}
+
+class InputData {
+}
+
+class CBaseAnimating : CBaseEntity {
+    int LookupAttachment(const string&in);
+    bool GetAttachment(const string&in, Vector&out, QAngle&out);
+    bool GetAttachment(int, Vector&out, QAngle&out);
+    int GetBodygroup(int);
+    int GetBodygroupCount(int);
+    string GetBodygroupName(int);
+    string GetBodygroupPartName(int, int);
+    int GetBoneCount();
+    void GetBonePosition(int, Vector&out, QAngle&out);
+    int GetBodygroupCount();
+    int GetObjectScaleLevel();
+    float GetPoseParameter(int);
+    bool GetPoseParameterRange(int, float&out, float&out);
+    int GetSequence();
+    string GetSequenceActivityName(int);
+    int GetSequenceCount();
+    float GetSequenceCycleRate(int);
+    float GetSequenceDuration(int);
+    string GetSequenceName(int);
+    int GetSkin();
+    bool IsActivityFinished();
+    bool IsSequenceFinished();
+    bool IsSequenceLooping(int);
+    bool IsValidSequence(int);
+    int LookupActivity(const string&in);
+    int LookupPoseParameter(const string&in);
+    int LookupSequence(const string&in);
+    void SetBodygroup(int, int);
+    void SetPlaybackRate(float);
+    float SetPoseParameter(int, float);
+    void SetSequence(int);
+    void SetSkin(int);
+}
+
+class CBaseCombatWeapon : CBaseEntity {
+    void PrimaryAttack();
+    void SecondaryAttack();
+    bool Reload();
+    void ItemPreFrame();
+    void ItemPostFrame();
+    void ItemBusyFrame();
+    bool Holster(CBaseCombatWeapon@ switchingTo = null);
+    CBaseEntity@ GetOwner() const;
+}
+
+class CLight : CBaseEntity {
+    float GetInnerAngle() const;
+    float GetOuterAngle() const;
+    Color GetColorHDR() const;
+    Color GetColor() const;
+    float GetClusteredRadius() const;
+    int GetColorScale() const;
+    int GetColorScaleHDR() const;
+    void SetColor(const Color&in, float);
+    void SetColorHDR(const Color&in, float);
+    float GetRadiusOverride() const;
+    void SetRadiusOverride(float);
+    void Toggle();
+    void TurnOff();
+    void TurnOn();
+    void SetShadowSize(int);
+    int GetShadowSize() const;
+    void SetPattern(const string&in);
+    string GetPattern() const;
+    void SetOuterAngle(float);
+    void SetInnerAngle(float);
+    bool GetState() const;
+    void SetLightFalloffCLQ(float, float, float);
+    void SetLightFalloffD50D0(float, float);
+    void GetLightFalloffCLQ(float&out, float&out, float&out);
+    void GetLightFalloffD50D0(float&out, float&out);
+    bool IsHDR() const;
+}
+
+class CGlobalEntityList {
+    CBaseEntity@ FindByClassname(CBaseEntity@, const string&in);
+    CBaseEntity@ FindByName(CBaseEntity@, const string&in);
+    CBaseEntity@ FindInSphere(CBaseEntity@, const Vector&in, float);
+    CBaseEntity@ Next(CBaseEntity@);
+    CBaseEntity@ First();
+    CBaseEntity@ FindByTarget(CBaseEntity@, const string&in);
+    CBaseEntity@ FindByModel(CBaseEntity@, const string&in);
+    CBaseEntity@ FindByNameNearest(const string&in, const Vector&in, float);
+    CBaseEntity@ FindByNameWithin(CBaseEntity@, const string&in, const Vector&in, float);
+    CBaseEntity@ FindByClassnameNearest(const string&in, const Vector&in, float);
+    CBaseEntity@ FindByClassnameWithin(CBaseEntity@, const string&in, const Vector&in, float);
+}
+
+float fpFromIEEE(uint);
+
+uint fpToIEEE(float);
+
+double fpFromIEEE(uint64);
+
+uint64 fpToIEEE(double);
+
+bool closeTo(float, float, float = 0.00001f);
+
+bool closeTo(double, double, double = 0.0000000001);
+
+float cos(float);
+
+float sin(float);
+
+float tan(float);
+
+float acos(float);
+
+float asin(float);
+
+float atan(float);
+
+float atan2(float, float);
+
+float cosh(float);
+
+float sinh(float);
+
+float tanh(float);
+
+float log(float);
+
+float log10(float);
+
+float pow(float, float);
+
+float sqrt(float);
+
+float ceil(float);
+
+float abs(float);
+
+float floor(float);
+
+float fraction(float);
+
+float round(float);
+
+string join(const string[]&in, const string&in);
+
+void throw(const string&in);
+
+string getExceptionInfo();
+
+float BitsToFloat(uint i);
+
+bool IsFinite(const float&in f);
+
+double fabs(double);
+
+float fabsf(float);
+
+float FloatMakePositive(float f);
+
+float FloatNegate(float f);
+
+float FloatMakeNegative(float f);
+
+float RandomFloat(float flMinVal, float flMaxVal = 1.0);
+
+float RandomFloatExp(float flMinVal, float flMaxVal = 1.0, float flExponent = 1.0);
+
+int RandomInt(int iMinVal, int iMaxVal);
+
+float RandomGaussianFloat(float flMean, float flStdDev = 1.0);
+
+float FastCos(float x);
+
+float FastRecip(float x);
+
+float FastSqrtEst(float x);
+
+float FastClampInfinity(float x);
+
+void Vector2DCopy(const Vector2D&in src, Vector2D&out dst);
+
+void Vector2DAdd(const Vector2D&in a, const Vector2D&in b, Vector2D&out result);
+
+void Vector2DSubtract(const Vector2D&in a, const Vector2D&in b, Vector2D&out result);
+
+void Vector2DMultiply(const Vector2D&in a, float b, Vector2D&out result);
+
+void Vector2DMultiply(const Vector2D&in a, const Vector2D&in b, Vector2D&out result);
+
+void Vector2DDivide(const Vector2D&in a, float b, Vector2D&out result);
+
+void Vector2DDivide(const Vector2D&in a, const Vector2D&in b, Vector2D&out result);
+
+void Vector2DMA(const Vector2D&in start, float s, const Vector2D&in dir, Vector2D&out result);
+
+void Vector2DMin(const Vector2D&in a, const Vector2D&in b, Vector2D&out result);
+
+void Vector2DMax(const Vector2D&in a, const Vector2D&in b, Vector2D&out result);
+
+float Vector2DNormalize(Vector2D&out v);
+
+float Vector2DLength(const Vector2D&in v);
+
+float DotProduct2D(const Vector2D&in a, const Vector2D&in b);
+
+float CrossProduct2D(const Vector2D&in a, const Vector2D&in b);
+
+void Vector2DLerp(const Vector2D&in src1, const Vector2D&in src2, float t, Vector2D&out dest);
+
+void Vector2DRotate(const Vector2D&in vIn, float flDegrees, Vector2D&out vOut);
+
+float Vector2DAngle(const Vector2D&in a, const Vector2D&in b);
+
+void VectorCopy(const Vector&in src, Vector&out dst);
+
+void VectorAdd(const Vector&in a, const Vector&in b, Vector&out result);
+
+void VectorSubtract(const Vector&in a, const Vector&in b, Vector&out result);
+
+void VectorMultiply(const Vector&in a, float b, Vector&out result);
+
+void VectorMultiply(const Vector&in a, const Vector&in b, Vector&out result);
+
+void VectorDivide(const Vector&in a, float b, Vector&out result);
+
+void VectorDivide(const Vector&in a, const Vector&in b, Vector&out result);
+
+void VectorScale(const Vector&in In, float scale, Vector&out result);
+
+void VectorMA(const Vector&in start, float scale, const Vector&in direction, Vector&out dest);
+
+bool VectorsAreEqual(const Vector&in src1, const Vector&in src2, float tolerance);
+
+float VectorLength(const Vector&in v);
+
+float DotProduct(const Vector&in a, const Vector&in b);
+
+void CrossProduct(const Vector&in a, const Vector&in b, Vector&out result);
+
+void VectorMin(const Vector&in a, const Vector&in b, Vector&out result);
+
+void VectorMax(const Vector&in a, const Vector&in b, Vector&out result);
+
+void VectorLerp(const Vector&in src1, const Vector&in src2, float t, Vector&out dest);
+
+Vector VectorLerp(const Vector&in src1, const Vector&in src2, float t);
+
+Vector ReplicateToVector(float x);
+
+bool PointWithinViewAngle(const Vector&in vecSrcPosition, const Vector&in vecTargetPosition, const Vector&in vecLookDirection, float flCosHalfFOV);
+
+Vector CrossProduct(const Vector&in a, const Vector&in b);
+
+Vector RandomVectorInUnitSphere();
+
+Vector RandomVectorOnUnitSphere();
+
+void VectorMAInline(const Vector&in start, float scale, const Vector&in direction, Vector&out dest);
+
+Vector& AllocTempVector();
+
+float DotProductAbs(const Vector&in v0, const Vector&in v1);
+
+bool FloatsAreEqual(float f1, float f2, float flTolerance);
+
+bool VectorsAreWithinPercentageTolerance(const Vector&in src1, const Vector&in src2, float flPercentageTolerance);
+
+void VectorAbs(const Vector&in src, Vector&out dst);
+
+Vector VectorAbs(const Vector&in src);
+
+Vector VectorMin(const Vector&in a, const Vector&in b);
+
+Vector VectorMax(const Vector&in a, const Vector&in b);
+
+float ComputeVolume(const Vector&in vecMins, const Vector&in vecMaxs);
+
+Vector RandomVector(float minVal, float maxVal);
+
+Vector VectorPerpendicularToVector(const Vector&in In);
+
+Quaternion RandomQuaternion();
+
+Quaternion Conjugate(const Quaternion&in q);
+
+bool QuaternionsAreEqual(const Quaternion&in src1, const Quaternion&in src2, float tolerance);
+
+float QuaternionLength(const Quaternion&in q);
+
+bool QuaternionIsNormalized(const Quaternion&in q, float flTolerance = 9.999999974752427e-07);
+
+void VectorAdd(const QAngle&in a, const QAngle&in b, QAngle&out result);
+
+void VectorMA(const QAngle&in start, float scale, const QAngle&in direction, QAngle&out dest);
+
+float AngleNormalize(float angle);
+
+float AngleNormalizePositive(float angle);
+
+QAngle RandomAngle(float minVal, float maxVal);
+
+void VectorCopy(const QAngle&in src, QAngle&out dst);
+
+bool QAnglesAreEqual(const QAngle&in src1, const QAngle&in src2, float tolerance);
+
+float InvRSquared(const Vector&in v);
+
+float VectorNormalize(Vector&out v);
+
+void VectorNormalizeFast(Vector&out vec);
+
+Vector ScaleVector(const Vector&in a, const Vector&in b);
+
+Quaternion Exp(const Vector&in v);
+
+Vector QuaternionLog(const Quaternion&in q);
+
+float Snap(float a, float flSnap);
+
+Vector Snap(const Vector&in a, float flSnap);
+
+float CalcFovY(float flFovX, float flScreenAspect);
+
+float CalcFovX(float flFovY, float flScreenAspect);
+
+float VectorMaximum(const Vector&in v);
+
+float CrossProductX(const Vector&in v1, const Vector&in v2);
+
+float CrossProductY(const Vector&in v1, const Vector&in v2);
+
+float CrossProductZ(const Vector&in v1, const Vector&in v2);
+
+float RoundInt(float In);
+
+int Q_log2(uint val);
+
+bool IsPowerOfTwo(uint x);
+
+uint SmallestPowerOfTwoGreaterOrEqual(uint x);
+
+uint LargestPowerOfTwoLessThanOrEqual(uint x);
+
+int GreatestCommonDivisor(int i1, int i2);
+
+bool IsDenormal(const float&in val);
+
+void VectorRotate(const Vector&in in1, const QAngle&in in2, Vector&out Out);
+
+void VectorRotate(const Vector&in in1, const Quaternion&in in2, Vector&out Out);
+
+Vector VectorRotate(const Vector&in vIn1, const Quaternion&in qIn2);
+
+QAngle TransformAnglesToLocalSpace(const QAngle&in angles, const matrix3x4_t&in parentMatrix);
+
+QAngle TransformAnglesToWorldSpace(const QAngle&in angles, const matrix3x4_t&in parentMatrix);
+
+void MatrixInitialize(matrix3x4_t&out mat, const Vector&in vecOrigin, const Vector&in vecXAxis, const Vector&in vecYAxis, const Vector&in vecZAxis);
+
+void MatrixCopy(const matrix3x4_t&in In, matrix3x4_t&out Out);
+
+void MatrixInvert(const matrix3x4_t&in In, matrix3x4_t&out Out);
+
+bool MatricesAreEqual(const matrix3x4_t&in src1, const matrix3x4_t&in src2, float flTolerance = 9.999999747378752e-06);
+
+void MatrixGetColumn(const matrix3x4_t&in In, int column, Vector&out Out);
+
+void MatrixSetColumn(const Vector&in In, int column, matrix3x4_t&out Out);
+
+void ConcatRotations(const matrix3x4_t&in in1, const matrix3x4_t&in in2, matrix3x4_t&out Out);
+
+void ConcatTransforms(const matrix3x4_t&in in1, const matrix3x4_t&in in2, matrix3x4_t&out Out);
+
+void MatrixMultiply(const matrix3x4_t&in in1, const matrix3x4_t&in in2, matrix3x4_t&out Out);
+
+void QuaternionExp(const Quaternion&in p, Quaternion&out q);
+
+void QuaternionLn(const Quaternion&in p, Quaternion&out q);
+
+void QuaternionLookAt(const Vector&in vecForward, const Vector&in referenceUp, Quaternion&out q);
+
+void QuaternionSlerp(const Quaternion&in p, const Quaternion&in q, float t, Quaternion&out qt);
+
+void QuaternionSlerpNoAlign(const Quaternion&in p, const Quaternion&in q, float t, Quaternion&out qt);
+
+void QuaternionBlend(const Quaternion&in p, const Quaternion&in q, float t, Quaternion&out qt);
+
+void QuaternionBlendNoAlign(const Quaternion&in p, const Quaternion&in q, float t, Quaternion&out qt);
+
+void QuaternionIdentityBlend(const Quaternion&in p, float t, Quaternion&out qt);
+
+float QuaternionAngleDiff(const Quaternion&in p, const Quaternion&in q);
+
+void QuaternionScale(const Quaternion&in p, float t, Quaternion&out q);
+
+void QuaternionAlign(const Quaternion&in p, const Quaternion&in q, Quaternion&out qt);
+
+float QuaternionDotProduct(const Quaternion&in p, const Quaternion&in q);
+
+void QuaternionConjugate(const Quaternion&in p, Quaternion&out q);
+
+void QuaternionInvert(const Quaternion&in p, Quaternion&out q);
+
+float QuaternionNormalize(Quaternion&out q);
+
+void QuaternionMultiply(const Quaternion&in q, const Vector&in v, Vector&out result);
+
+void QuaternionAdd(const Quaternion&in p, const Quaternion&in q, Quaternion&out qt);
+
+void QuaternionMult(const Quaternion&in p, const Quaternion&in q, Quaternion&out qt);
+
+void QuaternionMatrix(const Quaternion&in q, matrix3x4_t&out matrix);
+
+void QuaternionMatrix(const Quaternion&in q, const Vector&in pos, matrix3x4_t&out matrix);
+
+void QuaternionMatrix(const Quaternion&in q, const Vector&in pos, const Vector&in vScale, matrix3x4_t&out mat);
+
+void QuaternionAngles(const Quaternion&in q, QAngle&out angles);
+
+void AngleQuaternion(const QAngle&in angles, Quaternion&out qt);
+
+void QuaternionAxisAngle(const Quaternion&in q, Vector&out axis, float&out angle);
+
+void AxisAngleQuaternion(const Vector&in axis, float angle, Quaternion&out q);
+
+void BasisToQuaternion(const Vector&in vecForward, const Vector&in vecRight, const Vector&in vecUp, Quaternion&out q);
+
+void MatrixQuaternion(const matrix3x4_t&in mat, Quaternion&out q);
+
+void MatrixQuaternionFast(const matrix3x4_t&in mat, Quaternion&out q);
+
+void MatrixPosition(const matrix3x4_t&in matrix, Vector&out position);
+
+Vector MatrixNormalize(const matrix3x4_t&in In, matrix3x4_t&out Out);
+
+void MatrixQuaternion(const matrix3x4_t&in mat, Quaternion&out q, Vector&out o);
+
+float MatrixQuaternionTest(uint);
+
+float MatrixQuaternionTest2(uint);
+
+void QuaternionAccumulate(const Quaternion&in p, float s, const Quaternion&in q, Quaternion&out qt);
+
+void QuaternionSM(float s, const Quaternion&in p, const Quaternion&in q, Quaternion&out qt);
+
+void QuaternionMA(const Quaternion&in p, float s, const Quaternion&in q, Quaternion&out qt);
+
+Quaternion GetNormalized(const Quaternion&in q);
+
+Quaternion AngleQuaternion(const QAngle&in angles);
+
+Quaternion QuaternionFromPitchYawRoll(float flPitch, float flYaw, float flRoll);
+
+Quaternion QuaternionAddPitch(const Quaternion&in q, float flPitch);
+
+Quaternion QuaternionAddYaw(const Quaternion&in q, float flYaw);
+
+Quaternion QuaternionAddRoll(const Quaternion&in q, float flRoll);
+
+Quaternion MatrixQuaternion(const matrix3x4_t&in mat);
+
+Quaternion MatrixQuaternionFast(const matrix3x4_t&in mat);
+
+matrix3x4_t QuaternionMatrix(const Quaternion&in q);
+
+matrix3x4_t QuaternionMatrix(const Quaternion&in q, const Vector&in pos);
+
+Quaternion RotateBetween(const Vector&in v1, const Vector&in v2);
+
+Quaternion QuaternionConjugate(const Quaternion&in p);
+
+Quaternion QuaternionInvert(const Quaternion&in p);
+
+matrix3x4_t ConcatTransforms(const matrix3x4_t&in in1, const matrix3x4_t&in in2);
+
+matrix3x4_t MatrixInvert(const matrix3x4_t&in In);
+
+float MatrixRowDotProduct(const matrix3x4_t&in in1, int row, const Vector&in in2);
+
+float MatrixColumnDotProduct(const matrix3x4_t&in in1, int col, const Vector&in in2);
+
+float anglemod(float a);
+
+float RemapVal(float val, float A, float B, float C, float D);
+
+float RemapValClamped(float val, float A, float B, float C, float D);
+
+float Sqr(float f);
+
+float FLerp(float f1, float f2, float i1, float i2, float x);
+
+float Sign(float x);
+
+int ClampArrayBounds(int n, uint maxindex);
+
+int InsideOut(int nTotal, int nCounter);
+
+void AngleMatrix(const QAngle&in angles, matrix3x4_t&out mat);
+
+void AngleMatrix(const QAngle&in angles, const Vector&in position, matrix3x4_t&out mat);
+
+void AngleIMatrix(const QAngle&in angles, matrix3x4_t&out mat);
+
+void AngleIMatrix(const QAngle&in angles, const Vector&in position, matrix3x4_t&out mat);
+
+void VectorAngles(const Vector&in forward, QAngle&out angles);
+
+void VectorAngles(const Vector&in forward, const Vector&in pseudoup, QAngle&out angles);
+
+void VectorMatrix(const Vector&in forward, matrix3x4_t&out mat);
+
+void VectorVectors(const Vector&in forward, Vector&out right, Vector&out up);
+
+void SetIdentityMatrix(matrix3x4_t&out mat);
+
+void SetScaleMatrix(float x, float y, float z, matrix3x4_t&out dst);
+
+void MatrixBuildRotationAboutAxis(const Vector&in vAxisOfRot, float angleDegrees, matrix3x4_t&out dst);
+
+bool MatrixIsIdentity(const matrix3x4_t&in m);
+
+void SetScaleMatrix(float flScale, matrix3x4_t&out dst);
+
+void SetScaleMatrix(const Vector&in scale, matrix3x4_t&out dst);
+
+void MatrixTranspose(matrix3x4_t&out mat);
+
+void MatrixTranspose(const matrix3x4_t&in src, matrix3x4_t&out dst);
+
+void MatrixInverseTranspose(const matrix3x4_t&in src, matrix3x4_t&out dst);
+
+void PositionMatrix(const Vector&in position, matrix3x4_t&out mat);
+
+void VectorRotate(const Vector&in in1, const matrix3x4_t&in in2, Vector&out Out);
+
+void VectorIRotate(const Vector&in in1, const matrix3x4_t&in in2, Vector&out Out);
+
+void MatrixAngles(const matrix3x4_t&in matrix, QAngle&out angles);
+
+void MatrixAngles(const matrix3x4_t&in matrix, QAngle&out angles, Vector&out position);
+
+void MatrixAngles(const matrix3x4_t&in mat, Quaternion&out q, Vector&out position);
+
+int VectorCompare(const Vector&in v1, const Vector&in v2);
+
+void VectorTransform(const Vector&in in1, const matrix3x4_t&in in2, Vector&out Out);
+
+Vector VectorTransform(const Vector&in in1, const matrix3x4_t&in in2);
+
+Vector VectorRotate(const Vector&in in1, const matrix3x4_t&in in2);
+
+void VectorITransform(const Vector&in in1, const matrix3x4_t&in in2, Vector&out Out);
+
+Vector VectorITransform(const Vector&in in1, const matrix3x4_t&in in2);
+
+void VectorFill(Vector&out a, float b);
+
+void VectorNegate(Vector&out a);
+
+float VectorAvg(Vector&out a);
+
+void ClearBounds(Vector&out mins, Vector&out maxs);
+
+void AddPointToBounds(const Vector&in v, Vector&out mins, Vector&out maxs);
+
+bool AreBoundsValid(const Vector&in vMin, const Vector&in vMax);
+
+bool IsPointInBounds(const Vector&in vPoint, const Vector&in vMin, const Vector&in vMax);
+
+void BuildGammaTable(float gamma, float texGamma, float brightness, int overbright);
+
+float TexLightToLinear(int c, int exponent);
+
+int LinearToTexture(float f);
+
+int LinearToScreenGamma(float f);
+
+float TextureToLinear(int c);
+
+bool SolveQuadratic(float a, float b, float c, float&out root1, float&out root2);
+
+bool SolveInverseQuadratic(float x1, float y1, float x2, float y2, float x3, float y3, float&out a, float&out b, float&out c);
+
+bool SolveInverseQuadraticMonotonic(float x1, float y1, float x2, float y2, float x3, float y3, float&out a, float&out b, float&out c);
+
+bool SolveInverseReciprocalQuadratic(float x1, float y1, float x2, float y2, float x3, float y3, float&out a, float&out b, float&out c);
+
+void VectorYawRotate(const Vector&in In, float flYaw, Vector&out Out);
+
+float Bias(float x, float biasAmt);
+
+float Gain(float x, float biasAmt);
+
+float SmoothCurve(float x);
+
+float SmoothCurve_Tweak(float x, float flPeakPos = 0.5, float flPeakSharpness = 0.5);
+
+float ExponentialDecay(float halflife, float dt);
+
+float ExponentialDecay(float decayTo, float decayTime, float dt);
+
+float ExponentialDecayIntegral(float decayTo, float decayTime, float dt);
+
+float SimpleSpline(float value);
+
+float SimpleSplineRemapVal(float val, float A, float B, float C, float D);
+
+float SimpleSplineRemapValClamped(float val, float A, float B, float C, float D);
+
+int RoundFloatToInt(float f);
+
+uint8 RoundFloatToByte(float f);
+
+uint RoundFloatToUnsignedLong(float f);
+
+bool IsIntegralValue(float flValue, float flTolerance = 0.0010000000474974513);
+
+int Float2Int(float a);
+
+int Floor2Int(float a);
+
+uint FastFToC(float c);
+
+int FastFloatToSmallInt(float c);
+
+float ClampToMsec(float In);
+
+int Ceil2Int(float a);
+
+bool QuickBoxSphereTest(const Vector&in vOrigin, float flRadius, const Vector&in bbMin, const Vector&in bbMax);
+
+bool QuickBoxIntersectTest(const Vector&in vBox1Min, const Vector&in vBox1Max, const Vector&in vBox2Min, const Vector&in vBox2Max);
+
+float GammaToLinearFullRange(float gamma);
+
+float LinearToGammaFullRange(float linear);
+
+float GammaToLinear(float gamma);
+
+float LinearToGamma(float linear);
+
+float SrgbGammaToLinear(float flSrgbGammaValue);
+
+float SrgbLinearToGamma(float flLinearValue);
+
+float LinearToVertexLight(float f);
+
+uint8 LinearToLightmap(float f);
+
+void ColorClamp(Vector&out color);
+
+void ColorClampTruncate(Vector&out color);
+
+void Catmull_Rom_Spline(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Catmull_Rom_Spline_Tangent(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Catmull_Rom_Spline_Integral(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Catmull_Rom_Spline_Integral(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, Vector&out output);
+
+void Catmull_Rom_Spline_Normalize(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Catmull_Rom_Spline_Integral_Normalize(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Catmull_Rom_Spline_NormalizeX(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Hermite_Spline(const Vector&in p1, const Vector&in p2, const Vector&in d1, const Vector&in d2, float t, Vector&out output);
+
+float Hermite_Spline(float p1, float p2, float d1, float d2, float t);
+
+void Hermite_Spline(const Vector&in p0, const Vector&in p1, const Vector&in p2, float t, Vector&out output);
+
+float Hermite_Spline(float p0, float p1, float p2, float t);
+
+void Hermite_Spline(const Quaternion&in q0, const Quaternion&in q1, const Quaternion&in q2, float t, Quaternion&out output);
+
+void Kochanek_Bartels_Spline(float tension, float bias, float continuity, const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Kochanek_Bartels_Spline_NormalizeX(float tension, float bias, float continuity, const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Cubic_Spline(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Cubic_Spline_NormalizeX(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void BSpline(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void BSpline_NormalizeX(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Parabolic_Spline(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+void Parabolic_Spline_NormalizeX(const Vector&in p1, const Vector&in p2, const Vector&in p3, const Vector&in p4, float t, Vector&out output);
+
+float CubicBasis0(float t);
+
+float CubicBasis1(float t);
+
+float CubicBasis2(float t);
+
+float CubicBasis3(float t);
+
+float QuinticInterpolatingPolynomial(float t);
+
+float RangeCompressor(float flValue, float flMin, float flMax, float flBase);
+
+float CalcSqrDistanceToAABB(const Vector&in mins, const Vector&in maxs, const Vector&in point);
+
+void CalcClosestPointOnAABB(const Vector&in mins, const Vector&in maxs, const Vector&in point, Vector&out closestOut);
+
+void CalcSqrDistAndClosestPointOnAABB(const Vector&in mins, const Vector&in maxs, const Vector&in point, Vector&out closestOut, float&out distSqrOut);
+
+float CalcDistanceToAABB(const Vector&in mins, const Vector&in maxs, const Vector&in point);
+
+float Approach(float target, float value, float speed);
+
+float ApproachAngle(float target, float value, float speed);
+
+float AngleDiff(float destAngle, float srcAngle);
+
+float AngleDistance(float next, float cur);
+
+bool AnglesAreEqual(float a, float b, float tolerance);
+
+void RotationDeltaAxisAngle(const QAngle&in srcAngles, const QAngle&in destAngles, Vector&out deltaAxis, float&out deltaAngle);
+
+void ComputeTrianglePlane(const Vector&in v1, const Vector&in v2, const Vector&in v3, Vector&out normal, float&out intercept);
+
+float TetrahedronVolume(const Vector&in p0, const Vector&in p1, const Vector&in p2, const Vector&in p3);
+
+float TriangleArea(const Vector&in p0, const Vector&in p1, const Vector&in p2);
+
+float BoxSurfaceArea(const Vector&in vecBoxMin, const Vector&in vecBoxMax);
+
+void CalcTriangleTangentSpace(const Vector&in p0, const Vector&in p1, const Vector&in p2, const Vector2D&in t0, const Vector2D&in t1, const Vector2D&in t2, Vector&out sVect, Vector&out tVect);
+
+void TransformAABB(const matrix3x4_t&in in1, const Vector&in vecMinsIn, const Vector&in vecMaxsIn, Vector&out vecMinsOut, Vector&out vecMaxsOut);
+
+void ITransformAABB(const matrix3x4_t&in in1, const Vector&in vecMinsIn, const Vector&in vecMaxsIn, Vector&out vecMinsOut, Vector&out vecMaxsOut);
+
+void RotateAABB(const matrix3x4_t&in in1, const Vector&in vecMinsIn, const Vector&in vecMaxsIn, Vector&out vecMinsOut, Vector&out vecMaxsOut);
+
+void IRotateAABB(const matrix3x4_t&in in1, const Vector&in vecMinsIn, const Vector&in vecMaxsIn, Vector&out vecMinsOut, Vector&out vecMaxsOut);
+
+int CeilPow2(int In);
+
+int FloorPow2(int In);
+
+void RGB2YUV(int&out nR, int&out nG, int&out nB, float&out fY, float&out fU, float&out fV, bool bApplySaturationCurve);
+
+void RGBtoHSV(const Vector&in rgb, Vector&out hsv);
+
+void HSVtoRGB(const Vector&in hsv, Vector&out rgb);
+
+float FastLog2(float i);
+
+float FastPow2(float i);
+
+float FastPow(float a, float b);
+
+float FastPow10(float i);
+
+bool CloseEnough(float a, float b, float epsilon = 0.0010000000474974513);
+
+bool CloseEnough(const Vector&in a, const Vector&in b, float epsilon = 0.0010000000474974513);
+
+bool AlmostEqual(float a, float b, int maxUlps = 10);
+
+bool AlmostEqual(const Vector&in a, const Vector&in b, int maxUlps = 10);
+
+Vector Approach(Vector target, Vector value, float speed);
+
+float smoothstep_bounds(float edge0, float edge1, float x);
+
+float interpstep(float edge0, float edge1, float x);
+
+double SubtractIntegerPart(double flVal);
+
+float GetRelativeDifferenceSqr(const Vector&in a, const Vector&in b);
+
+float GetRelativeDifference(const Vector&in a, const Vector&in b);
+
+float GetRelativeDifference(const matrix3x4_t&in a, const matrix3x4_t&in b);
+
+void Vector4DCopy(const Vector4D&in src, Vector4D&out dst);
+
+void Vector4DAdd(const Vector4D&in a, const Vector4D&in b, Vector4D&out result);
+
+void Vector4DSubtract(const Vector4D&in a, const Vector4D&in b, Vector4D&out result);
+
+void Vector4DMultiply(const Vector4D&in a, float b, Vector4D&out result);
+
+void Vector4DMultiply(const Vector4D&in a, const Vector4D&in b, Vector4D&out result);
+
+void Vector4DDivide(const Vector4D&in a, float b, Vector4D&out result);
+
+void Vector4DDivide(const Vector4D&in a, const Vector4D&in b, Vector4D&out result);
+
+void Vector4DMA(const Vector4D&in start, float s, const Vector4D&in dir, Vector4D&out result);
+
+float Vector4DNormalize(Vector4D&out v);
+
+float Vector4DLength(const Vector4D&in v);
+
+float DotProduct4D(const Vector4D&in a, const Vector4D&in b);
+
+void Vector4DLerp(const Vector4D&in src1, const Vector4D&in src2, float t, Vector4D&out dest);
+
+VMatrix SetupMatrixIdentity();
+
+VMatrix SetupMatrixScale(const Vector&in vScale);
+
+VMatrix SetupMatrixTranslation(const Vector&in vTranslation);
+
+VMatrix SetupMatrixReflection(const VPlane&in thePlane);
+
+VMatrix SetupMatrixProjection(const Vector&in vOrigin, const VPlane&in thePlane);
+
+VMatrix SetupMatrixAxisRot(const Vector&in vAxis, float fDegrees);
+
+VMatrix SetupMatrixAxisToAxisRot(const Vector&in vFromAxis, const Vector&in vToAxis);
+
+VMatrix SetupMatrixAngles(const QAngle&in vAngles);
+
+VMatrix SetupMatrixOrgAngles(const Vector&in origin, const QAngle&in vAngles);
+
+bool PlaneIntersection(const VPlane&in vp1, const VPlane&in vp2, const VPlane&in vp3, Vector&out vOut);
+
+void MatrixSetIdentity(VMatrix&out dst);
+
+void MatrixTranspose(const VMatrix&in src, VMatrix&out dst);
+
+void MatrixCopy(const VMatrix&in src, VMatrix&out dst);
+
+void MatrixMultiply(const VMatrix&in src1, const VMatrix&in src2, VMatrix&out dst);
+
+void MatrixSetColumn(VMatrix&out src, int nCol, const Vector&in column);
+
+void MatrixSetRow(VMatrix&out src, int nCol, const Vector&in column);
+
+void Vector3DMultiply(const VMatrix&in src1, const Vector&in src2, Vector&out dst);
+
+void Vector3DMultiplyPosition(const VMatrix&in src1, const Vector src2, Vector&out dst);
+
+void Vector3DMultiplyPositionProjective(const VMatrix&in src1, const Vector&in src2, Vector&out dst);
+
+void Vector3DMultiplyProjective(const VMatrix&in src1, const Vector&in src2, Vector&out dst);
+
+void Vector4DMultiply(const VMatrix&in src1, const Vector4D&in src2, Vector4D&out dst);
+
+void Vector4DMultiplyPosition(const VMatrix&in src1, const Vector&in src2, Vector4D&out dst);
+
+void Vector3DMultiplyTranspose(const VMatrix&in src1, const Vector&in src2, Vector&out dst);
+
+void Vector4DMultiplyTranspose(const VMatrix&in src1, const Vector4D&in src2, Vector4D&out dst);
+
+void MatrixBuildTranslation(VMatrix&out dst, float x, float y, float z);
+
+void MatrixBuildTranslation(VMatrix&out dst, const Vector&in translation);
+
+void MatrixTranslate(VMatrix&out dst, const Vector&in translation);
+
+void MatrixBuildRotationAboutAxis(VMatrix&out dst, const Vector&in vAxisOfRot, float angleDegrees);
+
+void MatrixBuildRotateZ(VMatrix&out dst, float angleDegrees);
+
+void MatrixRotate(VMatrix&out dst, const Vector&in vAxisOfRot, float angleDegrees);
+
+void MatrixBuildRotation(VMatrix&out dst, const Vector&in initialDirection, const Vector&in finalDirection);
+
+void MatrixBuildScale(VMatrix&out dst, float x, float y, float z);
+
+void MatrixBuildScale(VMatrix&out dst, const Vector&in scale);
+
+void MatrixBuildPerspective(VMatrix&out dst, float fovX, float fovY, float zNear, float zFar);
+
+void MatrixFromAngles(const QAngle&in vAngles, VMatrix&out dst);
+
+void MatrixToAngles(const VMatrix&in src, QAngle&out vAngles);
+
+void MatrixInverseTR(const VMatrix&in src, VMatrix&out dst);
+
+bool MatrixInverseGeneral(const VMatrix&in src, VMatrix&out dst);
+
+void MatrixInverseTranspose(const VMatrix&in src, VMatrix&out dst);
+
+bool MatricesAreEqual(const VMatrix&in src1, const VMatrix&in src2, float flTolerance);
+
+void MatrixBuildOrtho(VMatrix&out dst, double left, double top, double right, double bottom, double zNear, double zFar);
+
+void MatrixBuildOrthoLH(VMatrix&out dst, double left, double top, double right, double bottom, double zNear, double zFar);
+
+void MatrixBuildPerspectiveX(VMatrix&out dst, double flFovX, double flAspect, double flZNear, double flZFar);
+
+void MatrixBuildPerspectiveOffCenterX(VMatrix&out dst, double flFovX, double flAspect, double flZNear, double flZFar, double bottom, double top, double left, double right);
+
+void MatrixOrtho(VMatrix&out dst, double left, double top, double right, double bottom, double zNear, double zFar);
+
+void MatrixPerspectiveX(VMatrix&out dst, double flFovX, double flAspect, double flZNear, double flZFar);
+
+void MatrixPerspectiveOffCenterX(VMatrix&out dst, double flFovX, double flAspect, double flZNear, double flZFar, double bottom, double top, double left, double right);
+
+Vector4D GetMatrixColumnAsVector4D(const VMatrix&in mMatrix, int nCol);
+
+Vector4D MatrixGetRowAsVector4D(const VMatrix&in src, int nRow);
+
+//Print a message to the console.
+void Msg(const string&in);
+
+void Warning(const string&in);
+
+void DevMsg(const string&in);
+
+void DevWarning(const string&in);
+
+void Msgl(const string&in);
+
+void Warningl(const string&in);
+
+void DevMsgl(const string&in);
+
+void DevWarningl(const string&in);
+
+IGameEventManager@ GameEventManager();
+
+CGlobalEntityList@ EntityList();
+
+
+namespace util {
+    float GetCurrentTime();
+
+    float GetFrameTime();
+
+    int GetTickCount();
+
+    CBaseEntity@ CreateEntityByName(const string&in);
+
+    void TraceLine(const Vector&in, const Vector&in, uint, CBaseEntity@, int, trace_t&out);
+
+    void TraceHull(const Vector&in, const Vector&in, const Vector&in, const Vector&in, uint, CBaseEntity@, int, trace_t&out);
+
+    void TracePortalLine(const Vector&in, const Vector&in, uint, CBaseEntity@, int, trace_t&out, bool);
+
+    CBaseEntity@ GetEntityByIndex(int);
+
+    int GetMaxEntities();
+
+    void Remove(CBaseEntity@ pEntity);
+}
+
+
