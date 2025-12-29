@@ -1,0 +1,37 @@
+name: Feature Request
+description: Request a new functionality.
+title: "[Feature Request]: "
+labels: ["enhancement"]
+type: feature
+body:
+
+  - type: dropdown
+    id: e_type
+    attributes:
+      label: type
+      description: A new class/mixin/method or something else?
+      options:
+        - Class
+        - Mixin
+        - Method
+        - Other
+    
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: Name of the new class/method/etc.
+      placeholder: NewCoolClass
+
+  - type: textarea
+    id: e_description
+    attributes:
+      label: Enhancement description.
+      description: Please describe in, most detail; your suggestion.
+      placeholder: This class can be helpful to others as it would implement the X function that does Y...
+    validations:
+      required: true
+
