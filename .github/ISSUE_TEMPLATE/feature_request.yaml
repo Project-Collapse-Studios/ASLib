@@ -14,6 +14,7 @@ body:
         - Class
         - Mixin
         - Method
+        - Function
         - Other
     
     validations:
