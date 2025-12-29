@@ -8,7 +8,7 @@ body:
   - type: dropdown
     id: e_type
     attributes:
-      label: type
+      label: Type
       description: A new class/mixin/method or something else?
       options:
         - Class
