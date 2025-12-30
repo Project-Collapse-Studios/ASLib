@@ -6,9 +6,9 @@
 * @license Distributed under the MIT license - Copyright (c) 2026 Project Collapse Studios
 */
 
-// Tags that can be appended to various EntityInfo's in the
-// EntityArray array type to find certain specific entities in the array.
-//? Maybe we could have a way to implement custom tags that can be made and applied in special cases.
+// Tags that can be appended to various EntityInfo's in the EntityArray to find certain specific entities in the array.
+//? Maybe we could have a way to implement custom tags that can be made and applied in special cases at runtime?
+// TODO: Currently these were just examples of tags we could have, these can be changed out or changed with whatever.
 enum EntityTag
 {
     NONE           = 0,      // Entity has no tags.
@@ -25,26 +25,56 @@ enum EntityTag
 typedef uint16 EntityTags; // Max allowed amount of tags currently is 1 << 15, this can easily be changed later.
 
 // Struct to contain the information about an entity in the EntityArray.
-class EntityInfo
+final class EntityInfo
 {
-    CBaseEntity@ entHandle;
-    EntityTags tags;
+    CBaseEntity@ entHandle; // Handle for the entity.
+    EntityTags tags; // unint16 number that holds a bit
 
+    /**
+    * @brief Default constructor.
+    */
     EntityInfo()
     {
         @entHandle = null;
         tags = EntityTag::NONE;
     }
 
-    EntityInfo( CBaseEntity@ handle, EntityTags tags = EntityTag::NONE )
+    /**
+    * @brief Constructor with arguments.
+    * @param newEntHandle A CBaseEntity handle to pass to the EntityInfo to store.
+    * @param tags What tags should be assosiated with the entity.
+    */
+    EntityInfo( CBaseEntity@ newEntHandle, EntityTags tags = EntityTag::NONE )
     {
-        @entHandle = handle;
+        @entHandle = newEntHandle;
         tags = tags;
+    }
+
+    /**
+    * @brief Assign the contents of one EntityInfo's to another.
+    * @param rhs EntityInfo on the right hand side.
+    */
+    EntityInfo& opAssign(const EntityInfo& rhs)
+    {
+        this.entHandle = rhs.entHandle;
+        this.tags = rhs.tags;
+    }
+
+    /**
+    * @brief Check if two EntityInfo's are equal.
+    * @param rhs EntityInfo on the right hand side.
+    */
+    bool opEquals( const EntityInfo&in rhs ) const
+    {
+        if ((this.entHandle != rhs.entHandle) || (this.tags != rhs.tags))
+            return false;
+
+        return true;
     }
 }
 
 // Custom array type that stores specificly added sets of Entities and information about them.
-// TODO: Should try and take advantage of using the array's "findByRef" functions for CBaseEntity handles,
+// TODO: Should try and take advantage of using the array's find functions for CBaseEntity handles,
 // TODO: however the issue is that the array type used is EntityInfo so CBaseEntity can't be used.
 class EntityArray
 {
@@ -52,17 +82,47 @@ class EntityArray
     array<EntityInfo> entArr;
 
     /**
-    * @brief Access a entity from the array by index.
+    * @brief Assign the contents of one EntityArray array to another EntityArray.
+    * @param rhs EntityArray on the right hand side.
     */
-    EntityInfo& opIndex(uint index) { return entArr[index]; }
-    const EntityInfo& opIndex(uint index) const { return entArr[index]; }
+    EntityArray& opAssign(const EntityArray& rhs)
+    {
+        this.entArr = rhs.entArr;
+    }
+
+    /**
+    * @brief Check if two EntityArray's are equal.
+    * @param rhs EntityArray on the right hand side.
+    * @note Order of EntityInfo's in the array matters, and for each index the inside items match.
+    */
+    bool opEquals( const EntityArray&in rhs ) const
+    {
+        // Checking if the length is different.
+        if (this.entArr.length() != rhs.entArr.length())
+            return false;
+
+        // Checking individual items of the array.
+        for (int i = 0; i < this.entArr.length(); i++)
+        {
+            if (this.entArr[i] != rhs.entArr[i])
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+    * @brief Access a EntityInfo by index from the array.
+    */
+    EntityInfo& opIndex( uint index ) { return entArr[index]; }
+    const EntityInfo& opIndex( uint index ) const { return entArr[index]; }
 
     /**
     * @brief For statement operator overloads for usage with foreach as indexes.
     */
     uint opForBegin() const { return 0; }
-    bool opForEnd(uint index) const { return index >= entArr.length(); }
-    uint opForNext(uint index) const { return index + 1; }
+    bool opForEnd( uint index ) const { return index >= entArr.length(); }
+    uint opForNext( uint index ) const { return index + 1; }
 
     /**
     * @brief Clear all the entities from the EntityArray.
@@ -73,7 +133,7 @@ class EntityArray
     * @brief Add a entity to the EntityArray by its entity name.
     * @param entName Entity name of the entity to add.
     * @param tags (optional) What tags should be added with the entity.
-    * @TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
+    * @// TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
     */
     void AddByEntityName( const string&in entName, const EntityTags tags = EntityTag::NONE )
     {
@@ -90,7 +150,7 @@ class EntityArray
     * @brief Add a entity to the EntityArray by its class name.
     * @param className Class name of the entity to add.
     * @param tags (optional) What tags should be added with the entity.
-    * @TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
+    * @// TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
     */
     void AddByClassname( const string&in className, const EntityTags tags = EntityTag::NONE )
     {
@@ -107,7 +167,7 @@ class EntityArray
     * @brief Add a entity to the EntityArray by its handle.
     * @param entHandle Handle of the entity to add.
     * @param tags (optional) What tags should be added with the entity.
-    * @TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
+    * @// TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
     */
     void AddByHandle( const CBaseEntity@ entHandle, const EntityTags tags = EntityTag::NONE )
     {
@@ -186,13 +246,43 @@ class EntityArray
         }
     }
 
-    // TODO: Implement
-    void SortByTagsAsc()
+    /**
+    * @brief Compare tags of entities for sorting assendingly.
+    * @param A Entity A.
+    * @param B Entity B.
+    */
+    bool SortByTagsAsc(const EntityInfo@ A, const EntityInfo@ B)
     {
+        if (A.tags < B.tags)
+            return true;
 
+        return false;
     }
-    void SortByTagsDesc()
-    {
 
+    /**
+    * @brief Compare tags of entities for sorting descendingly.
+    * @param A Entity A.
+    * @param B Entity B.
+    */
+    bool SortByTagsDesc(const EntityInfo@ A, const EntityInfo@ B)
+    {
+        if (A.tags < B.tags)
+            return false;
+
+        return true;
+    }
+
+    /**
+    * @brief Sort entities in the EntityArray by their tag value.
+    * @param assending Whether to sort assendingly or decendingly.
+    */
+    void SortEntitiesByTags(bool assending = true)
+    {
+        // TODO: Forgot this was a issue, normal sort function is incomplete by the dump so this is my assumptional take on what "T[]::less" actually is.
+        // TODO: Guess we have to wait till the dump is fixed or think of something else.
+        if (assending)
+            entArr.sort(SortByTagsAsc);
+        else
+            entArr.sort(SortByTagsDesc);
     }
 }
