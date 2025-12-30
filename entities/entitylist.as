@@ -11,18 +11,20 @@
 //? Maybe we could have a way to implement custom tags that can be made and applied in special cases.
 enum EntityTag
 {
-    NONE = 0,       // Entity has no tags.
-    LOGIC,          // Ex. logic_relay
-    MODEL,          // Ex. prop_dynamic
-    NPC,            // Ex. npc_barney
-    FRIENDLY,       // Ex. Rebels
-    ENEMY,          // Ex. Combine
-    CUSTOM,         // A custom AngelScript entity.
-    LAST_TAG        // To count how many tags exist.
-}
-typedef uint8 EntityTags;
+    NONE           = 0,      // Entity has no tags.
+    LOGIC          = 1 << 0, // Ex. logic_relay
+    MODEL          = 1 << 1, // Ex. prop_dynamic
+    PUZZLE_ELEMENT = 1 << 2, // Ex. prop_weighted_cube
+    NPC            = 1 << 3, // Ex. npc_barney
+    FRIENDLY       = 1 << 4, // Ex. Rebels
+    ENEMY          = 1 << 5, // Ex. Combine
+    CUSTOM         = 1 << 6, // A custom AngelScript entity.
 
-// Struct you contain the information about an entity in the EntityArray.
+    LAST_TAG       = 1 << 7  // To indicate how many tags exist.
+}
+typedef uint16 EntityTags; // Max allowed amount of tags currently is 1 << 15, this can easily be changed later.
+
+// Struct to contain the information about an entity in the EntityArray.
 class EntityInfo
 {
     CBaseEntity@ entRef;
