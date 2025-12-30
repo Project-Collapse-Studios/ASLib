@@ -3,7 +3,7 @@
 * @details
 * @authors Orsell
 *
-* @license Distributed under the MIT license - Copyright (c) 2025 Project Collapse Studios
+* @license Distributed under the MIT license - Copyright (c) 2026 Project Collapse Studios
 */
 
 // Tags that can be appended to various EntityInfo's in the
