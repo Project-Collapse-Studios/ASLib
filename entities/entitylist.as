@@ -44,17 +44,30 @@ class EntityInfo
 }
 
 // Custom array type that stores specificly added sets of Entities and information about them.
+// TODO: Should try and take advantage of using the array's "findByRef" functions for CBaseEntity handles,
+// TODO: however the issue is that the array type used is EntityInfo so CBaseEntity can't be used.
 class EntityArray
 {
+    // The underlying array that holds all the EntityInfo "structs".
     array<EntityInfo> entArr;
 
     /**
-    * @brief Clear the contents of the EntityArray.
+    * @brief Access a entity from the array by index.
     */
-    void Clear()
-    {
-        entArr.removeRange(0, entArr.length() - 1);
-    }
+    EntityInfo& opIndex(uint index) { return entArr[index]; }
+    const EntityInfo& opIndex(uint index) const { return entArr[index]; }
+
+    /**
+    * @brief For statement operator overloads for usage with foreach as indexes.
+    */
+    uint opForBegin() const { return 0; }
+    bool opForEnd(uint index) const { return index >= entArr.length(); }
+    uint opForNext(uint index) const { return index + 1; }
+
+    /**
+    * @brief Clear all the entities from the EntityArray.
+    */
+    void Clear() { entArr.removeRange(0, entArr.length() - 1); }
 
     /**
     * @brief Add a entity to the EntityArray by its entity name.
@@ -117,17 +130,69 @@ class EntityArray
     */
     void RemoveByEntityName( const string&in entName, int rmAmt = 1 )
     {
-        // TODO-FIXME: I believe there is better way to do this, this will work for now.
+        // TODO-FIXME: foreach would work better here, but for some reason the AS extension is saying it's invalid and doesn't exist?
         for (int i = 0; i < entArr.length(); i++)
         {
             EntityInfo entInfo = entArr[i];
-            if ((entInfo.entRef != null) && (entInfo.entRef.GetEntityName() == entName))
+            if ((entInfo.entHandle != null) && (entInfo.entHandle.GetEntityName() == entName))
             {
                 entArr.removeAt(i);
+                DevMsgl("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\"");
                 rmAmt--;
                 if (rmAmt <= 0)
                     return;
             }
         }
+    }
+
+    /**
+    * @brief Remove entities from the EntityArray by a entity's class name.
+    * @param className Class name of entity to remove from the array.
+    * @param rmAmt (optional) How many of the entity by it's class name should be removed.
+    */
+    void RemoveByClassname( const string&in className, int rmAmt = 1 )
+    {
+        // TODO-FIXME: foreach would work better here, but for some reason the AS extension is saying it's invalid and doesn't exist?
+        for (int i = 0; i < entArr.length(); i++)
+        {
+            EntityInfo entInfo = entArr[i];
+            if ((entInfo.entHandle != null) && (entInfo.entHandle.GetClassname() == className))
+            {
+                entArr.removeAt(i);
+                DevMsgl("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\"");
+                rmAmt--;
+                if (rmAmt <= 0)
+                    return;
+            }
+        }
+    }
+
+    /**
+    * @brief Remove entity from the EntityArray by a CBaseEntity handle.
+    * @param entHandle Handle of the entity to remove from the array.
+    */
+    void RemoveByHandle( const CBaseEntity@ entHandle)
+    {
+        // TODO-FIXME: foreach would work better here, but for some reason the AS extension is saying it's invalid and doesn't exist?
+        for (int i = 0; i < entArr.length(); i++)
+        {
+            EntityInfo entInfo = entArr[i];
+            if ((entInfo.entHandle != null) && (entInfo.entHandle == entHandle))
+            {
+                DevMsgl("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\"");
+                entArr.removeAt(i);
+                return;
+            }
+        }
+    }
+
+    // TODO: Implement
+    void SortByTagsAsc()
+    {
+
+    }
+    void SortByTagsDesc()
+    {
+
     }
 }
