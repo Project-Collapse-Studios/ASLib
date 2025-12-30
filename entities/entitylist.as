@@ -27,8 +27,20 @@ typedef uint16 EntityTags; // Max allowed amount of tags currently is 1 << 15, t
 // Struct to contain the information about an entity in the EntityArray.
 class EntityInfo
 {
-    CBaseEntity@ entRef;
+    CBaseEntity@ entHandle;
     EntityTags tags;
+
+    EntityInfo()
+    {
+        @entHandle = null;
+        tags = EntityTag::NONE;
+    }
+
+    EntityInfo( CBaseEntity@ handle, EntityTags tags = EntityTag::NONE )
+    {
+        @entHandle = handle;
+        tags = tags;
+    }
 }
 
 // Custom array type that stores specificly added sets of Entities and information about them.
@@ -52,14 +64,12 @@ class EntityArray
     */
     void AddByEntityName( const string&in entName, const EntityTags tags = EntityTag::NONE )
     {
-        for (CBaseEntity@ ent = null; ent = EntityList().FindByName(null, entName);)
+        for (CBaseEntity@ ent = null; ent = EntityList().FindByName(ent, entName);)
         {
-            EntityInfo newEntInfo;
-            newEntInfo.entRef = ent;
-            newEntInfo.tags = tags;
-
-            entArr.insertLast(newEntInfo);
-            DevMsgl("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\"");
+            entArr.insertLast(EntityInfo(ent, tags));
+            DevMsgl("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\".");
+            if (tags > 0)
+                DevMsgl("Entity tag value is: \"" + tags + "\"");
         }
     }
 
@@ -71,14 +81,12 @@ class EntityArray
     */
     void AddByClassname( const string&in className, const EntityTags tags = EntityTag::NONE )
     {
-        for (CBaseEntity@ ent = null; ent = EntityList().FindByClassname(null, className);)
+        for (CBaseEntity@ ent = null; ent = EntityList().FindByClassname(ent, className);)
         {
-            EntityInfo newEntInfo;
-            newEntInfo.entRef = ent;
-            newEntInfo.tags = tags;
-
-            entArr.insertLast(newEntInfo);
+            entArr.insertLast(EntityInfo(ent, tags));
             DevMsgl("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\"");
+            if (tags > 0)
+                DevMsgl("Entity tag value is: \"" + tags + "\"");
         }
     }
 
@@ -96,12 +104,10 @@ class EntityArray
             return;
         }
 
-        EntityInfo newEntInfo;
-        newEntInfo.entRef = entHandle;
-        newEntInfo.tags = tags;
-
-        entArr.insertLast(newEntInfo);
+        entArr.insertLast(EntityInfo(entHandle, tags));
         DevMsgl("Added entity \"" + entHandle.GetEntityName() + "\" with entindex \"" + entHandle.GetEntityIndex() + "\"");
+        if (tags > 0)
+            DevMsgl("Entity tag value is: \"" + tags + "\"");
     }
 
     /**
