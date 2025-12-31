@@ -5,6 +5,7 @@
 #include "../mixins/volumes/CuboidVolumeSimple.as"
 #include "../misc/logger.as"
 
+
 [ServerCommand("as_test_cuboidsimple", "")]
 void TestCuboidSimple(const CommandArgs@ args) {
     

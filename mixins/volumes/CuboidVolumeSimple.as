@@ -3,16 +3,17 @@
 // --------------------------------
 
 
-// Represents an axis alligned cuboid volume in world.
-class CuboidVolumeSimple {
+
+// Implements an axis alligned cuboid volume in world.
+mixin class CuboidVolumeSimpleMixin {
 
     protected double len_x, len_y, len_z;
     
     protected Vector origin;
 
 
-    // Construct from Min, Max vectors, optional origin vector = [0, 0, 0] is used to orient this volume in space.
-    CuboidVolumeSimple(Vector Min, Vector Max, Vector origin = Vector(0, 0, 0)) { 
+    // Initialize mixin functionality from Min, Max vectors, optional origin vector = [0, 0, 0] is used to orient this volume in space.
+    protected void InitCVS(Vector Min, Vector Max, Vector origin = Vector(0, 0, 0)) {
         this.len_x = abs(Max[0] - Min[0]);
         this.len_y = abs(Max[1] - Min[1]);
         this.len_z = abs(Max[2] - Min[2]);
@@ -20,12 +21,11 @@ class CuboidVolumeSimple {
         this.origin = origin;
     }
 
-    // Construct from dimensions x, y ,z, optional origin vector = [0, 0, 0] is used to orient this volume in space.
-    CuboidVolumeSimple(double length_x, double length_y, double length_z, Vector origin = Vector(0, 0, 0)) { 
+    // Initialize mixin functionality from dimensions x, y ,z, optional origin vector = [0, 0, 0] is used to orient this volume in space.
+    protected void InitCVS(double length_x, double length_y, double length_z, Vector origin = Vector(0, 0, 0)) {
         this.len_x = length_x;
         this.len_y = length_y;
         this.len_z = length_z;
-        
         this.origin = origin;
     }
 
@@ -102,5 +102,18 @@ class CuboidVolumeSimple {
     // Get the scalar of this volume in u^3
     double GetVolume() {
         return this.len_x * this.len_y * this.len_z;
+    }
+}
+
+// Represents an axis alligned cuboid volume in world.
+class CuboidVolumeSimple : CuboidVolumeSimpleMixin {
+    // Construct from Min, Max vectors, optional origin vector = [0, 0, 0] is used to orient this volume in space.
+    CuboidVolumeSimple(Vector Min, Vector Max, Vector origin = Vector(0, 0, 0)) { 
+        this.InitCVS(Min, Max, origin);
+    }
+
+    // Construct from dimensions x, y ,z, optional origin vector = [0, 0, 0] is used to orient this volume in space.
+    CuboidVolumeSimple(double length_x, double length_y, double length_z, Vector origin = Vector(0, 0, 0)) { 
+        this.InitCVS(length_x, length_y, length_z, origin);
     }
 }
