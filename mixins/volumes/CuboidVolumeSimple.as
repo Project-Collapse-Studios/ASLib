@@ -88,22 +88,14 @@ class CuboidVolumeSimple {
         return this.len_z;
     }
 
-    // Like GetOrigin, but this returns the geometrical center of this cuboid
-    Vector GetCenter() {
-        Vector local_origin;
-        local_origin.Init(len_x / 2, len_y / 2, len_z / 2);
-
-        return this.origin + local_origin;
-    }
-
     // Checks if this vector is inside of this volume
     bool IsInVolume(Vector v) {
-        Vector localized_v = v - this.origin; // In our local space
+        v -= this.origin; // In our local space
 
         return ( // Edges also belong to the volume
-            v[0] >= 0 && v[0] <= this.len_x &&
-            v[1] >= 0 && v[1] <= this.len_y &&
-            v[2] >= 0 && v[2] <= this.len_z
+            v[0] >= -this.len_x/2 && v[0] <= this.len_x/2 &&
+            v[1] >= -this.len_y/2 && v[1] <= this.len_y/2 &&
+            v[2] >= -this.len_z/2 && v[2] <= this.len_z/2
         );
     }
 
