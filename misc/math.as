@@ -16,7 +16,7 @@ class ParametricLine {
     protected Vector point;
 
     // Create a line from a vector pointing a direction and a point that belongs to this line.
-    ParametricLine(const Vector dir, const Vector point) {
+    ParametricLine(const Vector&in dir, const Vector point) {
         this.vx = dir[0];
         this.vy = dir[1];
         this.vz = dir[2];
@@ -45,24 +45,36 @@ class ParametricLine {
     }
 
     // Returns if this point belong to the line (or is extremely close). Pass epsilon to set the accuracy, default is 0.00005
-    bool PointBelongsToLine(const Vector point, const double epsilon = epsilon_) {
-        // Just check if we can solve this system of equations by using one t value
-        double t = (point[0] - this.point[0]) / this.vx;
-
-        return (
-            abs(point[1] - this.vy * t - this.point[1]) < epsilon &&
-            abs(point[2] - this.vz * t - this.point[2]) < epsilon
-        );
+    bool PointBelongsToLine(const Vector&in point, const double epsilon = epsilon_) const {
+        // We just need to check if we can get a t.
+        double _;
+        return this.GetParameterForPoint(point, _, epsilon);
     }
 
     // Get a point at specific t
-    Vector GetPointAtT(const double t) {
+    Vector GetPointAtT(const double t) const {
         return Vector(this.vx * t, this.vy * t, this.vz * t) + point;
+    }
+
+    // Get the parameter value for this point, if this point belongs to this line.
+    bool GetParameterForPoint(const Vector&in point, double&out t_out, const double epsilon = epsilon_) const {
+
+        double t = (point[0] - this.point[0]) / this.vx;
+
+        if (
+            abs(point[1] - this.vy * t - this.point[1]) < epsilon &&
+            abs(point[2] - this.vz * t - this.point[2]) < epsilon
+        ) {
+            t_out = t;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Calculate the intersection point (if exists) of two parametric lines.
     // Vector parameter is the result (&out), function returns bool to indicate if the intersection exists.
-    bool LineIntersection(const ParametricLine&in line, Vector&out intersection, const double epsilon = 0.0005) {
+    bool LineIntersection(const ParametricLine&in line, Vector&out intersection, const double epsilon = 0.0005) const {
         /* We're solving
             v1x * t + p1x = v2x * s + p2x
             v1y * t + p1y = v2y * s + p2y
@@ -77,7 +89,7 @@ class ParametricLine {
         Vector tp = line.GetPointAtT(0); // Their point; doesn't really matter which one we get, but 0 gives us the original one
 
         double s = mi * (tp[1] - this.point[1]) + this.point[0];
-        s /= line.GetVX() - (line.GetVY() * mi);
+        s /= (line.GetVY() * mi) - line.GetVX();
 
         double t = (line.GetVX() * s + tp[0] - this.point[0] ) / this.vx;
         
@@ -90,7 +102,7 @@ class ParametricLine {
     }
 
     // Perform an orthogonal projection onto this line
-    Vector OrthogonalProjection(const Vector point) {
+    Vector OrthogonalProjection(const Vector&in point) const {
         if (this.PointBelongsToLine(point)) { // If the point belongs to the line, it is it's own projection of itself
             return point;
         }
@@ -98,7 +110,7 @@ class ParametricLine {
         // P' (orthogonal projection of P) = [a, b, c]
         // Vec(PP') = [a - px, b - py, c - pz]
         // Vec(PP') dot [vx, vy, vz] == 0, these vectors must be perpendicular
-        // We get: vx(a-px) + vy(b-py), vz(c-pz) = 0
+        // We get: vx(a-px) + vy(b-py) + vz(c-pz) = 0
 
         // Additionally, P' must belong to us p0 = this.point
         // our final equation is, we want to get t
@@ -111,7 +123,7 @@ class ParametricLine {
     }
 
     // Calculate the distance from this point to this parametric line.
-    double GetDistance(const Vector point) {
+    double GetDistance(const Vector&in point) const {
         return this.point.Cross(point - this.point).Length() / point.Length();
     }
 }
