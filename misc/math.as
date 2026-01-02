@@ -9,7 +9,7 @@ x = vx * t + point_x
 y = vy * t + point_y, t belongs to Real
 z = vz * t + point_z
 
-This object is immutable, if you want a different line, you need to create a new object for it.
+This object acts as immutable, if you want a different line, you need to create a new object for it.
 */
 class ParametricLine {
     protected double vx, vy, vz;
