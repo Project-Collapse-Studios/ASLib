@@ -3,3 +3,4 @@
 // --------------------------------
 
 #include "test_CuboidVolumeSimple.as"
+#include "test_string_functions.as"
