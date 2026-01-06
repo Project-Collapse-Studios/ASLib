@@ -1,0 +1,53 @@
+name: Bug Report
+description: File a bug report.
+title: "[Bug]: "
+labels: ["bug"]
+type: bug
+body:
+
+  - type: input
+    id: what_broke
+    attributes:
+      label: Class/Functionality
+      description: Which part of the library experiences the bug?
+      placeholder: ex. Keyvalues.GetStrKeyvalue(...)
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Bug description.
+      description: Please describe what happened.
+      placeholder: This function returned a value that I haven't expected!
+    validations:
+      required: true
+
+  - type: textarea
+    id: expectation
+    attributes:
+      label: Expected result.
+      description: Please describe what you have expected the code to do.
+      placeholder: It should return X instead of Y!
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+
+  - type: checkboxes
+    id: version
+    attributes:
+      label: Happens on latest
+      description: Please confirm that this bug happens on the latest released (stable) version.
+      options: 
+        - label: Confirm
+          required: true
+
+    validations:
+      required: true
+
