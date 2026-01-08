@@ -1,5 +1,5 @@
 /**
-* @brief   EntityList is custom array type that stores specificly added sets of Entities and information about them.
+* @brief   EntityList is custom array type that stores specifically added sets of Entities and information about them.
 * @details
 * @authors Orsell
 *
@@ -24,11 +24,11 @@ enum EntityTag
 }
 typedef uint16 EntityTags; // Max allowed amount of tags currently is 1 << 15, this can easily be changed later.
 
-// Struct to contain the information about an entity in the EntityArray.
+// "Struct" to contain the information about an entity in the EntityArray.
 final class EntityInfo
 {
     CBaseEntity@ entHandle; // Handle for the entity.
-    EntityTags tags; // unint16 number that holds a bit
+    EntityTags tags; // unint16 number that holds bits.
 
     /**
     * @brief Default constructor.
@@ -42,7 +42,7 @@ final class EntityInfo
     /**
     * @brief Constructor with arguments.
     * @param newEntHandle A CBaseEntity handle to pass to the EntityInfo to store.
-    * @param tags What tags should be assosiated with the entity.
+    * @param tags What tags should be associated with the entity.
     */
     EntityInfo( CBaseEntity@ newEntHandle, EntityTags tags = EntityTag::NONE )
     {
@@ -54,7 +54,7 @@ final class EntityInfo
     * @brief Assign the contents of one EntityInfo's to another.
     * @param rhs EntityInfo on the right hand side.
     */
-    EntityInfo& opAssign(const EntityInfo& rhs)
+    EntityInfo& opAssign( const EntityInfo& rhs )
     {
         this.entHandle = rhs.entHandle;
         this.tags = rhs.tags;
@@ -73,9 +73,7 @@ final class EntityInfo
     }
 }
 
-// Custom array type that stores specificly added sets of Entities and information about them.
-// TODO: Should try and take advantage of using the array's find functions for CBaseEntity handles,
-// TODO: however the issue is that the array type used is EntityInfo so CBaseEntity can't be used.
+// Custom array type that stores specifically added sets of Entities and information about them.
 class EntityArray
 {
     // The underlying array that holds all the EntityInfo "structs".
@@ -85,7 +83,7 @@ class EntityArray
     * @brief Assign the contents of one EntityArray array to another EntityArray.
     * @param rhs EntityArray on the right hand side.
     */
-    EntityArray& opAssign(const EntityArray& rhs)
+    EntityArray& opAssign( const EntityArray& rhs )
     {
         this.entArr = rhs.entArr;
     }
@@ -128,6 +126,9 @@ class EntityArray
     * @brief Clear all the entities from the EntityArray.
     */
     void Clear() { entArr.removeRange(0, entArr.length() - 1); }
+
+
+    // ---------------- ADDING FUNCTIONS ---------------- \\
 
     /**
     * @brief Add a entity to the EntityArray by its entity name.
@@ -183,6 +184,9 @@ class EntityArray
             DevMsgl("Entity tag value is: \"" + tags + "\"");
     }
 
+
+    // ---------------- REMOVING FUNCTIONS ---------------- \\
+
     /**
     * @brief Remove entities from the EntityArray by a entity's name.
     * @param entName Name of entity to remove from the array.
@@ -231,7 +235,7 @@ class EntityArray
     * @brief Remove entity from the EntityArray by a CBaseEntity handle.
     * @param entHandle Handle of the entity to remove from the array.
     */
-    void RemoveByHandle( const CBaseEntity@ entHandle)
+    void RemoveByHandle( const CBaseEntity@ entHandle )
     {
         // TODO-FIXME: foreach would work better here, but for some reason the AS extension is saying it's invalid and doesn't exist?
         for (int i = 0; i < entArr.length(); i++)
@@ -246,12 +250,15 @@ class EntityArray
         }
     }
 
+
+    // ---------------- SORTING FUNCTIONS ---------------- \\
+
     /**
-    * @brief Compare tags of entities for sorting assendingly.
+    * @brief Compare tags of entities for sorting ascendingly.
     * @param A Entity A.
     * @param B Entity B.
     */
-    bool SortByTagsAsc(const EntityInfo@ A, const EntityInfo@ B)
+    bool SortByTagsAsc( const EntityInfo@ A, const EntityInfo@ B )
     {
         if (A.tags < B.tags)
             return true;
@@ -264,7 +271,7 @@ class EntityArray
     * @param A Entity A.
     * @param B Entity B.
     */
-    bool SortByTagsDesc(const EntityInfo@ A, const EntityInfo@ B)
+    bool SortByTagsDesc( const EntityInfo@ A, const EntityInfo@ B )
     {
         if (A.tags < B.tags)
             return false;
@@ -274,15 +281,90 @@ class EntityArray
 
     /**
     * @brief Sort entities in the EntityArray by their tag value.
-    * @param assending Whether to sort assendingly or decendingly.
+    * @param ascending Whether to sort ascendingly or decendingly.
     */
-    void SortEntitiesByTags(bool assending = true)
+    void SortEntitiesByTags( bool ascending = true )
     {
-        // TODO: Forgot this was a issue, normal sort function is incomplete by the dump so this is my assumptional take on what "T[]::less" actually is.
+        // TODO: Forgot this was a issue, normal sort function is incomplete by the dump so this is my assumption take on what "T[]::less" actually is.
         // TODO: Guess we have to wait till the dump is fixed or think of something else.
-        if (assending)
+        if (ascending)
             entArr.sort(SortByTagsAsc);
         else
             entArr.sort(SortByTagsDesc);
+    }
+
+
+    // ---------------- FIND FUNCTIONS ---------------- \\
+    // TODO: Should try and take advantage of using the array's find functions for CBaseEntity handles,
+    // TODO: however the issue is that the array type used is EntityInfo so CBaseEntity can't be used.
+
+    /**
+    * @brief Find entities in the EntityArray by a CBaseEntity handle.
+    * @param handle Handle to search for in the array.
+    * @return Simple array of EntityInfo with the given handle.
+    */
+    array<EntityInfo> FindByHandle( const CBaseEntity@ handle )
+    {
+        array<EntityInfo> results;
+        for (int i = 0; i < entArr.length(); i++)
+        {
+            if (entArr[i].entHandle == handle)
+                results.insertLast(entArr[i]);
+        }
+
+        return results;
+    }
+
+    /**
+    * @brief Find entities in the EntityArray by an entity name.
+    * @param entName Name of entity to search for in the array.
+    * @return Simple array of EntityInfo with the given name.
+    */
+    array<EntityInfo> FindByName( const string&in entName )
+    {
+        array<EntityInfo> results;
+        for (int i = 0; i < entArr.length(); i++)
+        {
+            if (entArr[i].entHandle.GetEntityName() == entName)
+                results.insertLast(entArr[i]);
+        }
+
+        return results;
+    }
+
+    /**
+    * @brief Find entities in the EntityArray by a class name.
+    * @param className Class name of entity to search for in the array.
+    * @return Simple array of EntityInfo with the given class name.
+    */
+    array<EntityInfo> FindByClassname( const string&in className )
+    {
+        array<EntityInfo> results;
+        for (int i = 0; i < entArr.length(); i++)
+        {
+            if (entArr[i].entHandle.GetClassname() == className)
+                results.insertLast(entArr[i]);
+        }
+
+        return results;
+    }
+
+    /**
+    * @brief Find entities in the EntityArray by EntityTags.
+    * @param tag Tags to search for in the array.
+    * @return Array of entities with the given tags.
+    */
+    array<EntityInfo> FindByTag( const EntityTags tag )
+    {
+        array<EntityInfo> results;
+        for (int i = 0; i < entArr.length(); i++)
+        {
+            if (entArr[i].tags & tag)
+            {
+                results.insertLast(entArr[i]);
+            }
+        }
+
+        return results;
     }
 }
