@@ -44,9 +44,9 @@ final class EntityInfo
     * @param newEntHandle A CBaseEntity handle to pass to the EntityInfo to store.
     * @param tags What tags should be associated with the entity.
     */
-    EntityInfo( CBaseEntity@ newEntHandle, EntityTags tags = EntityTag::NONE )
+    EntityInfo( const CBaseEntity@ newEntHandle, EntityTags tags = EntityTag::NONE )
     {
-        @entHandle = newEntHandle;
+        @entHandle = @newEntHandle;
         tags = tags;
     }
 
@@ -56,8 +56,13 @@ final class EntityInfo
     */
     EntityInfo& opAssign( const EntityInfo& rhs )
     {
+        if (this == rhs)
+            return this;
+
         this.entHandle = rhs.entHandle;
         this.tags = rhs.tags;
+
+        return this;
     }
 
     /**
@@ -77,7 +82,7 @@ final class EntityInfo
 class EntityArray
 {
     // The underlying array that holds all the EntityInfo "structs".
-    array<EntityInfo> entArr;
+    array<EntityInfo@> entArr;
 
     /**
     * @brief Assign the contents of one EntityArray array to another EntityArray.
@@ -85,7 +90,12 @@ class EntityArray
     */
     EntityArray& opAssign( const EntityArray& rhs )
     {
+        if (this == rhs)
+            return this;
+
         this.entArr = rhs.entArr;
+
+        return this;
     }
 
     /**
@@ -125,8 +135,23 @@ class EntityArray
     /**
     * @brief Clear all the entities from the EntityArray.
     */
-    void Clear() { entArr.removeRange(0, entArr.length() - 1); }
+    void Clear() { entArr.removeRange(0, entArr.length()); }
 
+    /**
+    * @brief Get length of the EntityArray.
+    */
+    int Length() { return entArr.length(); }
+
+    void Print()
+    {
+        for (int i = 0; i < entArr.length(); i++)
+        {
+            Msg("Array Position: " + i + " | ");
+            Msg("EntityHandle->GetEntityName: " + entArr[i].entHandle.GetEntityName() + " | ");
+            Msg("EntityHandle->GetEntityIndex: " + entArr[i].entHandle.GetEntityIndex() + " | ");
+            Msg("Tags: " + entArr[i].tags + "\n");
+        }
+    }
 
     // ---------------- ADDING FUNCTIONS ---------------- \\
 
@@ -254,7 +279,7 @@ class EntityArray
     // ---------------- SORTING FUNCTIONS ---------------- \\
 
     /**
-    * @brief Compare tags of entities for sorting ascendingly.
+    * @brief Compare tags of entities for sorting ascending.
     * @param A Entity A.
     * @param B Entity B.
     */
@@ -267,7 +292,7 @@ class EntityArray
     }
 
     /**
-    * @brief Compare tags of entities for sorting descendingly.
+    * @brief Compare tags of entities for sorting descending.
     * @param A Entity A.
     * @param B Entity B.
     */
@@ -281,7 +306,7 @@ class EntityArray
 
     /**
     * @brief Sort entities in the EntityArray by their tag value.
-    * @param ascending Whether to sort ascendingly or decendingly.
+    * @param ascending Whether to sort ascending or descending.
     */
     void SortEntitiesByTags( bool ascending = true )
     {
@@ -303,9 +328,9 @@ class EntityArray
     * @param handle Handle to search for in the array.
     * @return Simple array of EntityInfo with the given handle.
     */
-    array<EntityInfo> FindByHandle( const CBaseEntity@ handle )
+    array<EntityInfo@>@ FindByHandle( const CBaseEntity@ handle )
     {
-        array<EntityInfo> results;
+        array<EntityInfo@> results;
         for (int i = 0; i < entArr.length(); i++)
         {
             if (entArr[i].entHandle == handle)
@@ -320,9 +345,9 @@ class EntityArray
     * @param entName Name of entity to search for in the array.
     * @return Simple array of EntityInfo with the given name.
     */
-    array<EntityInfo> FindByName( const string&in entName )
+    array<EntityInfo@>@ FindByEntityName( const string&in entName )
     {
-        array<EntityInfo> results;
+        array<EntityInfo@> results;
         for (int i = 0; i < entArr.length(); i++)
         {
             if (entArr[i].entHandle.GetEntityName() == entName)
@@ -337,9 +362,9 @@ class EntityArray
     * @param className Class name of entity to search for in the array.
     * @return Simple array of EntityInfo with the given class name.
     */
-    array<EntityInfo> FindByClassname( const string&in className )
+    array<EntityInfo@>@ FindByClassname( const string&in className )
     {
-        array<EntityInfo> results;
+        array<EntityInfo@> results;
         for (int i = 0; i < entArr.length(); i++)
         {
             if (entArr[i].entHandle.GetClassname() == className)
@@ -354,9 +379,9 @@ class EntityArray
     * @param tag Tags to search for in the array.
     * @return Array of entities with the given tags.
     */
-    array<EntityInfo> FindByTag( const EntityTags tag )
+    array<EntityInfo@>@ FindByTag( const EntityTags tag )
     {
-        array<EntityInfo> results;
+        array<EntityInfo@> results;
         for (int i = 0; i < entArr.length(); i++)
         {
             if (entArr[i].tags & tag)
