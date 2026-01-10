@@ -9,10 +9,11 @@
 /**
 * @brief Assertion function to test statements. Will print out if a exception occurs and the error involved.
 *        Very limited to what line the assert was called on however.
-* @param Statement to pass in that should be true, if false, then a throw call will be passed.
+* @param testStatement Statement to pass in that should be true, if false, then a throw call will be passed.
+* @param errMsg Error message that throw should pass when the statement to test fails.
 */
-void assert( const bool testStatement )
+void assert( const bool testStatement, const string&in errMsg = "Passed statement was false!" )
 {
     if (!testStatement)
-        throw("Assertion hit! Statement failed!");
+        throw("Assertion hit! Error: " + errMsg);
 }
