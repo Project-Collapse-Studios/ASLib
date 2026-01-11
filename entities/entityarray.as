@@ -76,6 +76,13 @@ final class EntityInfo
 
         return true;
     }
+
+    void Print()
+    {
+        Msg("EntityHandle->GetEntityName: " + this.entHandle.GetEntityName() + " | ");
+        Msg("EntityHandle->GetEntityIndex: " + this.entHandle.GetEntityIndex() + " | ");
+        Msg("Tags: " + this.tags + "\n");
+    }
 }
 
 // Custom array type that stores specifically added sets of Entities and information about them.
@@ -142,14 +149,15 @@ class EntityArray
     */
     int Length() { return entArr.length(); }
 
-    void Print()
+    /**
+    * @brief Print all the contents of the array.
+    */
+    void PrintArray()
     {
         for (int i = 0; i < entArr.length(); i++)
         {
             Msg("Array Position: " + i + " | ");
-            Msg("EntityHandle->GetEntityName: " + entArr[i].entHandle.GetEntityName() + " | ");
-            Msg("EntityHandle->GetEntityIndex: " + entArr[i].entHandle.GetEntityIndex() + " | ");
-            Msg("Tags: " + entArr[i].tags + "\n");
+            entArr[i].Print();
         }
     }
 
@@ -159,16 +167,22 @@ class EntityArray
     * @brief Add a entity to the EntityArray by its entity name.
     * @param entName Entity name of the entity to add.
     * @param tags (optional) What tags should be added with the entity.
-    * @// TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
+    * @param addAmt (optional) How many of the entities by entity name should be added.
     */
-    void AddByEntityName( const string&in entName, const EntityTags tags = EntityTag::NONE )
+    void AddByEntityName( const string&in entName, const EntityTags tags = EntityTag::NONE, const int addAmt = 1 )
     {
-        for (CBaseEntity@ ent = null; ent = EntityList().FindByName(ent, entName);)
+        CBaseEntity@ ent = null;
+        for (int i = 0; i < addAmt; ent = EntityList().FindByName(ent, entName))
         {
+            if (i == addAmt)
+                return;
+
             entArr.insertLast(EntityInfo(ent, tags));
             DevMsgl("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\".");
             if (tags > 0)
                 DevMsgl("Entity tag value is: \"" + tags + "\"");
+
+            i++;
         }
     }
 
@@ -176,16 +190,22 @@ class EntityArray
     * @brief Add a entity to the EntityArray by its class name.
     * @param className Class name of the entity to add.
     * @param tags (optional) What tags should be added with the entity.
-    * @// TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
+    * @param addAmt (optional) How many of the entities by class name should be added.
     */
-    void AddByClassname( const string&in className, const EntityTags tags = EntityTag::NONE )
+    void AddByClassname( const string&in className, const EntityTags tags = EntityTag::NONE, const int addAmt = 1 )
     {
-        for (CBaseEntity@ ent = null; ent = EntityList().FindByClassname(ent, className);)
+        CBaseEntity@ ent = null;
+        for (int i = 0; i < addAmt; ent = EntityList().FindByClassname(ent, className))
         {
+            if (i == addAmt)
+                return;
+
             entArr.insertLast(EntityInfo(ent, tags));
             DevMsgl("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\"");
             if (tags > 0)
                 DevMsgl("Entity tag value is: \"" + tags + "\"");
+
+            i++;
         }
     }
 
@@ -193,13 +213,12 @@ class EntityArray
     * @brief Add a entity to the EntityArray by its handle.
     * @param entHandle Handle of the entity to add.
     * @param tags (optional) What tags should be added with the entity.
-    * @// TODO Maybe a "addAmt" like the "rmAmt" that "RemoveByEntityName" does could help.
     */
     void AddByHandle( const CBaseEntity@ entHandle, const EntityTags tags = EntityTag::NONE )
     {
         if (entHandle == null)
         {
-            Warningl("Invalid handle passed to AddByHandle!");
+            Warningl("[EntityHandle] Invalid handle passed to AddByHandle!");
             return;
         }
 
@@ -219,7 +238,6 @@ class EntityArray
     */
     void RemoveByEntityName( const string&in entName, int rmAmt = 1 )
     {
-        // TODO-FIXME: foreach would work better here, but for some reason the AS extension is saying it's invalid and doesn't exist?
         for (int i = 0; i < entArr.length(); i++)
         {
             EntityInfo entInfo = entArr[i];
@@ -241,7 +259,6 @@ class EntityArray
     */
     void RemoveByClassname( const string&in className, int rmAmt = 1 )
     {
-        // TODO-FIXME: foreach would work better here, but for some reason the AS extension is saying it's invalid and doesn't exist?
         for (int i = 0; i < entArr.length(); i++)
         {
             EntityInfo entInfo = entArr[i];
@@ -262,7 +279,6 @@ class EntityArray
     */
     void RemoveByHandle( const CBaseEntity@ entHandle )
     {
-        // TODO-FIXME: foreach would work better here, but for some reason the AS extension is saying it's invalid and doesn't exist?
         for (int i = 0; i < entArr.length(); i++)
         {
             EntityInfo entInfo = entArr[i];
@@ -328,7 +344,7 @@ class EntityArray
     * @param handle Handle to search for in the array.
     * @return Simple array of EntityInfo with the given handle.
     */
-    array<EntityInfo@>@ FindByHandle( const CBaseEntity@ handle )
+    array<EntityInfo>@ FindByHandle( const CBaseEntity@ handle )
     {
         array<EntityInfo@> results;
         for (int i = 0; i < entArr.length(); i++)
@@ -345,7 +361,7 @@ class EntityArray
     * @param entName Name of entity to search for in the array.
     * @return Simple array of EntityInfo with the given name.
     */
-    array<EntityInfo@>@ FindByEntityName( const string&in entName )
+    array<EntityInfo>@ FindByEntityName( const string&in entName )
     {
         array<EntityInfo@> results;
         for (int i = 0; i < entArr.length(); i++)
@@ -362,7 +378,7 @@ class EntityArray
     * @param className Class name of entity to search for in the array.
     * @return Simple array of EntityInfo with the given class name.
     */
-    array<EntityInfo@>@ FindByClassname( const string&in className )
+    array<EntityInfo>@ FindByClassname( const string&in className )
     {
         array<EntityInfo@> results;
         for (int i = 0; i < entArr.length(); i++)
@@ -379,7 +395,7 @@ class EntityArray
     * @param tag Tags to search for in the array.
     * @return Array of entities with the given tags.
     */
-    array<EntityInfo@>@ FindByTag( const EntityTags tag )
+    array<EntityInfo>@ FindByTag( const EntityTags tag )
     {
         array<EntityInfo@> results;
         for (int i = 0; i < entArr.length(); i++)
@@ -389,7 +405,7 @@ class EntityArray
                 results.insertLast(entArr[i]);
             }
         }
-
+ 
         return results;
     }
 }
