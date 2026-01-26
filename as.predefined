@@ -71,6 +71,12 @@ enum EFireBulletsFlags {
 	FIRE_BULLETS_ALLOW_WATER_SURFACE_IMPACTS,
 	FIRE_BULLETS_TEMPORARY_DANGER_SOUND
 }
+enum UseType {
+	USE_OFF,
+	USE_ON,
+	USE_SET,
+	USE_TOGGLE
+}
 enum EFieldType {
 	FIELD_VOID,
 	FIELD_FLOAT,
@@ -106,6 +112,969 @@ enum EFieldType {
 	FIELD_MATERIALINDEX,
 	FIELD_TYPECOUNT
 }
+enum Activity {
+	ACT_INVALID,
+	ACT_RESET,
+	ACT_IDLE,
+	ACT_TRANSITION,
+	ACT_COVER,
+	ACT_COVER_MED,
+	ACT_COVER_LOW,
+	ACT_WALK,
+	ACT_WALK_AIM,
+	ACT_WALK_CROUCH,
+	ACT_WALK_CROUCH_AIM,
+	ACT_RUN,
+	ACT_RUN_AIM,
+	ACT_RUN_CROUCH,
+	ACT_RUN_CROUCH_AIM,
+	ACT_RUN_PROTECTED,
+	ACT_SCRIPT_CUSTOM_MOVE,
+	ACT_RANGE_ATTACK1,
+	ACT_RANGE_ATTACK2,
+	ACT_RANGE_ATTACK1_LOW,
+	ACT_RANGE_ATTACK2_LOW,
+	ACT_DIESIMPLE,
+	ACT_DIEBACKWARD,
+	ACT_DIEFORWARD,
+	ACT_DIEVIOLENT,
+	ACT_DIERAGDOLL,
+	ACT_FLY,
+	ACT_HOVER,
+	ACT_GLIDE,
+	ACT_SWIM,
+	ACT_JUMP,
+	ACT_HOP,
+	ACT_LEAP,
+	ACT_LAND,
+	ACT_CLIMB_UP,
+	ACT_CLIMB_DOWN,
+	ACT_CLIMB_DISMOUNT,
+	ACT_SHIPLADDER_UP,
+	ACT_SHIPLADDER_DOWN,
+	ACT_STRAFE_LEFT,
+	ACT_STRAFE_RIGHT,
+	ACT_ROLL_LEFT,
+	ACT_ROLL_RIGHT,
+	ACT_TURN_LEFT,
+	ACT_TURN_RIGHT,
+	ACT_CROUCH,
+	ACT_CROUCHIDLE,
+	ACT_STAND,
+	ACT_USE,
+	ACT_ALIEN_BURROW_IDLE,
+	ACT_ALIEN_BURROW_OUT,
+	ACT_SIGNAL1,
+	ACT_SIGNAL2,
+	ACT_SIGNAL3,
+	ACT_SIGNAL_ADVANCE,
+	ACT_SIGNAL_FORWARD,
+	ACT_SIGNAL_GROUP,
+	ACT_SIGNAL_HALT,
+	ACT_SIGNAL_LEFT,
+	ACT_SIGNAL_RIGHT,
+	ACT_SIGNAL_TAKECOVER,
+	ACT_LOOKBACK_RIGHT,
+	ACT_LOOKBACK_LEFT,
+	ACT_COWER,
+	ACT_SMALL_FLINCH,
+	ACT_BIG_FLINCH,
+	ACT_MELEE_ATTACK1,
+	ACT_MELEE_ATTACK2,
+	ACT_RELOAD,
+	ACT_RELOAD_START,
+	ACT_RELOAD_FINISH,
+	ACT_RELOAD_LOW,
+	ACT_ARM,
+	ACT_DISARM,
+	ACT_DROP_WEAPON,
+	ACT_DROP_WEAPON_SHOTGUN,
+	ACT_PICKUP_GROUND,
+	ACT_PICKUP_RACK,
+	ACT_IDLE_ANGRY,
+	ACT_IDLE_RELAXED,
+	ACT_IDLE_STIMULATED,
+	ACT_IDLE_AGITATED,
+	ACT_IDLE_STEALTH,
+	ACT_IDLE_HURT,
+	ACT_WALK_RELAXED,
+	ACT_WALK_STIMULATED,
+	ACT_WALK_AGITATED,
+	ACT_WALK_STEALTH,
+	ACT_RUN_RELAXED,
+	ACT_RUN_STIMULATED,
+	ACT_RUN_AGITATED,
+	ACT_RUN_STEALTH,
+	ACT_IDLE_AIM_RELAXED,
+	ACT_IDLE_AIM_STIMULATED,
+	ACT_IDLE_AIM_AGITATED,
+	ACT_IDLE_AIM_STEALTH,
+	ACT_WALK_AIM_RELAXED,
+	ACT_WALK_AIM_STIMULATED,
+	ACT_WALK_AIM_AGITATED,
+	ACT_WALK_AIM_STEALTH,
+	ACT_RUN_AIM_RELAXED,
+	ACT_RUN_AIM_STIMULATED,
+	ACT_RUN_AIM_AGITATED,
+	ACT_RUN_AIM_STEALTH,
+	ACT_CROUCHIDLE_STIMULATED,
+	ACT_CROUCHIDLE_AIM_STIMULATED,
+	ACT_CROUCHIDLE_AGITATED,
+	ACT_WALK_HURT,
+	ACT_RUN_HURT,
+	ACT_SPECIAL_ATTACK1,
+	ACT_SPECIAL_ATTACK2,
+	ACT_COMBAT_IDLE,
+	ACT_WALK_SCARED,
+	ACT_RUN_SCARED,
+	ACT_VICTORY_DANCE,
+	ACT_DIE_HEADSHOT,
+	ACT_DIE_CHESTSHOT,
+	ACT_DIE_GUTSHOT,
+	ACT_DIE_BACKSHOT,
+	ACT_FLINCH_HEAD,
+	ACT_FLINCH_CHEST,
+	ACT_FLINCH_STOMACH,
+	ACT_FLINCH_LEFTARM,
+	ACT_FLINCH_RIGHTARM,
+	ACT_FLINCH_LEFTLEG,
+	ACT_FLINCH_RIGHTLEG,
+	ACT_FLINCH_PHYSICS,
+	ACT_FLINCH_HEAD_BACK,
+	ACT_FLINCH_HEAD_LEFT,
+	ACT_FLINCH_HEAD_RIGHT,
+	ACT_FLINCH_CHEST_BACK,
+	ACT_FLINCH_STOMACH_BACK,
+	ACT_FLINCH_CROUCH_FRONT,
+	ACT_FLINCH_CROUCH_BACK,
+	ACT_FLINCH_CROUCH_LEFT,
+	ACT_FLINCH_CROUCH_RIGHT,
+	ACT_IDLE_ON_FIRE,
+	ACT_WALK_ON_FIRE,
+	ACT_RUN_ON_FIRE,
+	ACT_RAPPEL_LOOP,
+	ACT_180_LEFT,
+	ACT_180_RIGHT,
+	ACT_90_LEFT,
+	ACT_90_RIGHT,
+	ACT_STEP_LEFT,
+	ACT_STEP_RIGHT,
+	ACT_STEP_BACK,
+	ACT_STEP_FORE,
+	ACT_GESTURE_RANGE_ATTACK1,
+	ACT_GESTURE_RANGE_ATTACK2,
+	ACT_GESTURE_MELEE_ATTACK1,
+	ACT_GESTURE_MELEE_ATTACK2,
+	ACT_GESTURE_RANGE_ATTACK1_LOW,
+	ACT_GESTURE_RANGE_ATTACK2_LOW,
+	ACT_MELEE_ATTACK_SWING_GESTURE,
+	ACT_GESTURE_SMALL_FLINCH,
+	ACT_GESTURE_BIG_FLINCH,
+	ACT_GESTURE_FLINCH_BLAST,
+	ACT_GESTURE_FLINCH_BLAST_SHOTGUN,
+	ACT_GESTURE_FLINCH_BLAST_DAMAGED,
+	ACT_GESTURE_FLINCH_BLAST_DAMAGED_SHOTGUN,
+	ACT_GESTURE_FLINCH_HEAD,
+	ACT_GESTURE_FLINCH_CHEST,
+	ACT_GESTURE_FLINCH_STOMACH,
+	ACT_GESTURE_FLINCH_LEFTARM,
+	ACT_GESTURE_FLINCH_RIGHTARM,
+	ACT_GESTURE_FLINCH_LEFTLEG,
+	ACT_GESTURE_FLINCH_RIGHTLEG,
+	ACT_GESTURE_TURN_LEFT,
+	ACT_GESTURE_TURN_RIGHT,
+	ACT_GESTURE_TURN_LEFT45,
+	ACT_GESTURE_TURN_RIGHT45,
+	ACT_GESTURE_TURN_LEFT90,
+	ACT_GESTURE_TURN_RIGHT90,
+	ACT_GESTURE_TURN_LEFT45_FLAT,
+	ACT_GESTURE_TURN_RIGHT45_FLAT,
+	ACT_GESTURE_TURN_LEFT90_FLAT,
+	ACT_GESTURE_TURN_RIGHT90_FLAT,
+	ACT_BARNACLE_HIT,
+	ACT_BARNACLE_PULL,
+	ACT_BARNACLE_CHOMP,
+	ACT_BARNACLE_CHEW,
+	ACT_DO_NOT_DISTURB,
+	ACT_SPECIFIC_SEQUENCE,
+	ACT_VM_DRAW,
+	ACT_VM_HOLSTER,
+	ACT_VM_IDLE,
+	ACT_VM_FIDGET,
+	ACT_VM_PULLBACK,
+	ACT_VM_PULLBACK_HIGH,
+	ACT_VM_PULLBACK_LOW,
+	ACT_VM_THROW,
+	ACT_VM_PULLPIN,
+	ACT_VM_PRIMARYATTACK,
+	ACT_VM_SECONDARYATTACK,
+	ACT_VM_RELOAD,
+	ACT_VM_DRYFIRE,
+	ACT_VM_HITLEFT,
+	ACT_VM_HITLEFT2,
+	ACT_VM_HITRIGHT,
+	ACT_VM_HITRIGHT2,
+	ACT_VM_HITCENTER,
+	ACT_VM_HITCENTER2,
+	ACT_VM_MISSLEFT,
+	ACT_VM_MISSLEFT2,
+	ACT_VM_MISSRIGHT,
+	ACT_VM_MISSRIGHT2,
+	ACT_VM_MISSCENTER,
+	ACT_VM_MISSCENTER2,
+	ACT_VM_HAULBACK,
+	ACT_VM_SWINGHARD,
+	ACT_VM_SWINGMISS,
+	ACT_VM_SWINGHIT,
+	ACT_VM_IDLE_TO_LOWERED,
+	ACT_VM_IDLE_LOWERED,
+	ACT_VM_LOWERED_TO_IDLE,
+	ACT_VM_RECOIL1,
+	ACT_VM_RECOIL2,
+	ACT_VM_RECOIL3,
+	ACT_VM_PICKUP,
+	ACT_VM_RELEASE,
+	ACT_VM_ATTACH_SILENCER,
+	ACT_VM_DETACH_SILENCER,
+	ACT_VM_DRAW_SPECIAL,
+	ACT_VM_PULLBACK_SPECIAL,
+	ACT_VM_EMPTY_FIRE,
+	ACT_VM_EMPTY_RELOAD,
+	ACT_VM_EMPTY_DRAW,
+	ACT_VM_EMPTY_IDLE,
+	ACT_SLAM_STICKWALL_IDLE,
+	ACT_SLAM_STICKWALL_ND_IDLE,
+	ACT_SLAM_STICKWALL_ATTACH,
+	ACT_SLAM_STICKWALL_ATTACH2,
+	ACT_SLAM_STICKWALL_ND_ATTACH,
+	ACT_SLAM_STICKWALL_ND_ATTACH2,
+	ACT_SLAM_STICKWALL_DETONATE,
+	ACT_SLAM_STICKWALL_DETONATOR_HOLSTER,
+	ACT_SLAM_STICKWALL_DRAW,
+	ACT_SLAM_STICKWALL_ND_DRAW,
+	ACT_SLAM_STICKWALL_TO_THROW,
+	ACT_SLAM_STICKWALL_TO_THROW_ND,
+	ACT_SLAM_STICKWALL_TO_TRIPMINE_ND,
+	ACT_SLAM_THROW_IDLE,
+	ACT_SLAM_THROW_ND_IDLE,
+	ACT_SLAM_THROW_THROW,
+	ACT_SLAM_THROW_THROW2,
+	ACT_SLAM_THROW_THROW_ND,
+	ACT_SLAM_THROW_THROW_ND2,
+	ACT_SLAM_THROW_DRAW,
+	ACT_SLAM_THROW_ND_DRAW,
+	ACT_SLAM_THROW_TO_STICKWALL,
+	ACT_SLAM_THROW_TO_STICKWALL_ND,
+	ACT_SLAM_THROW_DETONATE,
+	ACT_SLAM_THROW_DETONATOR_HOLSTER,
+	ACT_SLAM_THROW_TO_TRIPMINE_ND,
+	ACT_SLAM_TRIPMINE_IDLE,
+	ACT_SLAM_TRIPMINE_DRAW,
+	ACT_SLAM_TRIPMINE_ATTACH,
+	ACT_SLAM_TRIPMINE_ATTACH2,
+	ACT_SLAM_TRIPMINE_TO_STICKWALL_ND,
+	ACT_SLAM_TRIPMINE_TO_THROW_ND,
+	ACT_SLAM_DETONATOR_IDLE,
+	ACT_SLAM_DETONATOR_DRAW,
+	ACT_SLAM_DETONATOR_DETONATE,
+	ACT_SLAM_DETONATOR_HOLSTER,
+	ACT_SLAM_DETONATOR_STICKWALL_DRAW,
+	ACT_SLAM_DETONATOR_THROW_DRAW,
+	ACT_SHOTGUN_RELOAD_START,
+	ACT_SHOTGUN_RELOAD_FINISH,
+	ACT_SHOTGUN_PUMP,
+	ACT_SMG2_IDLE2,
+	ACT_SMG2_FIRE2,
+	ACT_SMG2_DRAW2,
+	ACT_SMG2_RELOAD2,
+	ACT_SMG2_DRYFIRE2,
+	ACT_SMG2_TOAUTO,
+	ACT_SMG2_TOBURST,
+	ACT_PHYSCANNON_UPGRADE,
+	ACT_RANGE_ATTACK_AR1,
+	ACT_RANGE_ATTACK_AR2,
+	ACT_RANGE_ATTACK_AR2_LOW,
+	ACT_RANGE_ATTACK_AR2_GRENADE,
+	ACT_RANGE_ATTACK_HMG1,
+	ACT_RANGE_ATTACK_ML,
+	ACT_RANGE_ATTACK_SMG1,
+	ACT_RANGE_ATTACK_SMG1_LOW,
+	ACT_RANGE_ATTACK_SMG2,
+	ACT_RANGE_ATTACK_SHOTGUN,
+	ACT_RANGE_ATTACK_SHOTGUN_LOW,
+	ACT_RANGE_ATTACK_PISTOL,
+	ACT_RANGE_ATTACK_PISTOL_LOW,
+	ACT_RANGE_ATTACK_SLAM,
+	ACT_RANGE_ATTACK_TRIPWIRE,
+	ACT_RANGE_ATTACK_THROW,
+	ACT_RANGE_ATTACK_SNIPER_RIFLE,
+	ACT_RANGE_ATTACK_RPG,
+	ACT_MELEE_ATTACK_SWING,
+	ACT_RANGE_AIM_LOW,
+	ACT_RANGE_AIM_SMG1_LOW,
+	ACT_RANGE_AIM_PISTOL_LOW,
+	ACT_RANGE_AIM_AR2_LOW,
+	ACT_COVER_PISTOL_LOW,
+	ACT_COVER_SMG1_LOW,
+	ACT_GESTURE_RANGE_ATTACK_AR1,
+	ACT_GESTURE_RANGE_ATTACK_AR2,
+	ACT_GESTURE_RANGE_ATTACK_AR2_GRENADE,
+	ACT_GESTURE_RANGE_ATTACK_HMG1,
+	ACT_GESTURE_RANGE_ATTACK_ML,
+	ACT_GESTURE_RANGE_ATTACK_SMG1,
+	ACT_GESTURE_RANGE_ATTACK_SMG1_LOW,
+	ACT_GESTURE_RANGE_ATTACK_SMG2,
+	ACT_GESTURE_RANGE_ATTACK_SHOTGUN,
+	ACT_GESTURE_RANGE_ATTACK_PISTOL,
+	ACT_GESTURE_RANGE_ATTACK_PISTOL_LOW,
+	ACT_GESTURE_RANGE_ATTACK_SLAM,
+	ACT_GESTURE_RANGE_ATTACK_TRIPWIRE,
+	ACT_GESTURE_RANGE_ATTACK_THROW,
+	ACT_GESTURE_RANGE_ATTACK_SNIPER_RIFLE,
+	ACT_GESTURE_MELEE_ATTACK_SWING,
+	ACT_IDLE_RIFLE,
+	ACT_IDLE_SMG1,
+	ACT_IDLE_ANGRY_SMG1,
+	ACT_IDLE_PISTOL,
+	ACT_IDLE_ANGRY_PISTOL,
+	ACT_IDLE_ANGRY_SHOTGUN,
+	ACT_IDLE_STEALTH_PISTOL,
+	ACT_IDLE_PACKAGE,
+	ACT_WALK_PACKAGE,
+	ACT_IDLE_SUITCASE,
+	ACT_WALK_SUITCASE,
+	ACT_IDLE_SMG1_RELAXED,
+	ACT_IDLE_SMG1_STIMULATED,
+	ACT_WALK_RIFLE_RELAXED,
+	ACT_RUN_RIFLE_RELAXED,
+	ACT_WALK_RIFLE_STIMULATED,
+	ACT_RUN_RIFLE_STIMULATED,
+	ACT_IDLE_AIM_RIFLE_STIMULATED,
+	ACT_WALK_AIM_RIFLE_STIMULATED,
+	ACT_RUN_AIM_RIFLE_STIMULATED,
+	ACT_IDLE_SHOTGUN_RELAXED,
+	ACT_IDLE_SHOTGUN_STIMULATED,
+	ACT_IDLE_SHOTGUN_AGITATED,
+	ACT_WALK_ANGRY,
+	ACT_POLICE_HARASS1,
+	ACT_POLICE_HARASS2,
+	ACT_IDLE_MANNEDGUN,
+	ACT_IDLE_MELEE,
+	ACT_IDLE_ANGRY_MELEE,
+	ACT_IDLE_RPG_RELAXED,
+	ACT_IDLE_RPG,
+	ACT_IDLE_ANGRY_RPG,
+	ACT_COVER_LOW_RPG,
+	ACT_WALK_RPG,
+	ACT_RUN_RPG,
+	ACT_WALK_CROUCH_RPG,
+	ACT_RUN_CROUCH_RPG,
+	ACT_WALK_RPG_RELAXED,
+	ACT_RUN_RPG_RELAXED,
+	ACT_WALK_RIFLE,
+	ACT_WALK_AIM_RIFLE,
+	ACT_WALK_CROUCH_RIFLE,
+	ACT_WALK_CROUCH_AIM_RIFLE,
+	ACT_RUN_RIFLE,
+	ACT_RUN_AIM_RIFLE,
+	ACT_RUN_CROUCH_RIFLE,
+	ACT_RUN_CROUCH_AIM_RIFLE,
+	ACT_RUN_STEALTH_PISTOL,
+	ACT_WALK_AIM_SHOTGUN,
+	ACT_RUN_AIM_SHOTGUN,
+	ACT_WALK_PISTOL,
+	ACT_RUN_PISTOL,
+	ACT_WALK_AIM_PISTOL,
+	ACT_RUN_AIM_PISTOL,
+	ACT_WALK_STEALTH_PISTOL,
+	ACT_WALK_AIM_STEALTH_PISTOL,
+	ACT_RUN_AIM_STEALTH_PISTOL,
+	ACT_RELOAD_PISTOL,
+	ACT_RELOAD_PISTOL_LOW,
+	ACT_RELOAD_SMG1,
+	ACT_RELOAD_SMG1_LOW,
+	ACT_RELOAD_SHOTGUN,
+	ACT_RELOAD_SHOTGUN_LOW,
+	ACT_GESTURE_RELOAD,
+	ACT_GESTURE_RELOAD_PISTOL,
+	ACT_GESTURE_RELOAD_SMG1,
+	ACT_GESTURE_RELOAD_SHOTGUN,
+	ACT_BUSY_LEAN_LEFT,
+	ACT_BUSY_LEAN_LEFT_ENTRY,
+	ACT_BUSY_LEAN_LEFT_EXIT,
+	ACT_BUSY_LEAN_BACK,
+	ACT_BUSY_LEAN_BACK_ENTRY,
+	ACT_BUSY_LEAN_BACK_EXIT,
+	ACT_BUSY_SIT_GROUND,
+	ACT_BUSY_SIT_GROUND_ENTRY,
+	ACT_BUSY_SIT_GROUND_EXIT,
+	ACT_BUSY_SIT_CHAIR,
+	ACT_BUSY_SIT_CHAIR_ENTRY,
+	ACT_BUSY_SIT_CHAIR_EXIT,
+	ACT_BUSY_STAND,
+	ACT_BUSY_QUEUE,
+	ACT_DUCK_DODGE,
+	ACT_DIE_BARNACLE_SWALLOW,
+	ACT_GESTURE_BARNACLE_STRANGLE,
+	ACT_PHYSCANNON_DETACH,
+	ACT_PHYSCANNON_ANIMATE,
+	ACT_PHYSCANNON_ANIMATE_PRE,
+	ACT_PHYSCANNON_ANIMATE_POST,
+	ACT_DIE_FRONTSIDE,
+	ACT_DIE_RIGHTSIDE,
+	ACT_DIE_BACKSIDE,
+	ACT_DIE_LEFTSIDE,
+	ACT_DIE_CROUCH_FRONTSIDE,
+	ACT_DIE_CROUCH_RIGHTSIDE,
+	ACT_DIE_CROUCH_BACKSIDE,
+	ACT_DIE_CROUCH_LEFTSIDE,
+	ACT_OPEN_DOOR,
+	ACT_DI_ALYX_ZOMBIE_MELEE,
+	ACT_DI_ALYX_ZOMBIE_TORSO_MELEE,
+	ACT_DI_ALYX_HEADCRAB_MELEE,
+	ACT_DI_ALYX_ANTLION,
+	ACT_DI_ALYX_ZOMBIE_SHOTGUN64,
+	ACT_DI_ALYX_ZOMBIE_SHOTGUN26,
+	ACT_READINESS_RELAXED_TO_STIMULATED,
+	ACT_READINESS_RELAXED_TO_STIMULATED_WALK,
+	ACT_READINESS_AGITATED_TO_STIMULATED,
+	ACT_READINESS_STIMULATED_TO_RELAXED,
+	ACT_READINESS_PISTOL_RELAXED_TO_STIMULATED,
+	ACT_READINESS_PISTOL_RELAXED_TO_STIMULATED_WALK,
+	ACT_READINESS_PISTOL_AGITATED_TO_STIMULATED,
+	ACT_READINESS_PISTOL_STIMULATED_TO_RELAXED,
+	ACT_IDLE_CARRY,
+	ACT_WALK_CARRY,
+	ACT_STARTDYING,
+	ACT_DYINGLOOP,
+	ACT_DYINGTODEAD,
+	ACT_RIDE_MANNED_GUN,
+	ACT_VM_SPRINT_ENTER,
+	ACT_VM_SPRINT_IDLE,
+	ACT_VM_SPRINT_LEAVE,
+	ACT_FIRE_START,
+	ACT_FIRE_LOOP,
+	ACT_FIRE_END,
+	ACT_CROUCHING_GRENADEIDLE,
+	ACT_CROUCHING_GRENADEREADY,
+	ACT_CROUCHING_PRIMARYATTACK,
+	ACT_OVERLAY_GRENADEIDLE,
+	ACT_OVERLAY_GRENADEREADY,
+	ACT_OVERLAY_PRIMARYATTACK,
+	ACT_OVERLAY_SHIELD_UP,
+	ACT_OVERLAY_SHIELD_DOWN,
+	ACT_OVERLAY_SHIELD_UP_IDLE,
+	ACT_OVERLAY_SHIELD_ATTACK,
+	ACT_OVERLAY_SHIELD_KNOCKBACK,
+	ACT_SHIELD_UP,
+	ACT_SHIELD_DOWN,
+	ACT_SHIELD_UP_IDLE,
+	ACT_SHIELD_ATTACK,
+	ACT_SHIELD_KNOCKBACK,
+	ACT_CROUCHING_SHIELD_UP,
+	ACT_CROUCHING_SHIELD_DOWN,
+	ACT_CROUCHING_SHIELD_UP_IDLE,
+	ACT_CROUCHING_SHIELD_ATTACK,
+	ACT_CROUCHING_SHIELD_KNOCKBACK,
+	ACT_TURNRIGHT45,
+	ACT_TURNLEFT45,
+	ACT_TURN,
+	ACT_OBJ_ASSEMBLING,
+	ACT_OBJ_DISMANTLING,
+	ACT_OBJ_STARTUP,
+	ACT_OBJ_RUNNING,
+	ACT_OBJ_IDLE,
+	ACT_OBJ_PLACING,
+	ACT_OBJ_DETERIORATING,
+	ACT_OBJ_UPGRADING,
+	ACT_DEPLOY,
+	ACT_DEPLOY_IDLE,
+	ACT_UNDEPLOY,
+	ACT_CROSSBOW_DRAW_UNLOADED,
+	ACT_GAUSS_SPINUP,
+	ACT_GAUSS_SPINCYCLE,
+	ACT_VM_PRIMARYATTACK_SILENCED,
+	ACT_VM_RELOAD_SILENCED,
+	ACT_VM_DRYFIRE_SILENCED,
+	ACT_VM_IDLE_SILENCED,
+	ACT_VM_DRAW_SILENCED,
+	ACT_VM_IDLE_EMPTY_LEFT,
+	ACT_VM_DRYFIRE_LEFT,
+	ACT_VM_IS_DRAW,
+	ACT_VM_IS_HOLSTER,
+	ACT_VM_IS_IDLE,
+	ACT_VM_IS_PRIMARYATTACK,
+	ACT_PLAYER_IDLE_FIRE,
+	ACT_PLAYER_CROUCH_FIRE,
+	ACT_PLAYER_CROUCH_WALK_FIRE,
+	ACT_PLAYER_WALK_FIRE,
+	ACT_PLAYER_RUN_FIRE,
+	ACT_IDLETORUN,
+	ACT_RUNTOIDLE,
+	ACT_VM_DRAW_DEPLOYED,
+	ACT_HL2MP_IDLE_MELEE,
+	ACT_HL2MP_RUN_MELEE,
+	ACT_HL2MP_IDLE_CROUCH_MELEE,
+	ACT_HL2MP_WALK_CROUCH_MELEE,
+	ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE,
+	ACT_HL2MP_GESTURE_RELOAD_MELEE,
+	ACT_HL2MP_JUMP_MELEE,
+	ACT_VM_FIZZLE,
+	ACT_MP_STAND_IDLE,
+	ACT_MP_CROUCH_IDLE,
+	ACT_MP_CROUCH_DEPLOYED_IDLE,
+	ACT_MP_CROUCH_DEPLOYED,
+	ACT_MP_DEPLOYED_IDLE,
+	ACT_MP_RUN,
+	ACT_MP_WALK,
+	ACT_MP_AIRWALK,
+	ACT_MP_CROUCHWALK,
+	ACT_MP_SPRINT,
+	ACT_MP_JUMP,
+	ACT_MP_JUMP_START,
+	ACT_MP_JUMP_FLOAT,
+	ACT_MP_JUMP_LAND,
+	ACT_MP_JUMP_IMPACT_N,
+	ACT_MP_JUMP_IMPACT_E,
+	ACT_MP_JUMP_IMPACT_W,
+	ACT_MP_JUMP_IMPACT_S,
+	ACT_MP_JUMP_IMPACT_TOP,
+	ACT_MP_DOUBLEJUMP,
+	ACT_MP_SWIM,
+	ACT_MP_DEPLOYED,
+	ACT_MP_SWIM_DEPLOYED,
+	ACT_MP_VCD,
+	ACT_MP_ATTACK_STAND_PRIMARYFIRE,
+	ACT_MP_ATTACK_STAND_PRIMARYFIRE_DEPLOYED,
+	ACT_MP_ATTACK_STAND_SECONDARYFIRE,
+	ACT_MP_ATTACK_STAND_GRENADE,
+	ACT_MP_ATTACK_CROUCH_PRIMARYFIRE,
+	ACT_MP_ATTACK_CROUCH_PRIMARYFIRE_DEPLOYED,
+	ACT_MP_ATTACK_CROUCH_SECONDARYFIRE,
+	ACT_MP_ATTACK_CROUCH_GRENADE,
+	ACT_MP_ATTACK_SWIM_PRIMARYFIRE,
+	ACT_MP_ATTACK_SWIM_SECONDARYFIRE,
+	ACT_MP_ATTACK_SWIM_GRENADE,
+	ACT_MP_ATTACK_AIRWALK_PRIMARYFIRE,
+	ACT_MP_ATTACK_AIRWALK_SECONDARYFIRE,
+	ACT_MP_ATTACK_AIRWALK_GRENADE,
+	ACT_MP_RELOAD_STAND,
+	ACT_MP_RELOAD_STAND_LOOP,
+	ACT_MP_RELOAD_STAND_END,
+	ACT_MP_RELOAD_CROUCH,
+	ACT_MP_RELOAD_CROUCH_LOOP,
+	ACT_MP_RELOAD_CROUCH_END,
+	ACT_MP_RELOAD_SWIM,
+	ACT_MP_RELOAD_SWIM_LOOP,
+	ACT_MP_RELOAD_SWIM_END,
+	ACT_MP_RELOAD_AIRWALK,
+	ACT_MP_RELOAD_AIRWALK_LOOP,
+	ACT_MP_RELOAD_AIRWALK_END,
+	ACT_MP_ATTACK_STAND_PREFIRE,
+	ACT_MP_ATTACK_STAND_POSTFIRE,
+	ACT_MP_ATTACK_STAND_STARTFIRE,
+	ACT_MP_ATTACK_CROUCH_PREFIRE,
+	ACT_MP_ATTACK_CROUCH_POSTFIRE,
+	ACT_MP_ATTACK_SWIM_PREFIRE,
+	ACT_MP_ATTACK_SWIM_POSTFIRE,
+	ACT_MP_STAND_PRIMARY,
+	ACT_MP_CROUCH_PRIMARY,
+	ACT_MP_RUN_PRIMARY,
+	ACT_MP_WALK_PRIMARY,
+	ACT_MP_AIRWALK_PRIMARY,
+	ACT_MP_CROUCHWALK_PRIMARY,
+	ACT_MP_JUMP_PRIMARY,
+	ACT_MP_JUMP_START_PRIMARY,
+	ACT_MP_JUMP_FLOAT_PRIMARY,
+	ACT_MP_JUMP_LAND_PRIMARY,
+	ACT_MP_SWIM_PRIMARY,
+	ACT_MP_DEPLOYED_PRIMARY,
+	ACT_MP_SWIM_DEPLOYED_PRIMARY,
+	ACT_MP_ATTACK_STAND_PRIMARY,
+	ACT_MP_ATTACK_STAND_PRIMARY_DEPLOYED,
+	ACT_MP_ATTACK_CROUCH_PRIMARY,
+	ACT_MP_ATTACK_CROUCH_PRIMARY_DEPLOYED,
+	ACT_MP_ATTACK_SWIM_PRIMARY,
+	ACT_MP_ATTACK_AIRWALK_PRIMARY,
+	ACT_MP_RELOAD_STAND_PRIMARY,
+	ACT_MP_RELOAD_STAND_PRIMARY_LOOP,
+	ACT_MP_RELOAD_STAND_PRIMARY_END,
+	ACT_MP_RELOAD_CROUCH_PRIMARY,
+	ACT_MP_RELOAD_CROUCH_PRIMARY_LOOP,
+	ACT_MP_RELOAD_CROUCH_PRIMARY_END,
+	ACT_MP_RELOAD_SWIM_PRIMARY,
+	ACT_MP_RELOAD_SWIM_PRIMARY_LOOP,
+	ACT_MP_RELOAD_SWIM_PRIMARY_END,
+	ACT_MP_RELOAD_AIRWALK_PRIMARY,
+	ACT_MP_RELOAD_AIRWALK_PRIMARY_LOOP,
+	ACT_MP_RELOAD_AIRWALK_PRIMARY_END,
+	ACT_MP_ATTACK_STAND_GRENADE_PRIMARY,
+	ACT_MP_ATTACK_CROUCH_GRENADE_PRIMARY,
+	ACT_MP_ATTACK_SWIM_GRENADE_PRIMARY,
+	ACT_MP_ATTACK_AIRWALK_GRENADE_PRIMARY,
+	ACT_MP_STAND_SECONDARY,
+	ACT_MP_CROUCH_SECONDARY,
+	ACT_MP_RUN_SECONDARY,
+	ACT_MP_WALK_SECONDARY,
+	ACT_MP_AIRWALK_SECONDARY,
+	ACT_MP_CROUCHWALK_SECONDARY,
+	ACT_MP_JUMP_SECONDARY,
+	ACT_MP_JUMP_START_SECONDARY,
+	ACT_MP_JUMP_FLOAT_SECONDARY,
+	ACT_MP_JUMP_LAND_SECONDARY,
+	ACT_MP_SWIM_SECONDARY,
+	ACT_MP_ATTACK_STAND_SECONDARY,
+	ACT_MP_ATTACK_CROUCH_SECONDARY,
+	ACT_MP_ATTACK_SWIM_SECONDARY,
+	ACT_MP_ATTACK_AIRWALK_SECONDARY,
+	ACT_MP_RELOAD_STAND_SECONDARY,
+	ACT_MP_RELOAD_STAND_SECONDARY_LOOP,
+	ACT_MP_RELOAD_STAND_SECONDARY_END,
+	ACT_MP_RELOAD_CROUCH_SECONDARY,
+	ACT_MP_RELOAD_CROUCH_SECONDARY_LOOP,
+	ACT_MP_RELOAD_CROUCH_SECONDARY_END,
+	ACT_MP_RELOAD_SWIM_SECONDARY,
+	ACT_MP_RELOAD_SWIM_SECONDARY_LOOP,
+	ACT_MP_RELOAD_SWIM_SECONDARY_END,
+	ACT_MP_RELOAD_AIRWALK_SECONDARY,
+	ACT_MP_RELOAD_AIRWALK_SECONDARY_LOOP,
+	ACT_MP_RELOAD_AIRWALK_SECONDARY_END,
+	ACT_MP_ATTACK_STAND_GRENADE_SECONDARY,
+	ACT_MP_ATTACK_CROUCH_GRENADE_SECONDARY,
+	ACT_MP_ATTACK_SWIM_GRENADE_SECONDARY,
+	ACT_MP_ATTACK_AIRWALK_GRENADE_SECONDARY,
+	ACT_MP_STAND_MELEE,
+	ACT_MP_CROUCH_MELEE,
+	ACT_MP_RUN_MELEE,
+	ACT_MP_WALK_MELEE,
+	ACT_MP_AIRWALK_MELEE,
+	ACT_MP_CROUCHWALK_MELEE,
+	ACT_MP_JUMP_MELEE,
+	ACT_MP_JUMP_START_MELEE,
+	ACT_MP_JUMP_FLOAT_MELEE,
+	ACT_MP_JUMP_LAND_MELEE,
+	ACT_MP_SWIM_MELEE,
+	ACT_MP_ATTACK_STAND_MELEE,
+	ACT_MP_ATTACK_STAND_MELEE_SECONDARY,
+	ACT_MP_ATTACK_CROUCH_MELEE,
+	ACT_MP_ATTACK_CROUCH_MELEE_SECONDARY,
+	ACT_MP_ATTACK_SWIM_MELEE,
+	ACT_MP_ATTACK_AIRWALK_MELEE,
+	ACT_MP_ATTACK_STAND_GRENADE_MELEE,
+	ACT_MP_ATTACK_CROUCH_GRENADE_MELEE,
+	ACT_MP_ATTACK_SWIM_GRENADE_MELEE,
+	ACT_MP_ATTACK_AIRWALK_GRENADE_MELEE,
+	ACT_MP_STAND_ITEM1,
+	ACT_MP_CROUCH_ITEM1,
+	ACT_MP_RUN_ITEM1,
+	ACT_MP_WALK_ITEM1,
+	ACT_MP_AIRWALK_ITEM1,
+	ACT_MP_CROUCHWALK_ITEM1,
+	ACT_MP_JUMP_ITEM1,
+	ACT_MP_JUMP_START_ITEM1,
+	ACT_MP_JUMP_FLOAT_ITEM1,
+	ACT_MP_JUMP_LAND_ITEM1,
+	ACT_MP_SWIM_ITEM1,
+	ACT_MP_ATTACK_STAND_ITEM1,
+	ACT_MP_ATTACK_STAND_ITEM1_SECONDARY,
+	ACT_MP_ATTACK_CROUCH_ITEM1,
+	ACT_MP_ATTACK_CROUCH_ITEM1_SECONDARY,
+	ACT_MP_ATTACK_SWIM_ITEM1,
+	ACT_MP_ATTACK_AIRWALK_ITEM1,
+	ACT_MP_STAND_ITEM2,
+	ACT_MP_CROUCH_ITEM2,
+	ACT_MP_RUN_ITEM2,
+	ACT_MP_WALK_ITEM2,
+	ACT_MP_AIRWALK_ITEM2,
+	ACT_MP_CROUCHWALK_ITEM2,
+	ACT_MP_JUMP_ITEM2,
+	ACT_MP_JUMP_START_ITEM2,
+	ACT_MP_JUMP_FLOAT_ITEM2,
+	ACT_MP_JUMP_LAND_ITEM2,
+	ACT_MP_SWIM_ITEM2,
+	ACT_MP_ATTACK_STAND_ITEM2,
+	ACT_MP_ATTACK_STAND_ITEM2_SECONDARY,
+	ACT_MP_ATTACK_CROUCH_ITEM2,
+	ACT_MP_ATTACK_CROUCH_ITEM2_SECONDARY,
+	ACT_MP_ATTACK_SWIM_ITEM2,
+	ACT_MP_ATTACK_AIRWALK_ITEM2,
+	ACT_MP_GESTURE_FLINCH,
+	ACT_MP_GESTURE_FLINCH_PRIMARY,
+	ACT_MP_GESTURE_FLINCH_SECONDARY,
+	ACT_MP_GESTURE_FLINCH_MELEE,
+	ACT_MP_GESTURE_FLINCH_ITEM1,
+	ACT_MP_GESTURE_FLINCH_ITEM2,
+	ACT_MP_GESTURE_FLINCH_HEAD,
+	ACT_MP_GESTURE_FLINCH_CHEST,
+	ACT_MP_GESTURE_FLINCH_STOMACH,
+	ACT_MP_GESTURE_FLINCH_LEFTARM,
+	ACT_MP_GESTURE_FLINCH_RIGHTARM,
+	ACT_MP_GESTURE_FLINCH_LEFTLEG,
+	ACT_MP_GESTURE_FLINCH_RIGHTLEG,
+	ACT_MP_GRENADE1_DRAW,
+	ACT_MP_GRENADE1_IDLE,
+	ACT_MP_GRENADE1_ATTACK,
+	ACT_MP_GRENADE2_DRAW,
+	ACT_MP_GRENADE2_IDLE,
+	ACT_MP_GRENADE2_ATTACK,
+	ACT_MP_PRIMARY_GRENADE1_DRAW,
+	ACT_MP_PRIMARY_GRENADE1_IDLE,
+	ACT_MP_PRIMARY_GRENADE1_ATTACK,
+	ACT_MP_PRIMARY_GRENADE2_DRAW,
+	ACT_MP_PRIMARY_GRENADE2_IDLE,
+	ACT_MP_PRIMARY_GRENADE2_ATTACK,
+	ACT_MP_SECONDARY_GRENADE1_DRAW,
+	ACT_MP_SECONDARY_GRENADE1_IDLE,
+	ACT_MP_SECONDARY_GRENADE1_ATTACK,
+	ACT_MP_SECONDARY_GRENADE2_DRAW,
+	ACT_MP_SECONDARY_GRENADE2_IDLE,
+	ACT_MP_SECONDARY_GRENADE2_ATTACK,
+	ACT_MP_MELEE_GRENADE1_DRAW,
+	ACT_MP_MELEE_GRENADE1_IDLE,
+	ACT_MP_MELEE_GRENADE1_ATTACK,
+	ACT_MP_MELEE_GRENADE2_DRAW,
+	ACT_MP_MELEE_GRENADE2_IDLE,
+	ACT_MP_MELEE_GRENADE2_ATTACK,
+	ACT_MP_ITEM1_GRENADE1_DRAW,
+	ACT_MP_ITEM1_GRENADE1_IDLE,
+	ACT_MP_ITEM1_GRENADE1_ATTACK,
+	ACT_MP_ITEM1_GRENADE2_DRAW,
+	ACT_MP_ITEM1_GRENADE2_IDLE,
+	ACT_MP_ITEM1_GRENADE2_ATTACK,
+	ACT_MP_ITEM2_GRENADE1_DRAW,
+	ACT_MP_ITEM2_GRENADE1_IDLE,
+	ACT_MP_ITEM2_GRENADE1_ATTACK,
+	ACT_MP_ITEM2_GRENADE2_DRAW,
+	ACT_MP_ITEM2_GRENADE2_IDLE,
+	ACT_MP_ITEM2_GRENADE2_ATTACK,
+	ACT_MP_STAND_BUILDING,
+	ACT_MP_CROUCH_BUILDING,
+	ACT_MP_RUN_BUILDING,
+	ACT_MP_WALK_BUILDING,
+	ACT_MP_AIRWALK_BUILDING,
+	ACT_MP_CROUCHWALK_BUILDING,
+	ACT_MP_JUMP_BUILDING,
+	ACT_MP_JUMP_START_BUILDING,
+	ACT_MP_JUMP_FLOAT_BUILDING,
+	ACT_MP_JUMP_LAND_BUILDING,
+	ACT_MP_SWIM_BUILDING,
+	ACT_MP_ATTACK_STAND_BUILDING,
+	ACT_MP_ATTACK_CROUCH_BUILDING,
+	ACT_MP_ATTACK_SWIM_BUILDING,
+	ACT_MP_ATTACK_AIRWALK_BUILDING,
+	ACT_MP_ATTACK_STAND_GRENADE_BUILDING,
+	ACT_MP_ATTACK_CROUCH_GRENADE_BUILDING,
+	ACT_MP_ATTACK_SWIM_GRENADE_BUILDING,
+	ACT_MP_ATTACK_AIRWALK_GRENADE_BUILDING,
+	ACT_MP_STAND_PDA,
+	ACT_MP_CROUCH_PDA,
+	ACT_MP_RUN_PDA,
+	ACT_MP_WALK_PDA,
+	ACT_MP_AIRWALK_PDA,
+	ACT_MP_CROUCHWALK_PDA,
+	ACT_MP_JUMP_PDA,
+	ACT_MP_JUMP_START_PDA,
+	ACT_MP_JUMP_FLOAT_PDA,
+	ACT_MP_JUMP_LAND_PDA,
+	ACT_MP_SWIM_PDA,
+	ACT_MP_ATTACK_STAND_PDA,
+	ACT_MP_ATTACK_SWIM_PDA,
+	ACT_MP_GESTURE_VC_HANDMOUTH,
+	ACT_MP_GESTURE_VC_FINGERPOINT,
+	ACT_MP_GESTURE_VC_FISTPUMP,
+	ACT_MP_GESTURE_VC_THUMBSUP,
+	ACT_MP_GESTURE_VC_NODYES,
+	ACT_MP_GESTURE_VC_NODNO,
+	ACT_MP_GESTURE_VC_HANDMOUTH_PRIMARY,
+	ACT_MP_GESTURE_VC_FINGERPOINT_PRIMARY,
+	ACT_MP_GESTURE_VC_FISTPUMP_PRIMARY,
+	ACT_MP_GESTURE_VC_THUMBSUP_PRIMARY,
+	ACT_MP_GESTURE_VC_NODYES_PRIMARY,
+	ACT_MP_GESTURE_VC_NODNO_PRIMARY,
+	ACT_MP_GESTURE_VC_HANDMOUTH_SECONDARY,
+	ACT_MP_GESTURE_VC_FINGERPOINT_SECONDARY,
+	ACT_MP_GESTURE_VC_FISTPUMP_SECONDARY,
+	ACT_MP_GESTURE_VC_THUMBSUP_SECONDARY,
+	ACT_MP_GESTURE_VC_NODYES_SECONDARY,
+	ACT_MP_GESTURE_VC_NODNO_SECONDARY,
+	ACT_MP_GESTURE_VC_HANDMOUTH_MELEE,
+	ACT_MP_GESTURE_VC_FINGERPOINT_MELEE,
+	ACT_MP_GESTURE_VC_FISTPUMP_MELEE,
+	ACT_MP_GESTURE_VC_THUMBSUP_MELEE,
+	ACT_MP_GESTURE_VC_NODYES_MELEE,
+	ACT_MP_GESTURE_VC_NODNO_MELEE,
+	ACT_MP_GESTURE_VC_HANDMOUTH_ITEM1,
+	ACT_MP_GESTURE_VC_FINGERPOINT_ITEM1,
+	ACT_MP_GESTURE_VC_FISTPUMP_ITEM1,
+	ACT_MP_GESTURE_VC_THUMBSUP_ITEM1,
+	ACT_MP_GESTURE_VC_NODYES_ITEM1,
+	ACT_MP_GESTURE_VC_NODNO_ITEM1,
+	ACT_MP_GESTURE_VC_HANDMOUTH_ITEM2,
+	ACT_MP_GESTURE_VC_FINGERPOINT_ITEM2,
+	ACT_MP_GESTURE_VC_FISTPUMP_ITEM2,
+	ACT_MP_GESTURE_VC_THUMBSUP_ITEM2,
+	ACT_MP_GESTURE_VC_NODYES_ITEM2,
+	ACT_MP_GESTURE_VC_NODNO_ITEM2,
+	ACT_MP_GESTURE_VC_HANDMOUTH_BUILDING,
+	ACT_MP_GESTURE_VC_FINGERPOINT_BUILDING,
+	ACT_MP_GESTURE_VC_FISTPUMP_BUILDING,
+	ACT_MP_GESTURE_VC_THUMBSUP_BUILDING,
+	ACT_MP_GESTURE_VC_NODYES_BUILDING,
+	ACT_MP_GESTURE_VC_NODNO_BUILDING,
+	ACT_MP_GESTURE_VC_HANDMOUTH_PDA,
+	ACT_MP_GESTURE_VC_FINGERPOINT_PDA,
+	ACT_MP_GESTURE_VC_FISTPUMP_PDA,
+	ACT_MP_GESTURE_VC_THUMBSUP_PDA,
+	ACT_MP_GESTURE_VC_NODYES_PDA,
+	ACT_MP_GESTURE_VC_NODNO_PDA,
+	ACT_VM_UNUSABLE,
+	ACT_VM_UNUSABLE_TO_USABLE,
+	ACT_VM_USABLE_TO_UNUSABLE,
+	ACT_PRIMARY_VM_DRAW,
+	ACT_PRIMARY_VM_HOLSTER,
+	ACT_PRIMARY_VM_IDLE,
+	ACT_PRIMARY_VM_PULLBACK,
+	ACT_PRIMARY_VM_PRIMARYATTACK,
+	ACT_PRIMARY_VM_SECONDARYATTACK,
+	ACT_PRIMARY_VM_RELOAD,
+	ACT_PRIMARY_VM_DRYFIRE,
+	ACT_PRIMARY_VM_IDLE_TO_LOWERED,
+	ACT_PRIMARY_VM_IDLE_LOWERED,
+	ACT_PRIMARY_VM_LOWERED_TO_IDLE,
+	ACT_SECONDARY_VM_DRAW,
+	ACT_SECONDARY_VM_HOLSTER,
+	ACT_SECONDARY_VM_IDLE,
+	ACT_SECONDARY_VM_PULLBACK,
+	ACT_SECONDARY_VM_PRIMARYATTACK,
+	ACT_SECONDARY_VM_SECONDARYATTACK,
+	ACT_SECONDARY_VM_RELOAD,
+	ACT_SECONDARY_VM_DRYFIRE,
+	ACT_SECONDARY_VM_IDLE_TO_LOWERED,
+	ACT_SECONDARY_VM_IDLE_LOWERED,
+	ACT_SECONDARY_VM_LOWERED_TO_IDLE,
+	ACT_MELEE_VM_DRAW,
+	ACT_MELEE_VM_HOLSTER,
+	ACT_MELEE_VM_IDLE,
+	ACT_MELEE_VM_PULLBACK,
+	ACT_MELEE_VM_PRIMARYATTACK,
+	ACT_MELEE_VM_SECONDARYATTACK,
+	ACT_MELEE_VM_RELOAD,
+	ACT_MELEE_VM_DRYFIRE,
+	ACT_MELEE_VM_IDLE_TO_LOWERED,
+	ACT_MELEE_VM_IDLE_LOWERED,
+	ACT_MELEE_VM_LOWERED_TO_IDLE,
+	ACT_PDA_VM_DRAW,
+	ACT_PDA_VM_HOLSTER,
+	ACT_PDA_VM_IDLE,
+	ACT_PDA_VM_PULLBACK,
+	ACT_PDA_VM_PRIMARYATTACK,
+	ACT_PDA_VM_SECONDARYATTACK,
+	ACT_PDA_VM_RELOAD,
+	ACT_PDA_VM_DRYFIRE,
+	ACT_PDA_VM_IDLE_TO_LOWERED,
+	ACT_PDA_VM_IDLE_LOWERED,
+	ACT_PDA_VM_LOWERED_TO_IDLE,
+	ACT_ITEM1_VM_DRAW,
+	ACT_ITEM1_VM_HOLSTER,
+	ACT_ITEM1_VM_IDLE,
+	ACT_ITEM1_VM_PULLBACK,
+	ACT_ITEM1_VM_PRIMARYATTACK,
+	ACT_ITEM1_VM_SECONDARYATTACK,
+	ACT_ITEM1_VM_RELOAD,
+	ACT_ITEM1_VM_DRYFIRE,
+	ACT_ITEM1_VM_IDLE_TO_LOWERED,
+	ACT_ITEM1_VM_IDLE_LOWERED,
+	ACT_ITEM1_VM_LOWERED_TO_IDLE,
+	ACT_ITEM2_VM_DRAW,
+	ACT_ITEM2_VM_HOLSTER,
+	ACT_ITEM2_VM_IDLE,
+	ACT_ITEM2_VM_PULLBACK,
+	ACT_ITEM2_VM_PRIMARYATTACK,
+	ACT_ITEM2_VM_SECONDARYATTACK,
+	ACT_ITEM2_VM_RELOAD,
+	ACT_ITEM2_VM_DRYFIRE,
+	ACT_ITEM2_VM_IDLE_TO_LOWERED,
+	ACT_ITEM2_VM_IDLE_LOWERED,
+	ACT_ITEM2_VM_LOWERED_TO_IDLE,
+	ACT_RELOAD_SUCCEED,
+	ACT_RELOAD_FAIL,
+	ACT_WALK_AIM_AUTOGUN,
+	ACT_RUN_AIM_AUTOGUN,
+	ACT_IDLE_AUTOGUN,
+	ACT_IDLE_AIM_AUTOGUN,
+	ACT_RELOAD_AUTOGUN,
+	ACT_CROUCH_IDLE_AUTOGUN,
+	ACT_RANGE_ATTACK_AUTOGUN,
+	ACT_JUMP_AUTOGUN,
+	ACT_IDLE_AIM_PISTOL,
+	ACT_WALK_AIM_DUAL,
+	ACT_RUN_AIM_DUAL,
+	ACT_IDLE_DUAL,
+	ACT_IDLE_AIM_DUAL,
+	ACT_RELOAD_DUAL,
+	ACT_CROUCH_IDLE_DUAL,
+	ACT_RANGE_ATTACK_DUAL,
+	ACT_JUMP_DUAL,
+	ACT_IDLE_SHOTGUN,
+	ACT_IDLE_AIM_SHOTGUN,
+	ACT_CROUCH_IDLE_SHOTGUN,
+	ACT_JUMP_SHOTGUN,
+	ACT_IDLE_AIM_RIFLE,
+	ACT_RELOAD_RIFLE,
+	ACT_CROUCH_IDLE_RIFLE,
+	ACT_RANGE_ATTACK_RIFLE,
+	ACT_JUMP_RIFLE,
+	ACT_SLEEP,
+	ACT_WAKE,
+	ACT_FLICK_LEFT,
+	ACT_FLICK_LEFT_MIDDLE,
+	ACT_FLICK_RIGHT_MIDDLE,
+	ACT_FLICK_RIGHT,
+	ACT_SPINAROUND,
+	ACT_PREP_TO_FIRE,
+	ACT_FIRE,
+	ACT_FIRE_RECOVER,
+	ACT_SPRAY,
+	ACT_PREP_EXPLODE,
+	ACT_EXPLODE,
+	ACT_DOTA_IDLE,
+	ACT_DOTA_RUN,
+	ACT_DOTA_ATTACK,
+	ACT_DOTA_ATTACK_EVENT,
+	ACT_DOTA_DIE,
+	ACT_DOTA_FLINCH,
+	ACT_DOTA_DISABLED,
+	ACT_DOTA_CAST_ABILITY_1,
+	ACT_DOTA_CAST_ABILITY_2,
+	ACT_DOTA_CAST_ABILITY_3,
+	ACT_DOTA_CAST_ABILITY_4,
+	ACT_DOTA_OVERRIDE_ABILITY_1,
+	ACT_DOTA_OVERRIDE_ABILITY_2,
+	ACT_DOTA_OVERRIDE_ABILITY_3,
+	ACT_DOTA_OVERRIDE_ABILITY_4,
+	ACT_DOTA_CHANNEL_ABILITY_1,
+	ACT_DOTA_CHANNEL_ABILITY_2,
+	ACT_DOTA_CHANNEL_ABILITY_3,
+	ACT_DOTA_CHANNEL_ABILITY_4,
+	ACT_DOTA_CHANNEL_END_ABILITY_1,
+	ACT_DOTA_CHANNEL_END_ABILITY_2,
+	ACT_DOTA_CHANNEL_END_ABILITY_3,
+	ACT_DOTA_CHANNEL_END_ABILITY_4,
+	ACT_MP_RUN_SPEEDPAINT,
+	ACT_MP_LONG_FALL,
+	ACT_MP_TRACTORBEAM_FLOAT,
+	ACT_MP_DEATH_CRUSH,
+	ACT_MP_RUN_SPEEDPAINT_PRIMARY,
+	ACT_MP_DROWNING_PRIMARY,
+	ACT_MP_LONG_FALL_PRIMARY,
+	ACT_MP_TRACTORBEAM_FLOAT_PRIMARY,
+	ACT_MP_DEATH_CRUSH_PRIMARY,
+	LAST_SHARED_ACTIVITY
+}
+enum LocalFlexController {
+	DUMMY_INVALID_FLEX_CONTROLLER,
+	DUMMY_NULL_FLEX_CONTROLLER
+}
 class array<T>{
 	array(int&in);
 	array(int&in, uint length);
@@ -139,7 +1108,7 @@ class array<T>{
 	bool opEquals(const array<T>&in) const;
 	bool isEmpty() const;
 	void sort(array<T>::less&in, uint startAt = 0, uint count = uint(-1));
-	funcdef bool less(const T&in, const T&in);
+	funcdef bool less(const T&in a, const T&in b);
 }
 class string{
 	~string();
@@ -195,6 +1164,7 @@ class string{
 	bool isNumeric() const;
 	bool isAlphaNumerical() const;
 	array<string>@ split(const string&in) const;
+	string format(const ?&in...) const;
 }
 class dictionaryValue{
 	~dictionaryValue();
@@ -620,7 +1590,7 @@ class ConVar{
 	void SetValue(const string&in value);
 	void SetValue(Color value);
 	void Reset();
-	funcdef void ChangeCallback(ConVar&in, const string&in, float);
+	funcdef void ChangeCallback(ConVar&in, const string&in prevStr, float prevVal);
 }
 class ConVarRef{
 	~ConVarRef();
@@ -689,13 +1659,6 @@ class CommandArgs{
 	string opIndex(int idx) const;
 }
 class cplane_t : VPlane{
-	void Init(const Vector&in vNormal, float dist);
-	void Init(const Vector&in vNormal, const Vector&in vPointOnPlane);
-	float DistTo(const Vector&in vVec) const;
-	VPlane& opAssign(const VPlane&in thePlane);
-	VPlane Flip() const;
-	Vector GetPointOnPlane() const;
-	Vector ProjectPointOntoPlane(const Vector&in vPoint) const;
 	Vector m_Normal;
 	float m_Dist;
 	uint8 type;
@@ -764,30 +1727,30 @@ class IPhysicsObject{
 	bool IsDragEnabled() const;
 	bool IsMotionEnabled() const;
 	bool IsMoveable() const;
-	bool IsAttachedToConstraint(bool&out) const;
-	void EnableCollisions(bool&out enable);
-	void EnableGravity(bool&out enable);
-	void EnableDrag(bool&out enable);
-	void EnableMotion(bool&out enable);
+	bool IsAttachedToConstraint(bool) const;
+	void EnableCollisions(bool enable);
+	void EnableGravity(bool enable);
+	void EnableDrag(bool enable);
+	void EnableMotion(bool enable);
 	void Wake();
 	void Sleep();
-	void SetMass(float&out mass);
+	void SetMass(float mass);
 	float GetMass() const;
 	float GetInvMass() const;
 	Vector GetInertia() const;
 	Vector GetInvInertia() const;
 	void SetInertia(const Vector&in inertia);
-	void SetBuoyancyRatio(float&out ratio);
+	void SetBuoyancyRatio(float ratio);
 	int GetMaterialIndex() const;
-	void SetMaterialIndex(int&out index);
+	void SetMaterialIndex(int index);
 	uint GetContents() const;
-	void SetContents(uint&out contents);
+	void SetContents(uint contents);
 	float GetSphereRadius() const;
-	void SetSphereRadius(float&out radius);
+	void SetSphereRadius(float radius);
 	float GetEnergy() const;
 	Vector GetMassCenterLocalSpace() const;
-	void SetPosition(const Vector&in pos, const QAngle&in angles, bool&out teleport);
-	void SetPositionMatrix(const matrix3x4_t&in matrix, bool&out teleport);
+	void SetPosition(const Vector&in pos, const QAngle&in angles, bool teleport);
+	void SetPositionMatrix(const matrix3x4_t&in matrix, bool teleport);
 	void ApplyForceCenter(const Vector&in force);
 	void ApplyForceOffset(const Vector&in force, const Vector&in pos);
 	void ApplyTorqueCenter(const Vector&in torque);
@@ -808,7 +1771,7 @@ class IPhysicsObject{
 	void CalculateVelocityOffset(const Vector&in force, const Vector&in pos, Vector&out centerVelocity, Vector&out centerAngularVelocity) const;
 }
 class CBaseEntity{
-	CBaseEntity();
+	void opCast(?&out);
 	void Spawn();
 	void Precache();
 	void SetModel(const string&in);
@@ -875,74 +1838,13 @@ class CBaseEntity{
 	bool HasVPhysicsObject() const;
 	void PrecacheScriptSound(const string&in soundName);
 	IPhysicsObject@ GetPhysicsObject() const;
-}
-class __CBaseEntityNative : CBaseEntity{
-	void Spawn();
-	void Precache();
-	void SetModel(const string&in);
-	void PrecacheModel(const string&in modelName);
-	const Vector& GetAbsOrigin() const;
-	void SetAbsOrigin(const Vector&in origin);
-	const Vector& GetLocalOrigin() const;
-	void SetLocalOrigin(const Vector&in origin);
-	const QAngle& GetAbsAngles() const;
-	void SetAbsAngles(const QAngle&in angles);
-	const QAngle& GetLocalAngles() const;
-	void SetLocalAngles(const QAngle&in angles);
-	const Vector& GetAbsVelocity() const;
-	void SetAbsVelocity(const Vector&in velocity);
-	const Vector& GetLocalVelocity() const;
-	void SetLocalVelocity(const Vector&in velocity);
-	CBaseEntity@ GetOwnerEntity() const;
-	void SetOwnerEntity(CBaseEntity@ owner);
-	void SetOwnerEntity(CBaseEntity@ parent, int attachment = -1);
-	void SetParentAttachmentMaintainOffset(const string&in attachmentName);
-	void SetParentAttachment(const string&in attachmentName);
-	int GetTeamNumber() const;
-	void ChangeTeam(int team);
-	Vector EyePosition() const;
-	const QAngle& EyeAngles() const;
-	const QAngle& LocalEyeAngles() const;
-	Vector Forward() const;
-	Vector Up() const;
-	Vector Left() const;
-	const CollisionProperty@ CollisionProp() const;
-	CollisionProperty@ CollisionProp();
-	void SetMoveType(EMoveType val, EMoveCollide moveCollide = MOVECOLLIDE_DEFAULT);
-	EMoveType GetMoveType() const;
-	void SetMoveCollide(EMoveCollide val);
-	EMoveCollide GetMoveCollide() const;
-	CBaseEntity@ GetMoveParent();
-	void SetSolid(ESolidType val);
-	ESolidType GetSolid() const;
-	void SetCollisionBounds(const Vector&in mins, const Vector&in maxs);
-	void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
-	void SetNextThink(float thinkTime, const string&in context = "");
-	void EmitSound(const string&in soundName);
-	void StopSound(const string&in soundName);
-	int GetHealth() const;
-	int GetMaxHealth() const;
-	void SetHealth(int health);
-	void SetMaxHealth(int health);
-	void FireBullets(const FireBulletsInfo_t&in info);
-	void Remove();
-	string GetEntityName();
-	string GetClassname() const;
-	string GetDebugName();
-	int GetEntityIndex() const;
-	bool GetKeyValue(const string&in key, string&out value) const;
-	string GetModelName() const;
-	float GetElasticity() const;
-	void SetElasticity(float elasticity);
-	bool IsFloating();
-	bool IsBSPModel() const;
-	float GetFriction() const;
-	void SetFriction(float friction);
-	void SetGravity(float gravity);
-	float GetGravity() const;
-	bool HasVPhysicsObject() const;
-	void PrecacheScriptSound(const string&in soundName);
-	IPhysicsObject@ GetPhysicsObject() const;
+	void Use(CBaseEntity@ activator, CBaseEntity@ caller, UseType type, float value);
+	void StartTouch(CBaseEntity@ other);
+	void Touch(CBaseEntity@ other);
+	void EndTouch(CBaseEntity@ other);
+	void StartBlocked(CBaseEntity@ other);
+	void Blocked(CBaseEntity@ other);
+	void EndBlocked();
 }
 class Variant{
 	~Variant();
@@ -975,73 +1877,6 @@ class InputData{
 	int nOutputID;
 }
 class CBaseAnimating : CBaseEntity{
-	CBaseAnimating();
-	void Spawn();
-	void Precache();
-	void SetModel(const string&in);
-	void PrecacheModel(const string&in modelName);
-	const Vector& GetAbsOrigin() const;
-	void SetAbsOrigin(const Vector&in origin);
-	const Vector& GetLocalOrigin() const;
-	void SetLocalOrigin(const Vector&in origin);
-	const QAngle& GetAbsAngles() const;
-	void SetAbsAngles(const QAngle&in angles);
-	const QAngle& GetLocalAngles() const;
-	void SetLocalAngles(const QAngle&in angles);
-	const Vector& GetAbsVelocity() const;
-	void SetAbsVelocity(const Vector&in velocity);
-	const Vector& GetLocalVelocity() const;
-	void SetLocalVelocity(const Vector&in velocity);
-	CBaseEntity@ GetOwnerEntity() const;
-	void SetOwnerEntity(CBaseEntity@ owner);
-	void SetOwnerEntity(CBaseEntity@ parent, int attachment = -1);
-	void SetParentAttachmentMaintainOffset(const string&in attachmentName);
-	void SetParentAttachment(const string&in attachmentName);
-	int GetTeamNumber() const;
-	void ChangeTeam(int team);
-	Vector EyePosition() const;
-	const QAngle& EyeAngles() const;
-	const QAngle& LocalEyeAngles() const;
-	Vector Forward() const;
-	Vector Up() const;
-	Vector Left() const;
-	const CollisionProperty@ CollisionProp() const;
-	CollisionProperty@ CollisionProp();
-	void SetMoveType(EMoveType val, EMoveCollide moveCollide = MOVECOLLIDE_DEFAULT);
-	EMoveType GetMoveType() const;
-	void SetMoveCollide(EMoveCollide val);
-	EMoveCollide GetMoveCollide() const;
-	CBaseEntity@ GetMoveParent();
-	void SetSolid(ESolidType val);
-	ESolidType GetSolid() const;
-	void SetCollisionBounds(const Vector&in mins, const Vector&in maxs);
-	void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
-	void SetNextThink(float thinkTime, const string&in context = "");
-	void EmitSound(const string&in soundName);
-	void StopSound(const string&in soundName);
-	int GetHealth() const;
-	int GetMaxHealth() const;
-	void SetHealth(int health);
-	void SetMaxHealth(int health);
-	void FireBullets(const FireBulletsInfo_t&in info);
-	void Remove();
-	string GetEntityName();
-	string GetClassname() const;
-	string GetDebugName();
-	int GetEntityIndex() const;
-	bool GetKeyValue(const string&in key, string&out value) const;
-	string GetModelName() const;
-	float GetElasticity() const;
-	void SetElasticity(float elasticity);
-	bool IsFloating();
-	bool IsBSPModel() const;
-	float GetFriction() const;
-	void SetFriction(float friction);
-	void SetGravity(float gravity);
-	float GetGravity() const;
-	bool HasVPhysicsObject() const;
-	void PrecacheScriptSound(const string&in soundName);
-	IPhysicsObject@ GetPhysicsObject() const;
 	int LookupAttachment(const string&in attachmentName);
 	bool GetAttachment(const string&in attachmentName, Vector&out pos, QAngle&out angle);
 	bool GetAttachment(int attachmentIdx, Vector&out pos, QAngle&out angle);
@@ -1075,174 +1910,114 @@ class CBaseAnimating : CBaseEntity{
 	void SetSequence(int sequence);
 	void SetSkin(int skin);
 }
-class __CBaseAnimatingNative : CBaseAnimating{
-	void Spawn();
-	void Precache();
-	void SetModel(const string&in);
-	void PrecacheModel(const string&in modelName);
-	const Vector& GetAbsOrigin() const;
-	void SetAbsOrigin(const Vector&in origin);
-	const Vector& GetLocalOrigin() const;
-	void SetLocalOrigin(const Vector&in origin);
-	const QAngle& GetAbsAngles() const;
-	void SetAbsAngles(const QAngle&in angles);
-	const QAngle& GetLocalAngles() const;
-	void SetLocalAngles(const QAngle&in angles);
-	const Vector& GetAbsVelocity() const;
-	void SetAbsVelocity(const Vector&in velocity);
-	const Vector& GetLocalVelocity() const;
-	void SetLocalVelocity(const Vector&in velocity);
-	CBaseEntity@ GetOwnerEntity() const;
-	void SetOwnerEntity(CBaseEntity@ owner);
-	void SetOwnerEntity(CBaseEntity@ parent, int attachment = -1);
-	void SetParentAttachmentMaintainOffset(const string&in attachmentName);
-	void SetParentAttachment(const string&in attachmentName);
-	int GetTeamNumber() const;
-	void ChangeTeam(int team);
-	Vector EyePosition() const;
-	const QAngle& EyeAngles() const;
-	const QAngle& LocalEyeAngles() const;
-	Vector Forward() const;
-	Vector Up() const;
-	Vector Left() const;
-	const CollisionProperty@ CollisionProp() const;
-	CollisionProperty@ CollisionProp();
-	void SetMoveType(EMoveType val, EMoveCollide moveCollide = MOVECOLLIDE_DEFAULT);
-	EMoveType GetMoveType() const;
-	void SetMoveCollide(EMoveCollide val);
-	EMoveCollide GetMoveCollide() const;
-	CBaseEntity@ GetMoveParent();
-	void SetSolid(ESolidType val);
-	ESolidType GetSolid() const;
-	void SetCollisionBounds(const Vector&in mins, const Vector&in maxs);
-	void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
-	void SetNextThink(float thinkTime, const string&in context = "");
-	void EmitSound(const string&in soundName);
-	void StopSound(const string&in soundName);
-	int GetHealth() const;
-	int GetMaxHealth() const;
-	void SetHealth(int health);
-	void SetMaxHealth(int health);
-	void FireBullets(const FireBulletsInfo_t&in info);
-	void Remove();
-	string GetEntityName();
-	string GetClassname() const;
-	string GetDebugName();
-	int GetEntityIndex() const;
-	bool GetKeyValue(const string&in key, string&out value) const;
-	string GetModelName() const;
-	float GetElasticity() const;
-	void SetElasticity(float elasticity);
-	bool IsFloating();
-	bool IsBSPModel() const;
-	float GetFriction() const;
-	void SetFriction(float friction);
-	void SetGravity(float gravity);
-	float GetGravity() const;
-	bool HasVPhysicsObject() const;
-	void PrecacheScriptSound(const string&in soundName);
-	IPhysicsObject@ GetPhysicsObject() const;
-	int LookupAttachment(const string&in attachmentName);
-	bool GetAttachment(const string&in attachmentName, Vector&out pos, QAngle&out angle);
-	bool GetAttachment(int attachmentIdx, Vector&out pos, QAngle&out angle);
-	int GetBodygroup(int group);
-	int GetBodygroupCount(int group);
-	string GetBodygroupName(int group);
-	string GetBodygroupPartName(int group, int part);
-	int GetBoneCount();
-	void GetBonePosition(int bone, Vector&out pos, QAngle&out angle);
-	int GetNumBodyGroups();
-	int GetObjectScaleLevel();
-	float GetPoseParameter(int param);
-	bool GetPoseParameterRange(int param, float&out min, float&out max);
-	int GetSequence();
-	string GetSequenceActivityName(int sequence);
-	int GetSequenceCount();
-	float GetSequenceCycleRate(int sequence);
-	float GetSequenceDuration(int sequence);
-	string GetSequenceName(int sequence);
-	int GetSkin();
-	bool IsActivityFinished();
-	bool IsSequenceFinished();
-	bool IsSequenceLooping(int sequence);
-	bool IsValidSequence(int sequence);
-	int LookupActivity(const string&in name);
-	int LookupPoseParameter(const string&in name);
-	int LookupSequence(const string&in name);
-	void SetBodygroup(int group, int value);
-	void SetPlaybackRate(float rate);
-	float SetPoseParameter(int param, float value);
-	void SetSequence(int sequence);
-	void SetSkin(int skin);
+class CServerOnlyEntity : CBaseEntity{
 }
-class CBaseCombatWeapon : CBaseEntity{
-	CBaseCombatWeapon();
-	void Spawn();
-	void Precache();
-	void SetModel(const string&in);
-	void PrecacheModel(const string&in modelName);
-	const Vector& GetAbsOrigin() const;
-	void SetAbsOrigin(const Vector&in origin);
-	const Vector& GetLocalOrigin() const;
-	void SetLocalOrigin(const Vector&in origin);
-	const QAngle& GetAbsAngles() const;
-	void SetAbsAngles(const QAngle&in angles);
-	const QAngle& GetLocalAngles() const;
-	void SetLocalAngles(const QAngle&in angles);
-	const Vector& GetAbsVelocity() const;
-	void SetAbsVelocity(const Vector&in velocity);
-	const Vector& GetLocalVelocity() const;
-	void SetLocalVelocity(const Vector&in velocity);
-	CBaseEntity@ GetOwnerEntity() const;
-	void SetOwnerEntity(CBaseEntity@ owner);
-	void SetOwnerEntity(CBaseEntity@ parent, int attachment = -1);
-	void SetParentAttachmentMaintainOffset(const string&in attachmentName);
-	void SetParentAttachment(const string&in attachmentName);
-	int GetTeamNumber() const;
-	void ChangeTeam(int team);
-	Vector EyePosition() const;
-	const QAngle& EyeAngles() const;
-	const QAngle& LocalEyeAngles() const;
-	Vector Forward() const;
-	Vector Up() const;
-	Vector Left() const;
-	const CollisionProperty@ CollisionProp() const;
-	CollisionProperty@ CollisionProp();
-	void SetMoveType(EMoveType val, EMoveCollide moveCollide = MOVECOLLIDE_DEFAULT);
-	EMoveType GetMoveType() const;
-	void SetMoveCollide(EMoveCollide val);
-	EMoveCollide GetMoveCollide() const;
-	CBaseEntity@ GetMoveParent();
-	void SetSolid(ESolidType val);
-	ESolidType GetSolid() const;
-	void SetCollisionBounds(const Vector&in mins, const Vector&in maxs);
-	void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
-	void SetNextThink(float thinkTime, const string&in context = "");
-	void EmitSound(const string&in soundName);
-	void StopSound(const string&in soundName);
-	int GetHealth() const;
-	int GetMaxHealth() const;
-	void SetHealth(int health);
-	void SetMaxHealth(int health);
-	void FireBullets(const FireBulletsInfo_t&in info);
-	void Remove();
-	string GetEntityName();
-	string GetClassname() const;
-	string GetDebugName();
-	int GetEntityIndex() const;
-	bool GetKeyValue(const string&in key, string&out value) const;
-	string GetModelName() const;
-	float GetElasticity() const;
-	void SetElasticity(float elasticity);
-	bool IsFloating();
-	bool IsBSPModel() const;
-	float GetFriction() const;
-	void SetFriction(float friction);
-	void SetGravity(float gravity);
-	float GetGravity() const;
-	bool HasVPhysicsObject() const;
-	void PrecacheScriptSound(const string&in soundName);
-	IPhysicsObject@ GetPhysicsObject() const;
+class CPointEntity : CBaseEntity{
+}
+class CBaseToggle : CBaseEntity{
+}
+class CBaseTrigger : CBaseToggle{
+	bool PassesTriggerFilters(CBaseEntity@ other) const;
+	bool PassesSpawnflagFilters(CBaseEntity@ other) const;
+	void OnStartTouch(CBaseEntity@ other);
+	void OnEndTouch(CBaseEntity@ other);
+	void OnTouch(CBaseEntity@ other);
+	void OnStartTouchAll(CBaseEntity@ other);
+	void OnEndTouchAll(CBaseEntity@ other);
+	bool IsTouching(CBaseEntity@ other) const;
+	CBaseEntity@ GetTouchedEntityOfType(const string&in className) const;
+	bool PointIsWithin(const Vector&in point) const;
+}
+class CBaseAnimatingOverlay : CBaseAnimating{
+	int AddGestureSequence(int sequence, bool autoKill = true);
+	int AddGestureSequence(int sequence, float duration, bool autoKill = true);
+	int AddGesture(Activity activity, bool autoKill = true);
+	int AddGesture(Activity activity, float duration, bool autoKill = true);
+	bool IsPlayingGesture(Activity activity) const;
+	void RestartGesture(Activity activity, bool addIfMissing = true, bool autoKill = true);
+	void RemoveGesture(Activity activity);
+	void RemoveAllGestures();
+	int AddLayeredSequence(int sequence, int priority);
+	void SetLayerPriority(int layer, int priority);
+	bool IsValidLayer(int layer) const;
+	void SetLayerDuration(int layer, float duration);
+	float GetLayerDuration(int layer) const;
+	void SetLayerCycle(int layer, float cycle);
+	void SetLayerCycle(int layer, float cycle, float prevCycle);
+	float GetLayerCycle(int layer) const;
+	void SetLayerPlaybackRate(int layer, float rate);
+	void SetLayerWeight(int layer, float weight);
+	void SetLayerBlendIn(int layer, float blendIn);
+	void SetLayerBlendOut(int layer, float blendOut);
+	void SetLayerAutokill(int layer, bool autokill);
+	void SetLayerLooping(int layer, bool looping);
+	void SetLayerNoRestore(int layer, bool noRestore);
+	void SetLayerNoEvents(int layer, bool noEvents);
+	Activity GetLayerActivity(int layer) const;
+	int GetLayerSequence(int layer) const;
+	int FindGestureLayer(Activity activity) const;
+	void RemoveLayer(int layer, float killRate = 0.2, float killDelay = 0);
+	void FastRemoveLayer(int layer);
+	bool HasActiveLayer() const;
+}
+class CBaseFlex : CBaseAnimatingOverlay{
+	LocalFlexController FindFlexController(const string&in name) const;
+	float GetFlexWeight(const string&in name) const;
+	float GetFlexWeight(LocalFlexController index) const;
+	void SetFlexWeight(const string&in name, float value) const;
+	void SetFlexWeight(LocalFlexController index, float value) const;
+	float PlayScene(const string&in sceneName, float delay = 0);
+	float ScriptPlayScene(const string&in soundName, float delay = 0);
+	float PlayAutoGeneratedSoundScene(const string&in soundName);
+}
+class CBaseCombatCharacter : CBaseFlex{
+	int TakeHealth(float health, int damageBits);
+	bool FInViewCone(CBaseEntity@ entity) const;
+	bool FInViewCone(const Vector&in pos) const;
+	bool FInAimCone(CBaseEntity@ entity) const;
+	bool FInAimCone(const Vector&in pos) const;
+	bool ShouldShootMissTarget(CBaseCombatCharacter@ target) const;
+	QAngle BodyAngles() const;
+	Vector BodyDirection2D() const;
+	Vector BodyDirection3D() const;
+	Vector HeadDirection2D() const;
+	Vector HeadDirection3D() const;
+	Vector EyeDirection2D() const;
+	Vector EyeDirection3D() const;
+	bool IsHiddenByFog(const Vector&in target) const;
+	bool IsHiddenByFog(CBaseEntity@ target) const;
+	bool IsHiddenByFog(float target) const;
+	float GetFogObscuredRatio(const Vector&in target) const;
+	float GetFogObscuredRatio(CBaseEntity@ target) const;
+	float GetFogObscuredRatio(float target) const;
+	bool IsAbleToSee(CBaseEntity@ entity, bool checkFov) const;
+	bool IsLookingTowards(const Vector&in target, float cosTolerance = 0.9) const;
+	bool IsLookingTowards(const CBaseEntity@ target, float cosTolerance = 0.9) const;
+	bool IsInFieldOfView(const Vector&in target) const;
+	bool IsInFieldOfView(CBaseEntity@ target) const;
+	bool IsLineOfSightClear(CBaseEntity@ entity, bool ignoreActors) const;
+	bool IsLineOfSightClear(const Vector&in pos, bool ignoreActors, CBaseEntity@ entToIgnore = null) const;
+	int GiveAmmo(int count, int ammoIndex, bool suppressSound = false);
+	int GiveAmmo(int count, const string&in ammoName, bool suppressSound = false);
+	void RemoveAmmo(int count, int ammoIndex);
+	void RemoveAmmo(int count, const string&in ammoName);
+	int GetAmmoCount(int ammoIndex) const;
+	int GetAmmoCount(const string&in ammoName) const;
+	void Weapon_DropAll(bool disallowPickup = false);
+	CBaseCombatWeapon@ Weapon_OwnsThisType(const string&in weapnClass, int subtype = 0) const;
+	CBaseEntity@ CheckTraceHullAttack(float dist, const Vector&in mins, const Vector&in maxs, float damage, int damageType, float forceScale = 1, bool damageAnyNPC = false);
+	CBaseEntity@ CheckTraceHullAttack(const Vector&in start, const Vector&in end, const Vector&in mins, const Vector&in maxs, float damage, int damageType, float forceScale = 1, bool damageAnyNPC = false);
+	CBaseCombatWeapon@ GetActiveWeapon() const;
+	int WeaponCount() const;
+	CBaseCombatWeapon@ GetWeapon(int idx) const;
+	void RemoveAllWeapons();
+	void RemoveWeaponOnPlayer(CBaseCombatWeapon@ weapon);
+	Vector GetAttackSpread(CBaseCombatWeapon@ weapon, CBaseEntity@ target = null);
+	float GetSpreadBias(CBaseCombatWeapon@ weapon, CBaseEntity@ target);
+	void SetActiveWeapon(CBaseCombatWeapon@ weapon);
+	void ClearActiveWeapon();
+}
+class CBaseCombatWeapon : CBaseAnimating{
 	void PrimaryAttack();
 	void SecondaryAttack();
 	bool Reload();
@@ -1250,152 +2025,64 @@ class CBaseCombatWeapon : CBaseEntity{
 	void ItemPostFrame();
 	void ItemBusyFrame();
 	bool Holster(CBaseCombatWeapon@ switchingTo = null);
-	CBaseEntity@ GetOwner() const;
+	CBaseCombatCharacter@ GetOwner() const;
 }
-class __CBaseCombatWeaponNative : CBaseCombatWeapon{
-	void Spawn();
-	void Precache();
-	void SetModel(const string&in);
-	void PrecacheModel(const string&in modelName);
-	const Vector& GetAbsOrigin() const;
-	void SetAbsOrigin(const Vector&in origin);
-	const Vector& GetLocalOrigin() const;
-	void SetLocalOrigin(const Vector&in origin);
-	const QAngle& GetAbsAngles() const;
-	void SetAbsAngles(const QAngle&in angles);
-	const QAngle& GetLocalAngles() const;
-	void SetLocalAngles(const QAngle&in angles);
-	const Vector& GetAbsVelocity() const;
-	void SetAbsVelocity(const Vector&in velocity);
-	const Vector& GetLocalVelocity() const;
-	void SetLocalVelocity(const Vector&in velocity);
-	CBaseEntity@ GetOwnerEntity() const;
-	void SetOwnerEntity(CBaseEntity@ owner);
-	void SetOwnerEntity(CBaseEntity@ parent, int attachment = -1);
-	void SetParentAttachmentMaintainOffset(const string&in attachmentName);
-	void SetParentAttachment(const string&in attachmentName);
-	int GetTeamNumber() const;
-	void ChangeTeam(int team);
+class CBaseViewModel : CBaseAnimating{
+	CBaseEntity@ GetOwner() const;
+	CBaseCombatWeapon@ GetOwningWeapon() const;
+}
+class CBasePlayer : CBaseCombatCharacter{
 	Vector EyePosition() const;
 	const QAngle& EyeAngles() const;
 	const QAngle& LocalEyeAngles() const;
-	Vector Forward() const;
-	Vector Up() const;
-	Vector Left() const;
-	const CollisionProperty@ CollisionProp() const;
-	CollisionProperty@ CollisionProp();
-	void SetMoveType(EMoveType val, EMoveCollide moveCollide = MOVECOLLIDE_DEFAULT);
-	EMoveType GetMoveType() const;
-	void SetMoveCollide(EMoveCollide val);
-	EMoveCollide GetMoveCollide() const;
-	CBaseEntity@ GetMoveParent();
-	void SetSolid(ESolidType val);
-	ESolidType GetSolid() const;
-	void SetCollisionBounds(const Vector&in mins, const Vector&in maxs);
-	void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
-	void SetNextThink(float thinkTime, const string&in context = "");
-	void EmitSound(const string&in soundName);
-	void StopSound(const string&in soundName);
-	int GetHealth() const;
-	int GetMaxHealth() const;
-	void SetHealth(int health);
-	void SetMaxHealth(int health);
-	void FireBullets(const FireBulletsInfo_t&in info);
-	void Remove();
-	string GetEntityName();
-	string GetClassname() const;
-	string GetDebugName();
-	int GetEntityIndex() const;
-	bool GetKeyValue(const string&in key, string&out value) const;
-	string GetModelName() const;
-	float GetElasticity() const;
-	void SetElasticity(float elasticity);
-	bool IsFloating();
-	bool IsBSPModel() const;
-	float GetFriction() const;
-	void SetFriction(float friction);
-	void SetGravity(float gravity);
-	float GetGravity() const;
-	bool HasVPhysicsObject() const;
-	void PrecacheScriptSound(const string&in soundName);
-	IPhysicsObject@ GetPhysicsObject() const;
-	void PrimaryAttack();
-	void SecondaryAttack();
-	bool Reload();
-	void ItemPreFrame();
-	void ItemPostFrame();
-	void ItemBusyFrame();
-	bool Holster(CBaseCombatWeapon@ switchingTo = null);
-	CBaseEntity@ GetOwner() const;
+	void CreateViewModel(int viewmodelIndex);
+	CBaseViewModel@ GetViewModel(int viewmodelIndex) const;
+	void MakeTracer(const Vector&in src, const trace_t&in tr, int tracerType);
+	void DoImpactEffect(trace_t&out tr, int damageType);
+	void EyePositionAndVectors(Vector&out pos, Vector&out forward, Vector&out right, Vector&out up) const;
+	void EyeVectors(Vector&out forward, Vector&out right, Vector&out up) const;
+	string GetPlayerName() const;
+	Vector Weapon_ShootPosition() const;
+	bool Weapon_CanUse(CBaseCombatWeapon@ weapon) const;
+	void Weapon_Equip(CBaseCombatWeapon@ weapon);
+	void Weapon_Drop(CBaseCombatWeapon@ wepon);
+	void Weapon_Drop(CBaseCombatWeapon@ wepon, const Vector&in target, const Vector&in velocity);
+	bool Weapon_Switch(CBaseCombatWeapon@ weapon, int viewmodelIdx = 0);
+	void Weapon_SetLast(CBaseCombatWeapon@ weapon);
+	void Weapon_DropSlot(int slot);
+	CBaseCombatWeapon@ Weapon_GetLast() const;
+	bool HasAnyAmmoOfType(int ammoIndex) const;
+	void RumbleEffect(uint8 idx, uint8 rumbleData, uint8 rumbleFlags);
+	bool FlashlightIsOn() const;
+	bool FlashlightTurnOn(bool playSound = false);
+	void FlashlightTurnOff(bool playSound = false);
+	bool IsIlluminatedByFlashlight(CBaseEntity@ entity, float&out dot) const;
+	void SelectItem(const string&in weaponClass, int subType = 0);
+	void SelectItem(CBaseCombatWeapon@ weapon);
+	void SelectLastItem();
+	CBaseEntity@ HasNamedPlayerItem(const string&in className) const;
+	CBaseEntity@ GiveNamedItem(const string&in className, int subType = 0);
+	void PlayUseDenySound();
+	CBaseEntity@ FindUseEntity() const;
+	bool IsUseableEntity(CBaseEntity@ ent, uint requiredCaps) const;
+	bool ClearUseEntity();
+	bool CanPickupObject(CBaseEntity@ object, float massLimit, float sizeLimit) const;
+	void PickupObject(CBaseEntity@ object, bool limitMass = true);
+	void ForceDropOfCarriedPhysObjects(CBaseEntity@ dropThis = null);
+	Vector GetAutoaimVector(float scale) const;
+	Vector GetAutoaimVector(float scale, float maxDist) const;
+	QAngle GetViewPunchAngle() const;
+	void SetViewPunchAngle(const QAngle&in angle);
+	void SetViewPunchAngle(int axis, float value);
+	QAngle GetAimPunchAngle() const;
+	void SetAimPunchAngle(const QAngle&in angle);
+	void SetAimPunchAngleVelocity(const QAngle&in angleVelocity);
+	const Vector& GetEyeOffset() const;
+	const QAngle& GetEyeAngleOffset() const;
+	const Vector& GetAimDirection() const;
+	QAngle GetFinalAimAngle() const;
 }
 class CLight : CBaseEntity{
-	CLight();
-	void Spawn();
-	void Precache();
-	void SetModel(const string&in);
-	void PrecacheModel(const string&in modelName);
-	const Vector& GetAbsOrigin() const;
-	void SetAbsOrigin(const Vector&in origin);
-	const Vector& GetLocalOrigin() const;
-	void SetLocalOrigin(const Vector&in origin);
-	const QAngle& GetAbsAngles() const;
-	void SetAbsAngles(const QAngle&in angles);
-	const QAngle& GetLocalAngles() const;
-	void SetLocalAngles(const QAngle&in angles);
-	const Vector& GetAbsVelocity() const;
-	void SetAbsVelocity(const Vector&in velocity);
-	const Vector& GetLocalVelocity() const;
-	void SetLocalVelocity(const Vector&in velocity);
-	CBaseEntity@ GetOwnerEntity() const;
-	void SetOwnerEntity(CBaseEntity@ owner);
-	void SetOwnerEntity(CBaseEntity@ parent, int attachment = -1);
-	void SetParentAttachmentMaintainOffset(const string&in attachmentName);
-	void SetParentAttachment(const string&in attachmentName);
-	int GetTeamNumber() const;
-	void ChangeTeam(int team);
-	Vector EyePosition() const;
-	const QAngle& EyeAngles() const;
-	const QAngle& LocalEyeAngles() const;
-	Vector Forward() const;
-	Vector Up() const;
-	Vector Left() const;
-	const CollisionProperty@ CollisionProp() const;
-	CollisionProperty@ CollisionProp();
-	void SetMoveType(EMoveType val, EMoveCollide moveCollide = MOVECOLLIDE_DEFAULT);
-	EMoveType GetMoveType() const;
-	void SetMoveCollide(EMoveCollide val);
-	EMoveCollide GetMoveCollide() const;
-	CBaseEntity@ GetMoveParent();
-	void SetSolid(ESolidType val);
-	ESolidType GetSolid() const;
-	void SetCollisionBounds(const Vector&in mins, const Vector&in maxs);
-	void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
-	void SetNextThink(float thinkTime, const string&in context = "");
-	void EmitSound(const string&in soundName);
-	void StopSound(const string&in soundName);
-	int GetHealth() const;
-	int GetMaxHealth() const;
-	void SetHealth(int health);
-	void SetMaxHealth(int health);
-	void FireBullets(const FireBulletsInfo_t&in info);
-	void Remove();
-	string GetEntityName();
-	string GetClassname() const;
-	string GetDebugName();
-	int GetEntityIndex() const;
-	bool GetKeyValue(const string&in key, string&out value) const;
-	string GetModelName() const;
-	float GetElasticity() const;
-	void SetElasticity(float elasticity);
-	bool IsFloating();
-	bool IsBSPModel() const;
-	float GetFriction() const;
-	void SetFriction(float friction);
-	void SetGravity(float gravity);
-	float GetGravity() const;
-	bool HasVPhysicsObject() const;
-	void PrecacheScriptSound(const string&in soundName);
-	IPhysicsObject@ GetPhysicsObject() const;
 	float GetInnerAngle() const;
 	float GetOuterAngle() const;
 	Color GetColorHDR() const;
@@ -1856,6 +2543,7 @@ namespace util { float GetFrameTime(); }
 namespace util { int GetTickCount(); }
 CGlobalEntityList@ EntityList();
 namespace util { CBaseEntity@ CreateEntityByName(const string&in className); }
+namespace util { T@ CreateEntityByNameT<T>(const string&in className); }
 namespace util { void TraceLine(const Vector&in start, const Vector&in end, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace); }
 namespace util { void TraceHull(const Vector&in start, const Vector&in end, const Vector&in mins, const Vector&in maxs, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace); }
 namespace util { void TracePortalLine(const Vector&in start, const Vector&in end, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace, bool transform = true); }
@@ -1871,3 +2559,4 @@ Vector vec3_invalid;
 int nanmask;
 Vector4D vec4_origin;
 Vector4D vec4_invalid;
+funcdef void ThinkFunc_t();
