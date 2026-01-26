@@ -28,7 +28,7 @@ typedef uint16 EntityTags; // Max allowed amount of tags currently is 1 << 15, t
 final class EntityInfo
 {
     CBaseEntity@ entHandle; // Handle for the entity.
-    EntityTags tags; // unint16 number that holds bits.
+    EntityTags entInfoTags; // unint16 number that holds bits.
 
     /**
     * @brief Default constructor.
@@ -36,7 +36,7 @@ final class EntityInfo
     EntityInfo()
     {
         @entHandle = null;
-        tags = EntityTag::NONE;
+        entInfoTags = EntityTag::NONE;
     }
 
     /**
@@ -44,23 +44,23 @@ final class EntityInfo
     * @param newEntHandle A CBaseEntity handle to pass to the EntityInfo to store.
     * @param tags What tags should be associated with the entity.
     */
-    EntityInfo( const CBaseEntity@ newEntHandle, EntityTags tags = EntityTag::NONE )
+    EntityInfo( CBaseEntity@ newEntHandle, const EntityTags tags = EntityTag::NONE )
     {
         @entHandle = @newEntHandle;
-        tags = tags;
+        entInfoTags = tags;
     }
 
     /**
     * @brief Assign the contents of one EntityInfo's to another.
     * @param rhs EntityInfo on the right hand side.
     */
-    EntityInfo& opAssign( const EntityInfo& rhs )
+    EntityInfo& opAssign( const EntityInfo&in rhs )
     {
         if (this == rhs)
             return this;
 
-        this.entHandle = rhs.entHandle;
-        this.tags = rhs.tags;
+        @this.entHandle = @rhs.entHandle;
+        this.entInfoTags = rhs.entInfoTags;
 
         return this;
     }
@@ -71,7 +71,7 @@ final class EntityInfo
     */
     bool opEquals( const EntityInfo&in rhs ) const
     {
-        if ((this.entHandle != rhs.entHandle) || (this.tags != rhs.tags))
+        if ((@this.entHandle != @rhs.entHandle) || (this.entInfoTags != rhs.entInfoTags))
             return false;
 
         return true;
@@ -79,23 +79,25 @@ final class EntityInfo
 
     void Print()
     {
-        Msg("EntityHandle->GetEntityName: " + this.entHandle.GetEntityName() + " | ");
-        Msg("EntityHandle->GetEntityIndex: " + this.entHandle.GetEntityIndex() + " | ");
-        Msg("Tags: " + this.tags + "\n");
+        Msg("Entity Name: " + this.entHandle.GetEntityName() + " | ");
+        Msg("Entity Index: " + this.entHandle.GetEntityIndex() + " | ");
+        Msg("Tags: " + this.entInfoTags + "\n");
     }
 }
 
 // Custom array type that stores specifically added sets of Entities and information about them.
 class EntityArray
 {
+    // ---------------- CLASS MEMBERS VARIABLES ---------------- \\
+
     // The underlying array that holds all the EntityInfo "structs".
-    array<EntityInfo@> entArr;
+    private array<EntityInfo> entArr;
 
     /**
     * @brief Assign the contents of one EntityArray array to another EntityArray.
     * @param rhs EntityArray on the right hand side.
     */
-    EntityArray& opAssign( const EntityArray& rhs )
+    EntityArray& opAssign( const EntityArray&inout rhs )
     {
         if (this == rhs)
             return this;
@@ -117,7 +119,7 @@ class EntityArray
             return false;
 
         // Checking individual items of the array.
-        for (int i = 0; i < this.entArr.length(); i++)
+        for (uint i = 0; i < this.entArr.length(); i++)
         {
             if (this.entArr[i] != rhs.entArr[i])
                 return false;
@@ -154,7 +156,7 @@ class EntityArray
     */
     void PrintArray()
     {
-        for (int i = 0; i < entArr.length(); i++)
+        for (uint i = 0; i < entArr.length(); i++)
         {
             Msg("Array Position: " + i + " | ");
             entArr[i].Print();
@@ -216,7 +218,7 @@ class EntityArray
     */
     void AddByHandle( const CBaseEntity@ entHandle, const EntityTags tags = EntityTag::NONE )
     {
-        if (entHandle == null)
+        if (@entHandle == null)
         {
             Warningl("[EntityHandle] Invalid handle passed to AddByHandle!");
             return;
@@ -336,8 +338,6 @@ class EntityArray
 
 
     // ---------------- FIND FUNCTIONS ---------------- \\
-    // TODO: Should try and take advantage of using the array's find functions for CBaseEntity handles,
-    // TODO: however the issue is that the array type used is EntityInfo so CBaseEntity can't be used.
 
     /**
     * @brief Find entities in the EntityArray by a CBaseEntity handle.
@@ -346,10 +346,11 @@ class EntityArray
     */
     array<EntityInfo>@ FindByHandle( const CBaseEntity@ handle )
     {
-        array<EntityInfo@> results;
-        for (int i = 0; i < entArr.length(); i++)
+        array<EntityInfo> results;
+
+        for (uint i = 0; i < entArr.length(); i++)
         {
-            if (entArr[i].entHandle == handle)
+            if (@entArr[i].entHandle == @handle)
                 results.insertLast(entArr[i]);
         }
 
@@ -363,8 +364,8 @@ class EntityArray
     */
     array<EntityInfo>@ FindByEntityName( const string&in entName )
     {
-        array<EntityInfo@> results;
-        for (int i = 0; i < entArr.length(); i++)
+        array<EntityInfo> results;
+        for (uint i = 0; i < entArr.length(); i++)
         {
             if (entArr[i].entHandle.GetEntityName() == entName)
                 results.insertLast(entArr[i]);
@@ -380,8 +381,8 @@ class EntityArray
     */
     array<EntityInfo>@ FindByClassname( const string&in className )
     {
-        array<EntityInfo@> results;
-        for (int i = 0; i < entArr.length(); i++)
+        array<EntityInfo> results;
+        for (uint i = 0; i < entArr.length(); i++)
         {
             if (entArr[i].entHandle.GetClassname() == className)
                 results.insertLast(entArr[i]);
@@ -397,15 +398,17 @@ class EntityArray
     */
     array<EntityInfo>@ FindByTag( const EntityTags tag )
     {
-        array<EntityInfo@> results;
-        for (int i = 0; i < entArr.length(); i++)
+        array<EntityInfo> results;
+        for (uint i = 0; i < entArr.length(); i++)
         {
-            if (entArr[i].tags & tag)
+            //! The LSP will say this is invalid when actually it is,
+            //! there is no need for a defined operator overload for the bitwise AND.
+            if ((entArr[i].entInfoTags & tag) != 0)
             {
                 results.insertLast(entArr[i]);
             }
         }
- 
+
         return results;
     }
 }
