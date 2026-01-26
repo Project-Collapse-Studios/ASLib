@@ -6,6 +6,10 @@
 * @license Distributed under the MIT license - Copyright (c) 2026 Project Collapse Studios
 */
 
+#include "../misc/logger.as"
+
+Logger entArrayLog("EntityArray", 2);
+
 // Tags that can be appended to various EntityInfo's in the EntityArray to find certain specific entities in the array.
 //? Maybe we could have a way to implement custom tags that can be made and applied in special cases at runtime?
 // TODO: Currently these were just examples of tags we could have, these can be changed out or changed with whatever.
@@ -93,6 +97,28 @@ class EntityArray
     // The underlying array that holds all the EntityInfo "structs".
     private array<EntityInfo> entArr;
 
+
+    // ---------------- CLASS CTORs/DTORs ---------------- \\
+
+    /**
+    * @brief Default constructor for the EntityArray.
+    */
+    EntityArray()
+    {
+        entArr.resize(0);
+    }
+
+    /**
+    * @brief Copy constructor for the EntityArray.
+    */
+    EntityArray( const EntityArray&inout rhs )
+    {
+        this.entArr = rhs.entArr;
+    }
+
+
+    // ---------------- ARRAY FUNCTIONS ---------------- \\
+
     /**
     * @brief Assign the contents of one EntityArray array to another EntityArray.
     * @param rhs EntityArray on the right hand side.
@@ -142,6 +168,31 @@ class EntityArray
     uint opForNext( uint index ) const { return index + 1; }
 
     /**
+    * @brief Add assignment operator overload for adding and setting a array.
+    */
+    EntityArray& opAddAssign( const EntityArray&in rhs )
+    {
+        for (uint i = 0; i < entArr.length(); i++)
+        {
+            AddByInfo(rhs[i]);
+        }
+
+        return this;
+    }
+
+    /**
+    * @brief Add operator overload for adding arrays together.
+    */
+    EntityArray opAdd( const EntityArray&in rhs ) const
+    {
+        EntityArray result(this);
+        return (result += rhs);
+    }
+
+
+    // ---------------- ARRAY FUNCTIONS ---------------- \\
+
+    /**
     * @brief Clear all the entities from the EntityArray.
     */
     void Clear() { entArr.removeRange(0, entArr.length()); }
@@ -163,7 +214,9 @@ class EntityArray
         }
     }
 
+
     // ---------------- ADDING FUNCTIONS ---------------- \\
+
 
     /**
     * @brief Add a entity to the EntityArray by its entity name.
@@ -171,20 +224,23 @@ class EntityArray
     * @param tags (optional) What tags should be added with the entity.
     * @param addAmt (optional) How many of the entities by entity name should be added.
     */
-    void AddByEntityName( const string&in entName, const EntityTags tags = EntityTag::NONE, const int addAmt = 1 )
+    void AddByEntityName( const string&in entName, const EntityTags tags = EntityTag::NONE, uint addAmt = 1 )
     {
-        CBaseEntity@ ent = null;
-        for (int i = 0; i < addAmt; ent = EntityList().FindByName(ent, entName))
+        for (CBaseEntity@ ent = null; (@ent = EntityList().FindByName(ent, entName)) != null;)
         {
-            if (i == addAmt)
-                return;
+            if (@ent == null)
+                continue;
+
+            if (ent.GetEntityName() != entName)
+                continue;
 
             entArr.insertLast(EntityInfo(ent, tags));
-            DevMsgl("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\".");
+            entArrayLog.Info("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\".");
             if (tags > 0)
-                DevMsgl("Entity tag value is: \"" + tags + "\"");
+                entArrayLog.Info("Entity tag value is: \"" + tags + "\"");
 
-            i++;
+            if (--addAmt <= 0)
+                return;
         }
     }
 
@@ -194,20 +250,24 @@ class EntityArray
     * @param tags (optional) What tags should be added with the entity.
     * @param addAmt (optional) How many of the entities by class name should be added.
     */
-    void AddByClassname( const string&in className, const EntityTags tags = EntityTag::NONE, const int addAmt = 1 )
+    void AddByClassname( const string&in className, const EntityTags tags = EntityTag::NONE, uint addAmt = 1 )
     {
-        CBaseEntity@ ent = null;
-        for (int i = 0; i < addAmt; ent = EntityList().FindByClassname(ent, className))
+        for (CBaseEntity@ ent = null; (@ent = EntityList().FindByClassname(ent, className)) != null;)
         {
-            if (i == addAmt)
-                return;
+            if (@ent == null)
+                continue;
+
+            if (ent.GetClassname() != className)
+                continue;
 
             entArr.insertLast(EntityInfo(ent, tags));
-            DevMsgl("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\"");
-            if (tags > 0)
-                DevMsgl("Entity tag value is: \"" + tags + "\"");
+            entArrayLog.Info("Added entity \"" + ent.GetEntityName() + "\" with entindex \"" + ent.GetEntityIndex() + "\".");
 
-            i++;
+            if (tags > 0)
+                entArrayLog.Info("Entity tag value is: \"" + tags + "\"");
+
+            if (--addAmt <= 0)
+                return;
         }
     }
 
@@ -216,18 +276,35 @@ class EntityArray
     * @param entHandle Handle of the entity to add.
     * @param tags (optional) What tags should be added with the entity.
     */
-    void AddByHandle( const CBaseEntity@ entHandle, const EntityTags tags = EntityTag::NONE )
+    void AddByHandle( CBaseEntity@ entHandle, const EntityTags tags = EntityTag::NONE )
     {
         if (@entHandle == null)
         {
-            Warningl("[EntityHandle] Invalid handle passed to AddByHandle!");
+            entArrayLog.Warn("Invalid handle passed to AddByHandle!");
             return;
         }
 
         entArr.insertLast(EntityInfo(entHandle, tags));
-        DevMsgl("Added entity \"" + entHandle.GetEntityName() + "\" with entindex \"" + entHandle.GetEntityIndex() + "\"");
+        entArrayLog.Info("Added entity \"" + entHandle.GetEntityName() + "\" with entindex \"" + entHandle.GetEntityIndex() + "\".");
+
         if (tags > 0)
-            DevMsgl("Entity tag value is: \"" + tags + "\"");
+            entArrayLog.Info("Entity tag value is: \"" + tags + "\"");
+    }
+
+    /**
+    * @brief Add a EntityInfo to the EntityArray
+    * @param entInfo EntityInfo to add.
+    */
+    void AddByInfo( const EntityInfo&in entInfo )
+    {
+        entArr.insertLast(entInfo);
+        if (@entInfo.entHandle != null)
+            entArrayLog.Info("Added entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\".");
+        else
+            entArrayLog.Warn("EntityInfo with a null entity handle has been added!");
+
+        if (entInfo.entInfoTags > 0)
+            entArrayLog.Info("Entity tag value is: \"" + entInfo.entInfoTags + "\"");
     }
 
 
@@ -238,17 +315,17 @@ class EntityArray
     * @param entName Name of entity to remove from the array.
     * @param rmAmt (optional) How many of the entity by it's name should be removed.
     */
-    void RemoveByEntityName( const string&in entName, int rmAmt = 1 )
+    void RemoveByEntityName( const string&in entName, uint rmAmt = 1 )
     {
-        for (int i = 0; i < entArr.length(); i++)
+        for (uint i = 0; i < entArr.length(); i++)
         {
             EntityInfo entInfo = entArr[i];
-            if ((entInfo.entHandle != null) && (entInfo.entHandle.GetEntityName() == entName))
+            if ((@entInfo.entHandle != null) && (entInfo.entHandle.GetEntityName() == entName))
             {
+                entArrayLog.Info("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\".");
                 entArr.removeAt(i);
-                DevMsgl("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\"");
-                rmAmt--;
-                if (rmAmt <= 0)
+
+                if (--rmAmt <= 0)
                     return;
             }
         }
@@ -259,17 +336,17 @@ class EntityArray
     * @param className Class name of entity to remove from the array.
     * @param rmAmt (optional) How many of the entity by it's class name should be removed.
     */
-    void RemoveByClassname( const string&in className, int rmAmt = 1 )
+    void RemoveByClassname( const string&in className, uint rmAmt = 1 )
     {
-        for (int i = 0; i < entArr.length(); i++)
+        for (uint i = 0; i < entArr.length(); i++)
         {
             EntityInfo entInfo = entArr[i];
-            if ((entInfo.entHandle != null) && (entInfo.entHandle.GetClassname() == className))
+            if ((@entInfo.entHandle != null) && (entInfo.entHandle.GetClassname() == className))
             {
+                entArrayLog.Info("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\".");
                 entArr.removeAt(i);
-                DevMsgl("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\"");
-                rmAmt--;
-                if (rmAmt <= 0)
+
+                if (--rmAmt <= 0)
                     return;
             }
         }
@@ -281,12 +358,12 @@ class EntityArray
     */
     void RemoveByHandle( const CBaseEntity@ entHandle )
     {
-        for (int i = 0; i < entArr.length(); i++)
+        for (uint i = 0; i < entArr.length(); i++)
         {
             EntityInfo entInfo = entArr[i];
-            if ((entInfo.entHandle != null) && (entInfo.entHandle == entHandle))
+            if ((@entInfo.entHandle != null) && (entInfo.entHandle is entHandle))
             {
-                DevMsgl("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\"");
+                entArrayLog.Info("Removed entity \"" + entInfo.entHandle.GetEntityName() + "\" with entindex \"" + entInfo.entHandle.GetEntityIndex() + "\".");
                 entArr.removeAt(i);
                 return;
             }
@@ -295,32 +372,7 @@ class EntityArray
 
 
     // ---------------- SORTING FUNCTIONS ---------------- \\
-
-    /**
-    * @brief Compare tags of entities for sorting ascending.
-    * @param A Entity A.
-    * @param B Entity B.
-    */
-    bool SortByTagsAsc( const EntityInfo@ A, const EntityInfo@ B )
-    {
-        if (A.tags < B.tags)
-            return true;
-
-        return false;
-    }
-
-    /**
-    * @brief Compare tags of entities for sorting descending.
-    * @param A Entity A.
-    * @param B Entity B.
-    */
-    bool SortByTagsDesc( const EntityInfo@ A, const EntityInfo@ B )
-    {
-        if (A.tags < B.tags)
-            return false;
-
-        return true;
-    }
+    // TODO: Repetitive code, should be consolidated and optimized a bit.
 
     /**
     * @brief Sort entities in the EntityArray by their tag value.
@@ -328,14 +380,105 @@ class EntityArray
     */
     void SortEntitiesByTags( bool ascending = true )
     {
-        // TODO: Forgot this was a issue, normal sort function is incomplete by the dump so this is my assumption take on what "T[]::less" actually is.
-        // TODO: Guess we have to wait till the dump is fixed or think of something else.
         if (ascending)
-            entArr.sort(SortByTagsAsc);
+        {
+            entArr.sort(
+                function(const EntityInfo&in A, const EntityInfo&in B)
+                {
+                    return A.entInfoTags < B.entInfoTags;
+                }
+            );
+        }
         else
-            entArr.sort(SortByTagsDesc);
+        {
+            entArr.sort(
+                function(const EntityInfo&in A, const EntityInfo&in B)
+                {
+                    return A.entInfoTags > B.entInfoTags;
+                }
+            );
+        }
     }
 
+    /**
+    * @brief Sort entities in the EntityArray by their entity name.
+    * @param ascending Whether to sort ascending or descending.
+    */
+    // TODO: Figure out string comparison
+    // void SortEntitiesByName( bool ascending = true )
+    // {
+    //     if (ascending)
+    //     {
+    //         entArr.sort(
+    //             function(const EntityInfo&in A, const EntityInfo&in B)
+    //             {
+    //                 return A.entHandle.GetEntityName() < B.entHandle.GetEntityName();
+    //             }
+    //         );
+    //     }
+    //     else
+    //     {
+    //         entArr.sort(
+    //             function(const EntityInfo&in A, const EntityInfo&in B)
+    //             {
+    //                 return A.entHandle.GetEntityName() > B.entHandle.GetEntityName();
+    //             }
+    //         );
+    //     }
+    // }
+
+    /**
+    * @brief Sort entities in the EntityArray by their entity classname.
+    * @param ascending Whether to sort ascending or descending.
+    */
+    // TODO: Figure out string comparison
+    // void SortEntitiesByClassname( bool ascending = true )
+    // {
+    //     if (ascending)
+    //     {
+    //         entArr.sort(
+    //             function(const EntityInfo&in A, const EntityInfo&in B)
+    //             {
+    //                 return A.entHandle.GetClassname() < B.entHandle.GetClassname();
+    //             }
+    //         );
+    //     }
+    //     else
+    //     {
+    //         entArr.sort(
+    //             function(const EntityInfo&in A, const EntityInfo&in B)
+    //             {
+    //                 return A.entHandle.GetClassname() > B.entHandle.GetClassname();
+    //             }
+    //         );
+    //     }
+    // }
+
+    /**
+    * @brief Sort entities in the EntityArray by their entity entity index.
+    * @param ascending Whether to sort ascending or descending.
+    */
+    void SortEntitiesByIndex( bool ascending = true )
+    {
+        if (ascending)
+        {
+            entArr.sort(
+                function(const EntityInfo&in A, const EntityInfo&in B)
+                {
+                    return A.entHandle.GetEntityIndex() < B.entHandle.GetEntityIndex();
+                }
+            );
+        }
+        else
+        {
+            entArr.sort(
+                function(const EntityInfo&in A, const EntityInfo&in B)
+                {
+                    return A.entHandle.GetEntityIndex() > B.entHandle.GetEntityIndex();
+                }
+            );
+        }
+    }
 
     // ---------------- FIND FUNCTIONS ---------------- \\
 
@@ -401,7 +544,7 @@ class EntityArray
         array<EntityInfo> results;
         for (uint i = 0; i < entArr.length(); i++)
         {
-            //! The LSP will say this is invalid when actually it is,
+            //! The LSP will say this is invalid when actually it is valid,
             //! there is no need for a defined operator overload for the bitwise AND.
             if ((entArr[i].entInfoTags & tag) != 0)
             {
