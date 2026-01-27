@@ -1700,6 +1700,12 @@ class trace_t{
 	int hitbox;
 	CBaseEntity@ ent;
 }
+class Ray_t{
+	Ray_t();
+	void Init(const Vector&in start, const Vector&in end);
+	void Init(const Vector&in start, const Vector&in end, const Vector&in mins, const Vector&in maxs);
+	Vector InvDelta() const;
+}
 class FireBulletsInfo_t{
 	int iShots;
 	Vector vecSrc;
@@ -1770,11 +1776,35 @@ class IPhysicsObject{
 	void CalculateForceOffset(const Vector&in force, const Vector&in pos, Vector&out centerForce, Vector&out centerTorque) const;
 	void CalculateVelocityOffset(const Vector&in force, const Vector&in pos, Vector&out centerVelocity, Vector&out centerAngularVelocity) const;
 }
+class Variant{
+	~Variant();
+	Variant();
+	EFieldType FieldType() const;
+	bool Bool() const;
+	string String() const;
+	int Int() const;
+	float Float() const;
+	void Vector3D(Vector&out) const;
+	void Angle3D(QAngle&out) const;
+	Color Color32() const;
+	void SetBool(bool b);
+	void SetInt(int i);
+	void SetFloat(float f);
+	void SetVector3D(const Vector&in vec);
+	void SetPositionVector3D(const Vector&in pos);
+	void SetAngle3D(const QAngle&in ang);
+	void SetColor32(Color clr);
+	void SetColor32(int r, int g, int b, int a);
+	void SetString(const string&in s);
+	void SetEntity(CBaseEntity@ ent);
+	CBaseEntity@ Entity() const;
+}
 class CBaseEntity{
 	void opCast(?&out);
 	void Spawn();
 	void Precache();
 	void SetModel(const string&in);
+	void FireOutput(const string&in output, Variant variant, CBaseEntity@ activator, CBaseEntity@ caller, float delay = 0);
 	void PrecacheModel(const string&in modelName);
 	const Vector& GetAbsOrigin() const;
 	void SetAbsOrigin(const Vector&in origin);
@@ -1790,7 +1820,7 @@ class CBaseEntity{
 	void SetLocalVelocity(const Vector&in velocity);
 	CBaseEntity@ GetOwnerEntity() const;
 	void SetOwnerEntity(CBaseEntity@ owner);
-	void SetOwnerEntity(CBaseEntity@ parent, int attachment = -1);
+	void SetParent(CBaseEntity@ parent, int attachment = -1);
 	void SetParentAttachmentMaintainOffset(const string&in attachmentName);
 	void SetParentAttachment(const string&in attachmentName);
 	int GetTeamNumber() const;
@@ -1811,6 +1841,12 @@ class CBaseEntity{
 	void SetSolid(ESolidType val);
 	ESolidType GetSolid() const;
 	void SetCollisionBounds(const Vector&in mins, const Vector&in maxs);
+	const Vector& WorldAlignMins() const;
+	const Vector& WorldAlignMaxs() const;
+	const Vector& WorldSpaceCenter() const;
+	const Vector& WorldAlignSize() const;
+	float BoundingRadius() const;
+	bool IsPointSized() const;
 	void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
 	void SetNextThink(float thinkTime, const string&in context = "");
 	void EmitSound(const string&in soundName);
@@ -1845,28 +1881,9 @@ class CBaseEntity{
 	void StartBlocked(CBaseEntity@ other);
 	void Blocked(CBaseEntity@ other);
 	void EndBlocked();
-}
-class Variant{
-	~Variant();
-	Variant();
-	EFieldType FieldType() const;
-	bool Bool() const;
-	string String() const;
-	int Int() const;
-	float Float() const;
-	void Vector3D(Vector&out) const;
-	void Angle3D(QAngle&out) const;
-	Color Color32() const;
-	void SetBool(bool b);
-	void SetInt(int i);
-	void SetFloat(float f);
-	void SetEntity(CBaseEntity@ ent);
-	void SetVector3D(const Vector&in vec);
-	void SetPositionVector3D(const Vector&in pos);
-	void SetAngle3D(const QAngle&in ang);
-	void SetColor32(Color clr);
-	void SetColor32(int r, int g, int b, int a);
-	void SetString(const string&in s);
+	bool TestCollision(const Ray_t&in ray, uint mask, trace_t&out trace);
+	bool TestHitboxes(const Ray_t&in ray, uint mask, trace_t&out trace);
+	void ComputeWorldSpaceSurroundingBox(Vector&out mins, Vector&out maxs);
 }
 class InputData{
 	~InputData();
@@ -1917,6 +1934,7 @@ class CPointEntity : CBaseEntity{
 class CBaseToggle : CBaseEntity{
 }
 class CBaseTrigger : CBaseToggle{
+	void InitTrigger();
 	bool PassesTriggerFilters(CBaseEntity@ other) const;
 	bool PassesSpawnflagFilters(CBaseEntity@ other) const;
 	void OnStartTouch(CBaseEntity@ other);
@@ -2118,10 +2136,11 @@ class CGlobalEntityList{
 	CBaseEntity@ First();
 	CBaseEntity@ FindByTarget(CBaseEntity@ start, const string&in name);
 	CBaseEntity@ FindByModel(CBaseEntity@ start, const string&in modelName);
-	CBaseEntity@ FindByNameNearest(const string&in name, const Vector&in pos, float radius);
-	CBaseEntity@ FindByNameWithin(CBaseEntity@ start, const string&in name, const Vector&in center, float radius);
+	CBaseEntity@ FindByNameNearest(const string&in name, const Vector&in pos, float radius, CBaseEntity@ searcher = null, CBaseEntity@ activator = null, CBaseEntity@ caller = null);
+	CBaseEntity@ FindByNameWithin(CBaseEntity@ start, const string&in name, const Vector&in center, float radius, CBaseEntity@ searcher = null, CBaseEntity@ activator = null, CBaseEntity@ caller = null);
 	CBaseEntity@ FindByClassnameNearest(const string&in name, const Vector&in center, float radius);
 	CBaseEntity@ FindByClassnameWithin(CBaseEntity@ start, const string&in name, const Vector&in center, float radius);
+	CBaseEntity@ GetByIndex(int index);
 }
 float fpFromIEEE(uint);
 uint fpToIEEE(float);
@@ -2546,10 +2565,13 @@ namespace util { CBaseEntity@ CreateEntityByName(const string&in className); }
 namespace util { T@ CreateEntityByNameT<T>(const string&in className); }
 namespace util { void TraceLine(const Vector&in start, const Vector&in end, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace); }
 namespace util { void TraceHull(const Vector&in start, const Vector&in end, const Vector&in mins, const Vector&in maxs, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace); }
-namespace util { void TracePortalLine(const Vector&in start, const Vector&in end, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace, bool transform = true); }
+namespace util { void TraceRay(const Ray_t&in ray, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace); }
+namespace util { CBaseEntity@ TracePortalLine(const Vector&in start, const Vector&in end, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace, bool bullet = false, bool transform = true); }
+namespace util { CBaseEntity@ TracePortalRay(const Ray_t&in ray, uint mask, CBaseEntity@ ignore, int group, trace_t&out trace, bool bullet = false, bool transform = true); }
 namespace util { CBaseEntity@ GetEntityByIndex(int index); }
 namespace util { int GetMaxEntities(); }
 namespace util { void Remove(CBaseEntity@ entity); }
+void debugbreak();
 Vector2D vec2_origin;
 Vector2D vec2_invalid;
 Vector vec3_origin;
