@@ -1705,8 +1705,16 @@ class Ray_t{
 	void Init(const Vector&in start, const Vector&in end);
 	void Init(const Vector&in start, const Vector&in end, const Vector&in mins, const Vector&in maxs);
 	Vector InvDelta() const;
+	Vector start;
+	Vector delta;
+	Vector startOffset;
+	Vector extents;
+	bool isRay;
+	bool isSwept;
 }
 class FireBulletsInfo_t{
+	FireBulletsInfo_t();
+	FireBulletsInfo_t(int shots, const Vector&in src, const Vector&in dir, const Vector&in spread, float distance, int ammoType, bool primary = true);
 	int iShots;
 	Vector vecSrc;
 	Vector vecDirShooting;
@@ -1804,7 +1812,8 @@ class CBaseEntity{
 	void Spawn();
 	void Precache();
 	void SetModel(const string&in);
-	void FireOutput(const string&in output, Variant variant, CBaseEntity@ activator, CBaseEntity@ caller, float delay = 0);
+	void FireInput(const string&in fgdInputName, const Variant&in value, float delay, CBaseEntity@ activator, CBaseEntity@ caller, int id = 0);
+	void FireOutput(const string&in fgdOutput, Variant variant, CBaseEntity@ activator, CBaseEntity@ caller, float delay = 0);
 	void PrecacheModel(const string&in modelName);
 	const Vector& GetAbsOrigin() const;
 	void SetAbsOrigin(const Vector&in origin);
@@ -1847,6 +1856,8 @@ class CBaseEntity{
 	const Vector& WorldAlignSize() const;
 	float BoundingRadius() const;
 	bool IsPointSized() const;
+	bool IsOnGround() const;
+	CBaseEntity@ GetGroundEntity() const;
 	void SetThink(ThinkFunc_t@ thinkFunc, float nextThinkTime = 0.0, const string&in context = "");
 	void SetNextThink(float thinkTime, const string&in context = "");
 	void EmitSound(const string&in soundName);
@@ -1893,6 +1904,47 @@ class InputData{
 	Variant value;
 	int nOutputID;
 }
+class CBaseEntityOutput{
+	EFieldType GetType() const;
+	float GetMaxDelay() const;
+}
+class COutputVariant : CBaseEntityOutput{
+	COutputVariant();
+	void Fire(const Variant&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+}
+class COutputInt : CBaseEntityOutput{
+	COutputInt();
+	void Fire(int value, CBaseEntity@ activator, CBaseEntity@ caller);
+}
+class COutputFloat : CBaseEntityOutput{
+	COutputFloat();
+	void Fire(float value, CBaseEntity@ activator, CBaseEntity@ caller);
+}
+class COutputString : CBaseEntityOutput{
+	COutputString();
+	void Fire(const string&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+}
+class COutputEntity : CBaseEntityOutput{
+	COutputEntity();
+	void Fire(CBaseEntity@ value, CBaseEntity@ activator, CBaseEntity@ caller);
+}
+class COutputVector : CBaseEntityOutput{
+	COutputVector();
+	void Fire(const Vector&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Fire(const QAngle&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+}
+class COutputPosVector : CBaseEntityOutput{
+	COutputPosVector();
+	void Fire(const Vector&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+}
+class COutputColor : CBaseEntityOutput{
+	COutputColor();
+	void Fire(Color value, CBaseEntity@ activator, CBaseEntity@ caller);
+}
+class COutputEvent : CBaseEntityOutput{
+	COutputEvent();
+	void Fire(CBaseEntity@ activator, CBaseEntity@ caller, float delay = 0);
+}
 class CBaseAnimating : CBaseEntity{
 	int LookupAttachment(const string&in attachmentName);
 	bool GetAttachment(const string&in attachmentName, Vector&out pos, QAngle&out angle);
@@ -1926,6 +1978,7 @@ class CBaseAnimating : CBaseEntity{
 	float SetPoseParameter(int param, float value);
 	void SetSequence(int sequence);
 	void SetSkin(int skin);
+	bool IsOnFire() const;
 }
 class CServerOnlyEntity : CBaseEntity{
 }
