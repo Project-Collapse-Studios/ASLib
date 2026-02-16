@@ -11,6 +11,10 @@ class CuboidVolumeSimple : VolumeInterface {
     
     protected Vector origin;
 
+#ifdef DEBUG
+    protected array<CBaseEntity> visualizers;
+#endif
+
     // === CONSTRUCTORS ===
 
     // Initialize mixin functionality from Min, Max vectors, optional origin vector = [0, 0, 0] is used to orient this volume in space.
@@ -20,6 +24,12 @@ class CuboidVolumeSimple : VolumeInterface {
         this.len_z = abs(Max[2] - Min[2]);
 
         this.origin = origin;
+
+#ifdef DEBUG
+        for (int i = 0; i < 8; i++) { // To visualize CVS, we need 8 lasers for each vertex
+
+        }
+#endif
     }
 
     // Initialize mixin functionality from dimensions x, y ,z, optional origin vector = [0, 0, 0] is used to orient this volume in space.
@@ -106,4 +116,6 @@ class CuboidVolumeSimple : VolumeInterface {
     double GetVolume() {
         return this.len_x * this.len_y * this.len_z;
     }
+
+
 }
