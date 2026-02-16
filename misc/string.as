@@ -24,6 +24,15 @@ namespace char {
 
 namespace str {
 
+    int64 __unqstrnum = 0;
+    /* Get a unique string, guaranteed to be different from every other string returned by this function.
+        Returns a string in format: "UNQ_i" where i is the nth unique string.
+    */
+    string GetUnique() {
+        __unqstrnum += 1;
+        return "UNQ_" + __unqstrnum;
+    }
+
     /* Reads first int from the string, returns int in base 10, but can read in a different base.
     Parameters: const string&in s - input string to read from
                 const uint base = 10 - base to read in
