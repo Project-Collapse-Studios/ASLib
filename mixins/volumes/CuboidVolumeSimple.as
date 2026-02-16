@@ -5,7 +5,7 @@
 #include "VolumeInterface.as"
 
 // Implements an axis alligned cuboid volume in world.
-mixin class CuboidVolumeSimpleMixin : VolumeInterface {
+class CuboidVolumeSimple : VolumeInterface {
 
     protected double len_x, len_y, len_z;
     

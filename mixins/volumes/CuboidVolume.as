@@ -6,7 +6,7 @@
 #include "VolumeInterface.as"
 #include "CuboidVolumeSimple.as"
 
-mixin class CuboidVolume : CuboidVolumeSimpleMixin {
+class CuboidVolume : CuboidVolumeSimple {
 
     protected QAngle rotation;
     protected matrix3x4_t RotationMatrix;
@@ -25,13 +25,13 @@ mixin class CuboidVolume : CuboidVolumeSimpleMixin {
     
     // Initialize mixin functionality from Min, Max vectors, optional origin vector = [0, 0, 0] and rotation vector = [0, 0, 0] is used to orient this volume in space.
     protected void InitVolume(Vector Min, Vector Max, Vector origin = Vector(0, 0, 0), QAngle rotation = QAngle(0, 0, 0)) {
-        CuboidVolumeSimpleMixin::InitVolume(Min, Max, origin);
+        CuboidVolumeSimple::InitVolume(Min, Max, origin);
         this.SetRotation(rotation);
     }
 
     // Initialize mixin functionality from dimensions x, y ,z, optional origin vector = [0, 0, 0] and rotation vector = [0, 0, 0] is used to orient this volume in space.
     protected void InitVolume(double length_x, double length_y, double length_z, Vector origin = Vector(0, 0, 0)) {
-        CuboidVolumeSimpleMixin::InitVolume(length_x, length_y, length_z, origin);
+        CuboidVolumeSimple::InitVolume(length_x, length_y, length_z, origin);
         this.SetRotation(rotation);
     }
 
