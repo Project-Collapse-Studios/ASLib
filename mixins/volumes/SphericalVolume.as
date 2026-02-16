@@ -5,16 +5,21 @@
 #include "VolumeInterface.as"
 #include "../../math/constants.as"
 
+// Implements a spherical volume in world
 class SphericalVolume : VolumeInterface {
 
     protected double radius;
     protected Vector origin;
 
+    // === CONSTRUCTORS ===
+
     // Initialize from radius. Optional origin = [0, 0, 0] to orient the volume in space.
-    protected void InitVolume(double radius, Vector origin = Vector(0,0,0))  {
+    protected void SphericalVolume(double radius, Vector origin = Vector(0,0,0))  {
         this.radius = abs(radius);
         this.origin = origin;
     }
+
+    // === END ===
 
     void SetRadius(double r) {
         this.radius = abs(r);
