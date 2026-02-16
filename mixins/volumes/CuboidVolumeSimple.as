@@ -14,7 +14,7 @@ class CuboidVolumeSimple : VolumeInterface {
     // === CONSTRUCTORS ===
 
     // Initialize mixin functionality from Min, Max vectors, optional origin vector = [0, 0, 0] is used to orient this volume in space.
-    protected void CuboidVolumeSimple(Vector Min, Vector Max, Vector origin = Vector(0, 0, 0)) {
+    CuboidVolumeSimple(Vector Min, Vector Max, Vector origin = Vector(0, 0, 0)) {
         this.len_x = abs(Max[0] - Min[0]);
         this.len_y = abs(Max[1] - Min[1]);
         this.len_z = abs(Max[2] - Min[2]);
@@ -23,7 +23,7 @@ class CuboidVolumeSimple : VolumeInterface {
     }
 
     // Initialize mixin functionality from dimensions x, y ,z, optional origin vector = [0, 0, 0] is used to orient this volume in space.
-    protected void CuboidVolumeSimple(double length_x, double length_y, double length_z, Vector origin = Vector(0, 0, 0)) {
+    CuboidVolumeSimple(double length_x, double length_y, double length_z, Vector origin = Vector(0, 0, 0)) {
         this.len_x = length_x;
         this.len_y = length_y;
         this.len_z = length_z;

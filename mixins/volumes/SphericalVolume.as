@@ -14,7 +14,7 @@ class SphericalVolume : VolumeInterface {
     // === CONSTRUCTORS ===
 
     // Initialize from radius. Optional origin = [0, 0, 0] to orient the volume in space.
-    protected void SphericalVolume(double radius, Vector origin = Vector(0,0,0))  {
+    SphericalVolume(double radius, Vector origin = Vector(0,0,0))  {
         this.radius = abs(radius);
         this.origin = origin;
     }
