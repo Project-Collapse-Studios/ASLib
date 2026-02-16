@@ -15,14 +15,14 @@ class CuboidVolume : CuboidVolumeSimple {
     // === CONSTRUCTORS ===
 
     // Initialize mixin functionality from Min, Max vectors, optional origin vector = [0, 0, 0] and rotation vector = [0, 0, 0] is used to orient this volume in space.
-    protected void CuboidVolume(Vector Min, Vector Max, Vector origin = Vector(0, 0, 0), QAngle rotation = QAngle(0, 0, 0)) {
-        CuboidVolumeSimple::CuboidVolumeSimple(Min, Max, origin);
+    CuboidVolume(Vector Min, Vector Max, Vector origin = Vector(0, 0, 0), QAngle rotation = QAngle(0, 0, 0)) {
+        super(Min, Max, origin);
         this.SetRotation(rotation);
     }
 
     // Initialize mixin functionality from dimensions x, y ,z, optional origin vector = [0, 0, 0] and rotation vector = [0, 0, 0] is used to orient this volume in space.
-    protected void CuboidVolume(double length_x, double length_y, double length_z, Vector origin = Vector(0, 0, 0)) {
-        CuboidVolumeSimple::CuboidVolumeSimple(length_x, length_y, length_z, origin);
+    CuboidVolume(double length_x, double length_y, double length_z, Vector origin = Vector(0, 0, 0)) {
+        super(length_x, length_y, length_z, origin);
         this.SetRotation(rotation);
     }
     
