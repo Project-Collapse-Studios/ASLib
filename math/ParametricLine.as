@@ -1,8 +1,8 @@
 // --------------------------------
-// Purpose: Provide convienience functions/objects that aid with math.
+// Purpose: Represents a 3D parametric line in space.
 // --------------------------------
 
-const double epsilon_ = 0.0005;
+#include "constants.as"
 
 /* Represents a 3D parametric line in space.
 x = vx * t + point_x
@@ -45,7 +45,7 @@ class ParametricLine {
     }
 
     // Returns if this point belong to the line (or is extremely close). Pass epsilon to set the accuracy, default is 0.00005
-    bool PointBelongsToLine(const Vector&in point, const double epsilon = epsilon_) const {
+    bool PointBelongsToLine(const Vector&in point, const double epsilon = EPSILON) const {
         // We just need to check if we can get a t.
         double _;
         return this.GetParameterForPoint(point, _, epsilon);
@@ -57,7 +57,7 @@ class ParametricLine {
     }
 
     // Get the parameter value for this point, if this point belongs to this line.
-    bool GetParameterForPoint(const Vector&in point, double&out t_out, const double epsilon = epsilon_) const {
+    bool GetParameterForPoint(const Vector&in point, double&out t_out, const double epsilon = EPSILON) const {
 
         double t = (point[0] - this.point[0]) / this.vx;
 
@@ -74,7 +74,7 @@ class ParametricLine {
 
     // Calculate the intersection point (if exists) of two parametric lines.
     // Vector parameter is the result (&out), function returns bool to indicate if the intersection exists.
-    bool LineIntersection(const ParametricLine&in line, Vector&out intersection, const double epsilon = 0.0005) const {
+    bool LineIntersection(const ParametricLine&in line, Vector&out intersection, const double epsilon = EPSILON) const {
         /* We're solving
             v1x * t + p1x = v2x * s + p2x
             v1y * t + p1y = v2y * s + p2y
