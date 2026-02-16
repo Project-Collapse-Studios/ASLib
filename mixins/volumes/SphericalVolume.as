@@ -5,7 +5,7 @@
 #include "VolumeInterface.as"
 #include "../../math/constants.as"
 
-mixin class SphericalVolume : VolumeInterface {
+class SphericalVolume : VolumeInterface {
 
     protected double radius;
     protected Vector origin;
