@@ -35,12 +35,12 @@ mixin class CuboidVolume : CuboidVolumeSimpleMixin {
         this.SetRotation(rotation);
     }
 
-    // Transform a vector from being represented in the canonical (world) basis to local (rotated) space.
+    // Transform a vector from being represented in the canonical (world) basis to local (rotated) basis.
     private Vector BASIS_CanonicalToLocal(Vector v) {
         return this.RotationMatrix.RotateVector(v);
     }
 
-    // Transform a vector from being represented in the local (rotated) space to the canonical (world) basis.
+    // Transform a vector from being represented in the local (rotated) basis to the canonical (world) basis.
     private Vector BASIS_LocalToCanonical(Vector v) {
         // Rotation matrices are linear isometries, I assume the determinant is not equal to 0
         return this.RotationMatrix.RotateVectorByInverse(v);
