@@ -39,6 +39,14 @@ class SphericalVolume : VolumeInterface {
         return this.origin;
     }
 
+    Vector GetAABBMax() {
+        return Vector(this.radius, this.radius, this.radius);
+    }
+
+    Vector GetAABBMin() {
+        return -this.GetAABBMax();
+    }
+
     // Get the scalar of this volume in u^3
     double GetVolume() {
         return (radius * radius * radius * PI * 4) / 3;

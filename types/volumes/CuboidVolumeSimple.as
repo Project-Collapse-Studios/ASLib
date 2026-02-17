@@ -4,6 +4,11 @@
 
 #include "VolumeInterface.as"
 
+#if DEBUG
+#include "../../misc/string.as"
+#endif
+
+
 // Implements an axis alligned cuboid volume in world.
 class CuboidVolumeSimple : VolumeInterface {
 
@@ -11,8 +16,8 @@ class CuboidVolumeSimple : VolumeInterface {
     
     protected Vector origin;
 
-#ifdef DEBUG
-    protected array<CBaseEntity> visualizers;
+#if DEBUG
+    protected array<CBaseEntity@> visualizers;
 #endif
 
     // === CONSTRUCTORS ===
@@ -25,10 +30,8 @@ class CuboidVolumeSimple : VolumeInterface {
 
         this.origin = origin;
 
-#ifdef DEBUG
-        for (int i = 0; i < 8; i++) { // To visualize CVS, we need 8 lasers for each vertex
-
-        }
+#if DEBUG
+        this.LoadVisualizers();
 #endif
     }
 
@@ -38,6 +41,10 @@ class CuboidVolumeSimple : VolumeInterface {
         this.len_y = length_y;
         this.len_z = length_z;
         this.origin = origin;
+
+#if DEBUG
+        this.LoadVisualizers();
+#endif
     }
 
     // === END ===
@@ -101,6 +108,16 @@ class CuboidVolumeSimple : VolumeInterface {
         return this.len_z;
     }
 
+    // Get the Max vector of AABB
+    Vector GetAABBMax() {
+        return Vector(this.len_x/2, this.len_y/2, this.len_z/2);
+    }
+
+    // Get the Min vector of AABB
+    Vector GetAABBMin() {
+        return -this.GetAABBMax();
+    }
+
     // Checks if this vector is inside of this volume
     bool IsInVolume(Vector v) {
         v -= this.origin; // In our local space
@@ -117,5 +134,82 @@ class CuboidVolumeSimple : VolumeInterface {
         return this.len_x * this.len_y * this.len_z;
     }
 
+#if DEBUG
+    void LoadVisualizers() {
+        CBaseEntity@ ent = null;
+        string basename =  "";
+        for (int i = 1; i < 8; i++) {
+            basename = "ASVOLUMES_DEBUGLASER_" + str::GetUnique() + "_";
+            @ent = util::CreateEntityByName("env_laser"); // CBaseEntity interface will be sufficient here
+
+            ent.KeyValue("targetname", basename + i);
+            ent.KeyValue("rendercolor", "250 165 88");
+            ent.KeyValue("texture", "sprites/laserbeam.spr");
+            ent.KeyValue("spawnflags", 1);
+            ent.KeyValue("renderamt", "200");
+            ent.KeyValue("lasertarget", basename + (i+1));
+            ent.KeyValue("hdrcolorscale", "1");
+            ent.KeyValue("rendermode", "1");
+            ent.KeyValue("texturescroll", "35");
+            ent.KeyValue("width", "2");
+
+            this.visualizers.insertLast(ent);
+        }
+
+        @ent = util::CreateEntityByName("info_target");
+        ent.KeyValue("targetname", basename + "9");
+        ent.KeyValue("spawnflags", 2);
+        ent.Spawn();
+        this.visualizers.insertLast(ent);
+
+        for (int i = 0; i < 7; i++) {
+            auto@ ent_ = this.visualizers[6 - i];
+            ent_.Spawn();
+        }
+    }
+
+
+    void Visualize() {
+        if (this.visualizers.length() < 8) {
+            return;
+        }
+        
+        // Bottom plane
+        Vector v0 = Vector(-this.len_x / 2, -this.len_y/2, -this.len_z/2);
+        Vector v1 = Vector(this.len_x / 2, -this.len_y/2, -this.len_z/2);
+        Vector v2 = Vector(this.len_x / 2, this.len_y/2, -this.len_z/2);
+        Vector v3 = Vector(-this.len_x / 2, this.len_y/2, -this.len_z/2);
+
+        // Upper plane
+        Vector v4 = -v2;
+        Vector v5 = -v3;
+        Vector v6 = -v0;
+        Vector v7 = -v1;
+        
+        Msg("Vectors done!");
+
+        //auto@ ent = this.visualizers[0];
+        //if (@ent == null) {
+        //    Msg("Ent is null!");
+        //    throw("Ent is null!");
+        //}
+        //this.visualizers[0].SetAbsOrigin(v0 + this.origin);
+        //this.visualizers[1].SetAbsOrigin(v1 + this.origin);
+        //this.visualizers[2].SetAbsOrigin(v2 + this.origin);
+        //this.visualizers[3].SetAbsOrigin(v3 + this.origin);
+        //this.visualizers[4].SetAbsOrigin(v4 + this.origin);
+        //this.visualizers[5].SetAbsOrigin(v5 + this.origin);
+        //this.visualizers[6].SetAbsOrigin(v6 + this.origin);
+        //this.visualizers[7].SetAbsOrigin(v7 + this.origin);
+        EntityList().FindByName(null,"DEBUG_LASER_1").SetAbsOrigin(v0 + this.origin);
+        EntityList().FindByName(null,"DEBUG_LASER_2").SetAbsOrigin(v1 + this.origin);
+        EntityList().FindByName(null,"DEBUG_LASER_3").SetAbsOrigin(v2 + this.origin);
+        EntityList().FindByName(null,"DEBUG_LASER_4").SetAbsOrigin(v3 + this.origin);
+        EntityList().FindByName(null,"DEBUG_LASER_5").SetAbsOrigin(v4 + this.origin);
+        EntityList().FindByName(null,"DEBUG_LASER_6").SetAbsOrigin(v5 + this.origin);
+        EntityList().FindByName(null,"DEBUG_LASER_7").SetAbsOrigin(v6 + this.origin);
+        EntityList().FindByName(null,"DEBUG_LASER_8").SetAbsOrigin(v7 + this.origin);
+    }
+#endif
 
 }
