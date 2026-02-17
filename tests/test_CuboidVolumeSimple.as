@@ -2,15 +2,22 @@
 // Purpose: Test the cuboid volume simple object.
 // --------------------------------
 
-#include "../mixins/volumes/CuboidVolumeSimple.as"
+#include "../types/volumes/CuboidVolumeSimple.as"
 #include "../misc/logger.as"
+
+#include "../types/volumes/CuboidVolume.as"
+
+#include "../entities/server/trigger_as.as"
+#include "../types/volumes/CylindricalVolume.as"
+
+
 
 
 [ServerCommand("as_test_cuboidsimple", "")]
 void TestCuboidSimple(const CommandArgs@ args) {
     
     Logger logger("Test-CuboidSimpleVolume");
-
+/*
     CuboidVolumeSimple vol(Vector(-10, -10, -10), Vector(10, 10, 10)); // At map origin
 
 
@@ -35,5 +42,16 @@ void TestCuboidSimple(const CommandArgs@ args) {
     vol.Scale(2);
 
     logger.Info("Test vector 5 5 5 belongs? Expected False: " + vol.IsInVolume(tst_vector));
+*/
 
+
+    //CuboidVolume vol2(Vector(-64, -64, -64), Vector(64, 64, 64), Vector(0, 0, 192), QAngle(17, 65, 0));
+    //logger.Info("Visualizing vol2 at 0, 0, 192!");
+    //vol2.Visualize();
+    CylindricalVolume vol2(32, 128, Vector(-1, 1, 1), Vector(0, 0, 64));
+
+
+    auto@ a = util::CreateEntityByNameT<TriggerAS>("trigger_as");
+    a.AddVolume(@vol2);
+    a.Spawn();
 }
