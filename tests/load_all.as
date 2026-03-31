@@ -5,3 +5,4 @@
 #include "test_assert.as"
 #include "test_CuboidVolumeSimple.as"
 #include "test_logger.as"
+#include "test_ParametricLine.as"
