@@ -6,3 +6,4 @@
 #include "test_CuboidVolumeSimple.as"
 #include "test_EntityArray.as"
 #include "test_logger.as"
+#include "test_ParametricLine.as"
