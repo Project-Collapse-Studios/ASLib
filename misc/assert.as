@@ -16,7 +16,6 @@ void assert( const bool testStatement, const string&in errMsg = "Passed statemen
 {
     if (!testStatement)
     {
-        debugbreak();
         throw("Assertion hit! Error: " + errMsg);
     }
 }

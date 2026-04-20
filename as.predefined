@@ -1678,6 +1678,21 @@ class StorageScope{
 	void SetVector(const string&in key, const Vector&in value);
 	void SetString(const string&in key, const string&in value);
 }
+class EHandle<T>{
+	~EHandle();
+	EHandle(int&in);
+	EHandle(int&in, const T@ entity);
+	void opAssign(const EHandle<T>&in other);
+	void opHndlAssign(const EHandle<T>&in other);
+	void opHndlAssign(const T@ entity);
+	void Set(const T@ entity);
+	T@ Get() const;
+	T@ opImplCast() const;
+	bool opEquals(const EHandle<T>&in other) const;
+	bool opEquals(const T@ entity) const;
+	bool ChangedFrom(const T@ entity) const;
+	bool IsValid() const;
+}
 class trace_t{
 	~trace_t();
 	trace_t();
@@ -1873,6 +1888,10 @@ class CBaseEntity{
 	string GetDebugName();
 	int GetEntityIndex() const;
 	bool GetKeyValue(const string&in key, string&out value) const;
+	bool KeyValue(const string&in key, const string&in value);
+	bool KeyValue(const string&in key, float value);
+	bool KeyValue(const string&in key, int value);
+	bool KeyValue(const string&in key, const Vector&in value);
 	string GetModelName() const;
 	float GetElasticity() const;
 	void SetElasticity(float elasticity);
@@ -1895,6 +1914,14 @@ class CBaseEntity{
 	bool TestCollision(const Ray_t&in ray, uint mask, trace_t&out trace);
 	bool TestHitboxes(const Ray_t&in ray, uint mask, trace_t&out trace);
 	void ComputeWorldSpaceSurroundingBox(Vector&out mins, Vector&out maxs);
+	int GetSpawnFlags() const;
+	void AddSpawnFlags(int flags);
+	void RemoveSpawnFlags(int flags);
+	void ClearSpawnFlags();
+	bool HasSpawnFlags(int flags) const;
+	bool IsTrigger() const;
+	bool IsPlayer() const;
+	bool IsBaseCombatWeapon() const;
 }
 class InputData{
 	~InputData();
@@ -1911,35 +1938,53 @@ class CBaseEntityOutput{
 class COutputVariant : CBaseEntityOutput{
 	COutputVariant();
 	void Fire(const Variant&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Init(const Variant&in value);
+	Variant Get() const;
 }
 class COutputInt : CBaseEntityOutput{
 	COutputInt();
 	void Fire(int value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Init(int value);
+	int Get() const;
 }
 class COutputFloat : CBaseEntityOutput{
 	COutputFloat();
 	void Fire(float value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Init(float value);
+	float Get() const;
 }
 class COutputString : CBaseEntityOutput{
 	COutputString();
 	void Fire(const string&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Init(const string&in value);
+	string Get() const;
 }
 class COutputEntity : CBaseEntityOutput{
 	COutputEntity();
 	void Fire(CBaseEntity@ value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Init(CBaseEntity@ value);
+	CBaseEntity@ Get() const;
 }
 class COutputVector : CBaseEntityOutput{
 	COutputVector();
 	void Fire(const Vector&in value, CBaseEntity@ activator, CBaseEntity@ caller);
 	void Fire(const QAngle&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Init(const QAngle&in value);
+	void Init(const Vector&in value);
+	void Get(QAngle&out value) const;
+	void Get(Vector&out value) const;
 }
 class COutputPosVector : CBaseEntityOutput{
 	COutputPosVector();
 	void Fire(const Vector&in value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Init(const Vector&in value);
+	void Get(Vector&out value) const;
 }
 class COutputColor : CBaseEntityOutput{
 	COutputColor();
 	void Fire(Color value, CBaseEntity@ activator, CBaseEntity@ caller);
+	void Init(Color value);
+	Color Get() const;
 }
 class COutputEvent : CBaseEntityOutput{
 	COutputEvent();
@@ -2405,6 +2450,8 @@ void VectorAngles(const Vector&in forward, QAngle&out angles);
 void VectorAngles(const Vector&in forward, const Vector&in pseudoup, QAngle&out angles);
 void VectorMatrix(const Vector&in forward, matrix3x4_t&out mat);
 void VectorVectors(const Vector&in forward, Vector&out right, Vector&out up);
+void AngleVectors(const QAngle&in angle, Vector&out forward, Vector&out right, Vector&out up);
+void AngleVectors(const QAngle&in angle, Vector&out forward);
 void SetIdentityMatrix(matrix3x4_t&out mat);
 void SetScaleMatrix(float x, float y, float z, matrix3x4_t&out dst);
 void MatrixBuildRotationAboutAxis(const Vector&in vAxisOfRot, float angleDegrees, matrix3x4_t&out dst);
